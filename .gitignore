@@ -1,0 +1,21 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+tmp/
+output/
+outputs/
+.impeccable/
+own website 小人画像参考/
+参考part 2/
+*.docx
+奖状汇总最终版_副本.pdf
+网站各方面简图.jpg
+CODEX_BRIEF_CN.md
+WORK_PAGE_HANDOFF_CN.md
+scripts/rebuild-hku-hover-sprites.py
+
+# Only runtime assets are force-added to Git; design drafts stay local.
+assets/*
