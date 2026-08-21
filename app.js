@@ -431,7 +431,7 @@
             </div>
           </section>
           <figure class="work-portrait">
-            <img src="assets/work-professional-v1.webp" alt="${t.work.portraitAlt}" />
+            <img src="assets/work-professional-v2-balanced.webp" alt="${t.work.portraitAlt}" />
             <span class="work-portrait__light" aria-hidden="true"></span>
           </figure>
         </div>
@@ -455,17 +455,21 @@
         target="_blank"
         rel="noopener noreferrer"
         aria-label="${item.title} — ${t.create.openWork}"
+        data-create-work="${index}"
       >
         <img src="${item.image}" alt="${item.alt}" loading="lazy" />
         <span class="create-hotspot-label">
-          <strong>${item.title}</strong>
-          <span>${t.create.openWork} ↗</span>
+          <span class="create-hotspot-copy">
+            <strong>${item.title}</strong>
+            <span>${t.create.openWork} ↗</span>
+          </span>
+          <small class="create-work-engagement">${item.engagement.join(" · ")}</small>
         </span>
       </a>`).join("");
     const mobileWorks = t.create.works.map((item, index) => `
-      <a class="create-mobile-work create-mobile-work--${index + 1}" href="${item.url}" target="_blank" rel="noopener noreferrer">
+      <a class="create-mobile-work create-mobile-work--${index + 1}" href="${item.url}" target="_blank" rel="noopener noreferrer" data-create-work="${index}">
         <img src="${item.image}" alt="${item.alt}" loading="lazy" />
-        <span><strong>${item.title}</strong><small>${t.create.openWork} ↗</small></span>
+        <span><strong>${item.title}</strong><small class="create-work-engagement">${item.engagement.join(" · ")}</small><small>${t.create.openWork} ↗</small></span>
       </a>`).join("");
 
     return `
@@ -505,7 +509,7 @@
           <figure class="create-maker">
             <img
               class="create-maker__art"
-              src="assets/create-portrait-v1.png"
+              src="assets/create-portrait-v2.png"
               alt="Yixin creating beside an illustrated HKU Compass canvas at sunset."
             />
             <div class="create-maker__light" aria-hidden="true"></div>
@@ -515,7 +519,7 @@
 
         <div class="create-mobile-archive">
           <figure class="create-mobile-scene">
-            <img src="assets/create-portrait-v1.png" alt="Yixin creating beside an illustrated HKU Compass canvas at sunset." />
+            <img src="assets/create-portrait-v2.png" alt="Yixin creating beside an illustrated HKU Compass canvas at sunset." />
           </figure>
           <section class="create-mobile-section" aria-labelledby="create-mobile-content-title">
             <div class="create-mobile-heading">
@@ -649,6 +653,56 @@
     lastObjectHoverKey = key;
     lastObjectHoverAt = now;
     playLocalSound("hover", 0.48, objectFrequency(key) / 420);
+  }
+
+  function playLearnBookHoverSound(key) {
+    if (!soundEnabled) return;
+    const hoverKey = `learn-book:${key}`;
+    const now = performance.now();
+    if (hoverKey === lastObjectHoverKey && now - lastObjectHoverAt < 180) return;
+    lastObjectHoverKey = hoverKey;
+    lastObjectHoverAt = now;
+    const bookTones = {
+      education: 0.86,
+      academic: 0.93,
+      campus: 1,
+      awards: 1.08
+    };
+    playLocalSound("hover", 0.38, bookTones[key] || 0.94);
+  }
+
+  function playWorkTabHoverSound(key) {
+    if (!soundEnabled) return;
+    const hoverKey = `work-tab:${key}`;
+    const now = performance.now();
+    if (hoverKey === lastObjectHoverKey && now - lastObjectHoverAt < 180) return;
+    lastObjectHoverKey = hoverKey;
+    lastObjectHoverAt = now;
+    const tabTones = {
+      sumec: 0.84,
+      "china-daily": 0.9,
+      "creator-campaigns": 0.96,
+      "sichuan-rtv": 1.02,
+      "chengdu-rtv": 1.08,
+      "china-eastern": 1.14
+    };
+    playLocalSound("hover", 0.38, tabTones[key] || 0.98);
+  }
+
+  function playCreateWorkSelectSound(index) {
+    const workTones = [0.92, 0.98, 1.04, 1.1];
+    playLocalSound("select", 0.44, workTones[Number(index)] || 1);
+  }
+
+  function playCreateWorkHoverSound(index) {
+    if (!soundEnabled) return;
+    const hoverKey = `create-work:${index}`;
+    const now = performance.now();
+    if (hoverKey === lastObjectHoverKey && now - lastObjectHoverAt < 180) return;
+    lastObjectHoverKey = hoverKey;
+    lastObjectHoverAt = now;
+    const workTones = [0.9, 0.96, 1.02, 1.08];
+    playLocalSound("hover", 0.38, workTones[Number(index)] || 0.98);
   }
 
   function playObjectSelectSound(key) {
@@ -837,7 +891,11 @@
       if (active) panel.scrollTop = 0;
     });
     playLocalSound("select", 0.42, 1.06);
-    if (focusTab) targetTab.focus({ preventScroll: true });
+    if (focusTab) {
+      lastObjectHoverKey = `work-tab:${key}`;
+      lastObjectHoverAt = performance.now();
+      targetTab.focus({ preventScroll: true });
+    }
   }
 
   function setActiveRoomObject(key = "") {
@@ -848,6 +906,24 @@
   }
 
   document.addEventListener("pointerover", (event) => {
+    const learnSectionControl = event.target.closest("[data-learn-section]");
+    if (learnSectionControl && !learnSectionControl.contains(event.relatedTarget)
+      && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      playLearnBookHoverSound(learnSectionControl.dataset.learnSection);
+    }
+
+    const workTab = event.target.closest("[data-work-tab]");
+    if (workTab && !workTab.contains(event.relatedTarget)
+      && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      playWorkTabHoverSound(workTab.dataset.workTab);
+    }
+
+    const createWorkControl = event.target.closest("[data-create-work]");
+    if (createWorkControl && !createWorkControl.contains(event.relatedTarget)
+      && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      playCreateWorkHoverSound(createWorkControl.dataset.createWork);
+    }
+
     const objectControl = event.target.closest("[data-object]");
     if (!objectControl || objectControl.contains(event.relatedTarget)) return;
     if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
@@ -863,6 +939,21 @@
   });
 
   document.addEventListener("focusin", (event) => {
+    const learnSectionControl = event.target.closest("[data-learn-section]");
+    if (learnSectionControl && window.matchMedia("(min-width: 821px)").matches) {
+      playLearnBookHoverSound(learnSectionControl.dataset.learnSection);
+    }
+
+    const workTab = event.target.closest("[data-work-tab]");
+    if (workTab && window.matchMedia("(min-width: 821px)").matches) {
+      playWorkTabHoverSound(workTab.dataset.workTab);
+    }
+
+    const createWorkControl = event.target.closest("[data-create-work]");
+    if (createWorkControl && window.matchMedia("(min-width: 821px)").matches) {
+      playCreateWorkHoverSound(createWorkControl.dataset.createWork);
+    }
+
     const objectControl = event.target.closest("[data-object]");
     if (objectControl && window.matchMedia("(min-width: 821px)").matches) {
       setActiveRoomObject(objectControl.dataset.object);
@@ -884,6 +975,11 @@
     const learnSectionControl = event.target.closest("[data-learn-section]");
     if (learnSectionControl) {
       openLearnSection(learnSectionControl.dataset.learnSection);
+      return;
+    }
+    const createWorkControl = event.target.closest("[data-create-work]");
+    if (createWorkControl) {
+      playCreateWorkSelectSound(createWorkControl.dataset.createWork);
       return;
     }
     const objectControl = event.target.closest("[data-object]");
@@ -920,6 +1016,15 @@
       playPageSound(-1, 0.52);
       actionControl.closest("dialog")?.close();
     }
+  });
+
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest('a[target="_blank"]');
+    if (!link || event.defaultPrevented || event.button !== 0) return;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+    event.preventDefault();
+    window.location.assign(link.href);
   });
 
   prevButton.addEventListener("click", () => turnTo(currentPage - 1, -1));

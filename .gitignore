@@ -19,3 +19,7 @@ scripts/rebuild-hku-hover-sprites.py
 
 # Only runtime assets are force-added to Git; design drafts stay local.
 assets/*
+!assets/china-eastern-thinkcloud-siyun.png
+!assets/create-portrait-v2.png
+!assets/learn-portrait-v13-balanced.webp
+!assets/work-professional-v2-balanced.webp

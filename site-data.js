@@ -479,7 +479,10 @@ window.SITE_DATA = {
           handled: [
             "Delivered 40+ hours of English training for frontline service staff.",
             "Translated and refined 6 sets of in-flight announcements.",
-            "Organized and produced 37 sets of training materials for the Siyun learning platform."
+            {
+              html: "Organized and produced 37 sets of training materials for the Siyun learning platform.",
+              href: "assets/china-eastern-thinkcloud-siyun.png"
+            }
           ],
           moved: [
             "Connected live instruction with a reusable self-directed learning library.",
@@ -497,9 +500,8 @@ window.SITE_DATA = {
       title: "I create to make ideas visible.",
       lede: "Collage, content, and small digital systems are different materials for the same impulse: notice something, shape it, then invite someone else in.",
       stats: [
-        ["7,000", "Xiaohongshu followers"],
-        ["73,000+", "likes and saves"],
-        ["3.2M+", "views for the NUAA ‘Mr. China’ project"]
+        ["≈7,000", "Xiaohongshu followers"],
+        ["73,000+", "likes and saves"]
       ],
       wallTitle: "Content Creating",
       profileLabel: "See the full account",
@@ -510,24 +512,28 @@ window.SITE_DATA = {
           title: "Four collage templates",
           image: "assets/collage-templates.jpg",
           alt: "A dark brown collage of desserts, photographs and hand-drawn annotations",
+          engagement: ["13K likes", "6,816 saves", "72 comments"],
           url: "https://www.xiaohongshu.com/discovery/item/6842d123000000002001f506?source=webshare&xhsshare=pc_web&xsec_token=AByz21WPlcljncfLnDFSQ_EUMLfKWXp7b-HwzkOCeznuM=&xsec_source=pc_share"
         },
         {
           title: "Step-by-step collage tutorial",
           image: "assets/collage-tutorial.jpg",
           alt: "A handmade collage tutorial with food photographs and illustrated notes",
+          engagement: ["4,650 likes", "2,814 saves", "32 comments"],
           url: "https://www.xiaohongshu.com/discovery/item/683bcc9a000000002100ab91?source=webshare&xhsshare=pc_web&xsec_token=ABSW1d1xtxyqcPO84RSzuNjBdJFJ8-1A1lN_BrH5rTQ0w=&xsec_source=pc_share"
         },
         {
           title: "Four Korean-style templates",
           image: "assets/collage-korean.jpg",
           alt: "A pale blue and green collage template with photos, stars and music-player details",
+          engagement: ["1,568 likes", "732 saves", "27 comments"],
           url: "https://www.xiaohongshu.com/discovery/item/693a7cc9000000001f007b68?source=webshare&xhsshare=pc_web&xsec_token=ABvGhfv7OJoHMslM96ku6zP4AFPwncByz0H031kpjby-Y=&xsec_source=pc_share"
         },
         {
           title: "Collage thinking and templates",
           image: "assets/collage-sense.jpg",
           alt: "A light blue campus-photo collage with stars, music notes and reflective captions",
+          engagement: ["1,013 likes", "526 saves", "8 comments"],
           url: "https://www.xiaohongshu.com/discovery/item/68862011000000002203f97a?source=webshare&xhsshare=pc_web&xsec_token=ABy_VlBlDps7_d-NAJUd5vacU3X8VzXXyoynpnixLvov8=&xsec_source=pc_share"
         }
       ],
@@ -1052,7 +1058,10 @@ window.SITE_DATA = {
           handled: [
             "完成 40+ 小时一线服务人员英语培训。",
             "翻译并润色 6 套机上广播词。",
-            "为思云在线学习平台整理并制作 37 套培训资料。"
+            {
+              html: "为思云在线学习平台整理并制作 37 套培训资料。",
+              href: "assets/china-eastern-thinkcloud-siyun.png"
+            }
           ],
           moved: [
             "把线下培训沉淀成可复用的自主学习资料库。",
@@ -1070,9 +1079,8 @@ window.SITE_DATA = {
       title: "我通过创作让想法变得可见。",
       lede: "拼贴、内容与小型数字系统只是不同材料；驱动它们的是同一种冲动：先发现，再塑形，然后邀请别人进入。",
       stats: [
-        ["7,000", "小红书粉丝"],
-        ["73,000+", "累计点赞与收藏"],
-        ["3.2M+", "南航《Mr. China》项目播放量"]
+        ["≈7,000", "小红书粉丝"],
+        ["73,000+", "累计点赞与收藏"]
       ],
       wallTitle: "内容创作",
       profileLabel: "查看完整账号",
@@ -1083,24 +1091,28 @@ window.SITE_DATA = {
           title: "四个拼贴模板",
           image: "assets/collage-templates.jpg",
           alt: "由甜品、照片和手绘批注构成的深棕色拼贴作品",
+          engagement: ["赞 1.3万", "收藏 6,816", "评论 72"],
           url: "https://www.xiaohongshu.com/discovery/item/6842d123000000002001f506?source=webshare&xhsshare=pc_web&xsec_token=AByz21WPlcljncfLnDFSQ_EUMLfKWXp7b-HwzkOCeznuM=&xsec_source=pc_share"
         },
         {
           title: "手把手拼贴教程",
           image: "assets/collage-tutorial.jpg",
           alt: "包含食物照片和插画批注的手作拼贴教程",
+          engagement: ["赞 4,650", "收藏 2,814", "评论 32"],
           url: "https://www.xiaohongshu.com/discovery/item/683bcc9a000000002100ab91?source=webshare&xhsshare=pc_web&xsec_token=ABSW1d1xtxyqcPO84RSzuNjBdJFJ8-1A1lN_BrH5rTQ0w=&xsec_source=pc_share"
         },
         {
           title: "四个韩女拼贴模板",
           image: "assets/collage-korean.jpg",
           alt: "包含照片、星星和音乐播放器元素的浅蓝绿色拼贴模板",
+          engagement: ["赞 1,568", "收藏 732", "评论 27"],
           url: "https://www.xiaohongshu.com/discovery/item/693a7cc9000000001f007b68?source=webshare&xhsshare=pc_web&xsec_token=ABvGhfv7OJoHMslM96ku6zP4AFPwncByz0H031kpjby-Y=&xsec_source=pc_share"
         },
         {
           title: "拼贴思路与模板",
           image: "assets/collage-sense.jpg",
           alt: "由校园照片、星星、音符和文字构成的浅蓝色拼贴",
+          engagement: ["赞 1,013", "收藏 526", "评论 8"],
           url: "https://www.xiaohongshu.com/discovery/item/68862011000000002203f97a?source=webshare&xhsshare=pc_web&xsec_token=ABy_VlBlDps7_d-NAJUd5vacU3X8VzXXyoynpnixLvov8=&xsec_source=pc_share"
         }
       ],
