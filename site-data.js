@@ -296,7 +296,7 @@ window.SITE_DATA = {
             "Uses P1 / P2 / P3 priorities to separate today's deadlines, near-term attention, and reference information",
             "Designed as a personal learning project, not an official HKU product"
           ],
-          externalUrl: "https://hku-compass-workflow.chillsummery0625.chatgpt.site",
+          externalUrl: "https://hku-compass.chillsummery0625.workers.dev",
           action: "Open the live website",
           tone: "create"
         }
@@ -538,7 +538,7 @@ window.SITE_DATA = {
         body: "A real working website that turns scattered information into a daily decision system.",
         image: "assets/hku-compass-preview.png",
         alt: "Preview of the pink and cream HKU Compass student information dashboard",
-        url: "https://hku-compass-workflow.chillsummery0625.chatgpt.site",
+        url: "https://hku-compass.chillsummery0625.workers.dev",
         action: "Open the live website"
       },
       digitalProjects: [
@@ -872,7 +872,7 @@ window.SITE_DATA = {
             "用 P1 / P2 / P3 区分今日明确时限、近期关注与参考信息",
             "这是个人学习项目，并非香港大学官方产品"
           ],
-          externalUrl: "https://hku-compass-workflow.chillsummery0625.chatgpt.site",
+          externalUrl: "https://hku-compass.chillsummery0625.workers.dev",
           action: "打开真实网站",
           tone: "create"
         }
@@ -1111,7 +1111,7 @@ window.SITE_DATA = {
         body: "把分散信息转化成每日决策系统的真实可用网站。",
         image: "assets/hku-compass-preview.png",
         alt: "粉色与奶油色 HKU Compass 学生信息看板网页预览",
-        url: "https://hku-compass-workflow.chillsummery0625.chatgpt.site",
+        url: "https://hku-compass.chillsummery0625.workers.dev",
         action: "打开真实网站"
       },
       digitalProjects: [
