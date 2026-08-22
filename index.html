@@ -25,8 +25,31 @@
         <div class="book" id="book">
           <div class="book-shadow" aria-hidden="true"></div>
           <div class="book-content" id="book-content"></div>
-          <div class="page-turn page-turn--next" aria-hidden="true"></div>
-          <div class="page-turn page-turn--prev" aria-hidden="true"></div>
+          <div class="book-page-stack" aria-hidden="true"></div>
+          <span class="page-grab-hint page-grab-hint--left" aria-hidden="true">‹</span>
+          <span class="page-grab-hint page-grab-hint--right" aria-hidden="true">›</span>
+          <div class="page-turn-stationary" aria-hidden="true">
+            <div class="page-turn__snapshot"></div>
+          </div>
+          <div class="page-turn-shadow" aria-hidden="true"></div>
+          <div class="page-turn page-turn--next" aria-hidden="true">
+            <div class="page-turn__face page-turn__face--front">
+              <div class="page-turn__snapshot"></div>
+            </div>
+            <div class="page-turn__face page-turn__face--back">
+              <div class="page-turn__snapshot"></div>
+            </div>
+            <span class="page-turn__curl"></span>
+          </div>
+          <div class="page-turn page-turn--prev" aria-hidden="true">
+            <div class="page-turn__face page-turn__face--front">
+              <div class="page-turn__snapshot"></div>
+            </div>
+            <div class="page-turn__face page-turn__face--back">
+              <div class="page-turn__snapshot"></div>
+            </div>
+            <span class="page-turn__curl"></span>
+          </div>
         </div>
       </section>
 
@@ -53,6 +76,8 @@
       <p class="noscript-message">This interactive portfolio needs JavaScript. You can still download the <a href="assets/Cui-Yixin-CV.pdf">PDF resume</a>.</p>
     </noscript>
 
+    <!-- StPageFlip 2.0.7 (MIT): assets/vendor/page-flip.LICENSE.txt -->
+    <script src="assets/vendor/page-flip.browser.js"></script>
     <script src="site-data.js"></script>
     <script src="app.js"></script>
   </body>

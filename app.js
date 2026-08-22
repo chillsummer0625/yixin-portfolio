@@ -3,6 +3,12 @@
   const book = document.querySelector("#book");
   const bookStage = document.querySelector(".book-stage");
   const bookContent = document.querySelector("#book-content");
+  const stationaryPage = document.querySelector(".page-turn-stationary");
+  const stationarySnapshot = stationaryPage.querySelector(".page-turn__snapshot");
+  const pageTurns = {
+    next: document.querySelector(".page-turn--next"),
+    prev: document.querySelector(".page-turn--prev")
+  };
   const readerControls = document.querySelector("#reader-controls");
   const prevButton = document.querySelector("#prev-page");
   const nextButton = document.querySelector("#next-page");
@@ -18,7 +24,11 @@
   let currentPage = 1;
   let soundEnabled = false;
   let isTurning = false;
-  let touchStartX = 0;
+  let turnState = null;
+  let libraryTurnState = null;
+  let mobileSwipeState = null;
+  let turnAnimationFrame = 0;
+  let turnRenderFrame = 0;
   let perspectiveFrame = 0;
   let lastObjectHoverAt = 0;
   let lastObjectHoverKey = "";
@@ -32,7 +42,9 @@
   const content = () => data[language];
   const pageIndex = (key) => pageKeys.indexOf(key);
   const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const mobileLayout = () => window.matchMedia("(max-width: 820px)").matches;
   const certificatePdfPath = encodeURI("奖状汇总最终版_副本.pdf");
+  const pageCrease = (extraClass = "") => `<div class="page-crease${extraClass ? ` ${extraClass}` : ""}" aria-hidden="true"></div>`;
 
   function toolbar(active) {
     const t = content();
@@ -171,7 +183,7 @@
             <span class="character-hotspot__arrow" aria-hidden="true">↗</span>
           </button>
 
-          <div class="book-gutter" aria-hidden="true"></div>
+          ${pageCrease("book-gutter")}
         </div>
         <dialog class="experience-dialog" id="experience-dialog" aria-labelledby="experience-dialog-title">
           <div class="experience-dialog__accent" aria-hidden="true"></div>
@@ -253,6 +265,8 @@
 
     const linkedTitle = detail.externalUrl
       ? learnDetailLink(detail.title, detail.externalUrl, content().common.openArticle)
+      : detail.certificateHref
+        ? learnDetailLink(detail.title, detail.certificateHref, content().common.openCertificate)
       : detail.certificatePage
         ? learnCertificateLink(detail.title, detail.certificatePage)
         : detail.title;
@@ -313,7 +327,6 @@
           style="--learn-book-index: ${index}"
         >
           <span class="learn-book__rules learn-book__rules--top" aria-hidden="true"></span>
-          <span class="learn-book__dot" aria-hidden="true"></span>
           <span class="learn-book__title">${section.title}</span>
           <span class="learn-book__ornament" aria-hidden="true"></span>
           <span class="learn-book__rules learn-book__rules--bottom" aria-hidden="true"></span>
@@ -350,6 +363,7 @@
             <div class="learn-portrait__light" aria-hidden="true"></div>
           </div>
         </div>
+        ${pageCrease()}
       </article>`;
   }
 
@@ -435,6 +449,7 @@
             <span class="work-portrait__light" aria-hidden="true"></span>
           </figure>
         </div>
+        ${pageCrease()}
       </article>`;
   }
 
@@ -542,6 +557,7 @@
             <p class="create-mobile-proof">${proof}</p>
           </section>
         </div>
+        ${pageCrease()}
       </article>`;
   }
 
@@ -564,19 +580,70 @@
           </div>
           <p class="closing-meta">Yixin Cui · 2026</p>
         </div>
+        ${pageCrease()}
       </article>`;
   }
 
   const renderers = [coverPage, roomPage, learnPage, workPage, createPage, closingPage];
+  const pageMarkupCache = new Map();
+  const pageTemplateCache = new Map();
+  const warmedPageContexts = new Set();
+
+  const pageCacheKey = (index) => `${language}:${soundEnabled ? 1 : 0}:${index}`;
+
+  function renderedPageMarkup(index) {
+    const cacheKey = pageCacheKey(index);
+    if (!pageMarkupCache.has(cacheKey)) pageMarkupCache.set(cacheKey, renderers[index]());
+    return pageMarkupCache.get(cacheKey);
+  }
+
+  function pageTemplate(index) {
+    const cacheKey = pageCacheKey(index);
+    if (!pageTemplateCache.has(cacheKey)) {
+      const template = document.createElement("template");
+      template.innerHTML = renderedPageMarkup(index);
+      pageTemplateCache.set(cacheKey, template);
+    }
+    return pageTemplateCache.get(cacheKey);
+  }
+
+  function clonedPage(index) {
+    return pageTemplate(index).content.cloneNode(true);
+  }
+
+  function schedulePageWarmup() {
+    const contextKey = `${language}:${soundEnabled ? 1 : 0}`;
+    if (warmedPageContexts.has(contextKey)) return;
+    warmedPageContexts.add(contextKey);
+    const warm = () => pageKeys.forEach((_, index) => pageTemplate(index));
+    if ("requestIdleCallback" in window) window.requestIdleCallback(warm, { timeout: 1200 });
+    else window.setTimeout(warm, 120);
+  }
+
+  function resetPageCaches() {
+    pageMarkupCache.clear();
+    pageTemplateCache.clear();
+    warmedPageContexts.clear();
+  }
 
   function resumeMarkup() {
     const t = content();
     const highlights = t.resume.highlights.map((item) => `<li>${item}</li>`).join("");
+    const linkGroups = t.resume.linkGroups.map((group) => `
+      <div class="drawer-link-group">
+        <p>${group.label}</p>
+        <div>${group.links.map((link) => `<a class="drawer-highlight-link" href="${link.href}" target="_blank" rel="noopener noreferrer">${link.label}<span aria-hidden="true">↗</span></a>`).join("")}</div>
+      </div>`).join("");
     return `
       <p class="drawer-eyebrow">${t.resume.eyebrow}</p>
       <h2 id="resume-title">${t.resume.title}</h2>
       <p class="drawer-subtitle">${t.resume.subtitle}</p>
       <p class="drawer-summary">${t.resume.summary}</p>
+      <div class="drawer-facts">
+        <p>${t.resume.proficiency}</p>
+      </div>
+      <div class="drawer-link-groups">${linkGroups}</div>
+      <p class="drawer-section-label">${t.resume.experienceLabel}</p>
       <ul class="drawer-highlights">${highlights}</ul>
       <div class="drawer-actions">
         <a class="primary-action" href="assets/Cui-Yixin-CV.pdf" target="_blank" rel="noreferrer">${t.resume.download}<span aria-hidden="true">↓</span></a>
@@ -598,14 +665,17 @@
       : `${t.common.page} ${currentPage} ${t.common.of} ${pageKeys.length - 1}`;
   }
 
-  function render({ focusHeading = false } = {}) {
+  function render({ focusHeading = false, reuseContent = false } = {}) {
     const t = content();
     document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
     document.title = t.meta.title;
     book.dataset.currentPage = pageKeys[currentPage];
-    bookContent.innerHTML = renderers[currentPage]();
-    resumeContent.innerHTML = resumeMarkup();
+    if (!reuseContent) {
+      bookContent.replaceChildren(clonedPage(currentPage));
+      resumeContent.innerHTML = resumeMarkup();
+    }
     updateReaderControls();
+    schedulePageWarmup();
     if (focusHeading) {
       requestAnimationFrame(() => bookContent.querySelector("h1")?.focus({ preventScroll: true }));
     }
@@ -713,24 +783,580 @@
     playLocalSound("page", 0.72 * intensity, direction > 0 ? 1 : 0.86);
   }
 
+  const libraryFlipSupported = () => Boolean(window.St?.PageFlip) && !mobileLayout();
+
+  function pageFlipHalf(index, side) {
+    const page = document.createElement("div");
+    const surface = document.createElement("div");
+    const pageClone = clonedPage(index).firstElementChild;
+    page.className = `page-flip__page page-flip__page--${side}`;
+    surface.className = `page-flip__surface page-flip__surface--${side} book-content`;
+    page.setAttribute("aria-hidden", "true");
+    pageClone.querySelectorAll("dialog").forEach((dialog) => dialog.remove());
+    pageClone.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
+    pageClone.querySelectorAll("a, button, input, select, textarea, [tabindex]").forEach((element) => {
+      element.tabIndex = -1;
+    });
+    surface.append(pageClone);
+    page.append(surface);
+    return page;
+  }
+
+  function disposeLibraryTurn() {
+    if (!libraryTurnState) return;
+    const state = libraryTurnState;
+    libraryTurnState = null;
+    window.clearTimeout(state.holdTimer);
+    window.cancelAnimationFrame(state.moveFrame);
+    try {
+      state.instance.destroy();
+    } catch (_) {
+      state.root.remove();
+    }
+    book.classList.remove("is-library-grabbed", "is-library-turning", "is-library-turning-next", "is-library-turning-prev");
+  }
+
+  function finishLibraryTurn(commit) {
+    if (!libraryTurnState) return;
+    const { targetIndex, direction } = libraryTurnState;
+    disposeLibraryTurn();
+    isTurning = false;
+    if (commit) currentPage = targetIndex;
+    render({ focusHeading: commit });
+    if (commit) playPageSound(direction, 0.82);
+  }
+
+  function prepareLibraryTurn(targetIndex, direction, { programmatic = false } = {}) {
+    if (!libraryFlipSupported() || targetIndex < 0 || targetIndex >= pageKeys.length || targetIndex === currentPage) return false;
+    if (libraryTurnState) disposeLibraryTurn();
+
+    const bounds = book.getBoundingClientRect();
+    const root = document.createElement("div");
+    const sourceOrder = direction > 0
+      ? [[currentPage, "left"], [currentPage, "right"], [targetIndex, "left"], [targetIndex, "right"]]
+      : [[targetIndex, "left"], [targetIndex, "right"], [currentPage, "left"], [currentPage, "right"]];
+    const pages = sourceOrder.map(([index, side]) => pageFlipHalf(index, side));
+    const startPage = direction > 0 ? 0 : 2;
+    const destinationPage = direction > 0 ? 2 : 0;
+
+    root.className = "page-flip-engine";
+    root.dataset.direction = direction > 0 ? "next" : "prev";
+    root.setAttribute("aria-hidden", "true");
+    book.append(root);
+
+    const instance = new window.St.PageFlip(root, {
+      width: Math.max(1, Math.round(bounds.width / 2)),
+      height: Math.max(1, Math.round(bounds.height)),
+      size: "stretch",
+      minWidth: 100,
+      maxWidth: 2400,
+      minHeight: 100,
+      maxHeight: 1800,
+      startPage,
+      flippingTime: 620,
+      drawShadow: true,
+      maxShadowOpacity: 0.42,
+      usePortrait: false,
+      autoSize: false,
+      showCover: false,
+      mobileScrollSupport: true,
+      clickEventForward: false,
+      useMouseEvents: true,
+      showPageCorners: true,
+      disableFlipByClick: false
+    });
+
+    libraryTurnState = {
+      instance,
+      root,
+      targetIndex,
+      direction,
+      startPage,
+      destinationPage,
+      started: programmatic,
+      pointerId: null,
+      dragStartX: 0,
+      dragStartY: 0,
+      dragMoved: false,
+      holdLifted: false,
+      holdTimer: 0,
+      moveFrame: 0,
+      pendingPoint: null,
+      pendingIsTouch: false
+    };
+
+    instance.on("changeState", (event) => {
+      if (!libraryTurnState || libraryTurnState.instance !== instance) return;
+      if (["user_fold", "flipping"].includes(event.data)) {
+        libraryTurnState.started = true;
+        isTurning = true;
+        book.classList.add("is-library-turning", direction > 0 ? "is-library-turning-next" : "is-library-turning-prev");
+      }
+      if (event.data === "read" && libraryTurnState.started) {
+        const commit = instance.getCurrentPageIndex() === destinationPage;
+        window.requestAnimationFrame(() => finishLibraryTurn(commit));
+      }
+    });
+
+    instance.loadFromHTML(pages);
+    instance.getUI().removeHandlers?.();
+
+    if (programmatic) {
+      isTurning = true;
+      book.classList.add("is-library-turning", direction > 0 ? "is-library-turning-next" : "is-library-turning-prev");
+      window.requestAnimationFrame(() => {
+        if (!libraryTurnState || libraryTurnState.instance !== instance) return;
+        if (direction > 0) instance.flipNext("bottom");
+        else instance.flipPrev("bottom");
+      });
+    }
+    return true;
+  }
+
+  function setTurnSnapshot(snapshot, pageClone, side) {
+    snapshot.className = `page-turn__snapshot page-turn__snapshot--${side}`;
+    snapshot.replaceChildren(pageClone);
+    snapshot.inert = true;
+  }
+
+  function prepareTurn(targetIndex, direction, { pointerId = null, startX = 0 } = {}) {
+    if (targetIndex < 0 || targetIndex >= pageKeys.length || targetIndex === currentPage || isTurning) return false;
+
+    const currentPageNode = bookContent.firstElementChild;
+    const turnKey = direction > 0 ? "next" : "prev";
+    const turningPage = pageTurns[turnKey];
+    const frontSnapshot = turningPage.querySelector(".page-turn__face--front .page-turn__snapshot");
+    const backSnapshot = turningPage.querySelector(".page-turn__face--back .page-turn__snapshot");
+    const currentSide = direction > 0 ? "right" : "left";
+    const targetSide = direction > 0 ? "left" : "right";
+    const currentUnderlay = currentPageNode.cloneNode(true);
+    const targetUnderlay = clonedPage(targetIndex).firstElementChild;
+
+    window.cancelAnimationFrame(turnAnimationFrame);
+    window.cancelAnimationFrame(turnRenderFrame);
+    isTurning = true;
+    turnState = {
+      targetIndex,
+      direction,
+      pointerId,
+      startX,
+      lastX: startX,
+      lastTime: performance.now(),
+      velocity: 0,
+      progress: 0,
+      underlaySwapped: false,
+      currentUnderlay,
+      targetUnderlay,
+      turningPage
+    };
+
+    setTurnSnapshot(stationarySnapshot, currentPageNode.cloneNode(true), currentSide);
+    setTurnSnapshot(frontSnapshot, currentPageNode.cloneNode(true), currentSide);
+    setTurnSnapshot(backSnapshot, clonedPage(targetIndex), targetSide);
+    stationaryPage.classList.toggle("is-left", currentSide === "left");
+    stationaryPage.classList.toggle("is-right", currentSide === "right");
+    book.classList.add("is-page-turning", direction > 0 ? "is-turning-next" : "is-turning-prev");
+    book.dataset.turnDirection = turnKey;
+    setTurnProgress(0);
+    return true;
+  }
+
+  function syncTurnUnderlay(progress) {
+    if (!turnState) return;
+    const shouldShowTarget = progress >= 0.5;
+    if (shouldShowTarget === turnState.underlaySwapped) return;
+    bookContent.replaceChildren(shouldShowTarget ? turnState.targetUnderlay : turnState.currentUnderlay);
+    turnState.underlaySwapped = shouldShowTarget;
+  }
+
+  function setTurnProgress(progress) {
+    if (!turnState) return;
+    const nextProgress = Math.max(0, Math.min(1, progress));
+    const fold = Math.sin(nextProgress * Math.PI);
+    const direction = turnState.direction;
+    turnState.progress = nextProgress;
+    syncTurnUnderlay(nextProgress);
+    book.style.setProperty("--turn-progress", nextProgress.toFixed(4));
+    book.style.setProperty("--turn-fold", fold.toFixed(4));
+    book.style.setProperty("--turn-angle", `${(direction * -180 * nextProgress).toFixed(3)}deg`);
+    book.style.setProperty("--turn-shadow", Math.min(0.72, fold * 0.72).toFixed(4));
+    book.style.setProperty("--stationary-opacity", Math.max(0, 1 - Math.max(0, nextProgress - 0.46) / 0.16).toFixed(4));
+  }
+
+  function finishTurn(commit) {
+    if (!turnState) return;
+    syncTurnUnderlay(commit ? 1 : 0);
+    const { targetIndex, direction } = turnState;
+    window.cancelAnimationFrame(turnAnimationFrame);
+    window.cancelAnimationFrame(turnRenderFrame);
+    if (commit) currentPage = targetIndex;
+    turnState = null;
+    isTurning = false;
+    book.classList.remove("is-page-turning", "is-page-dragging", "is-turning-next", "is-turning-prev", "is-page-settling");
+    delete book.dataset.turnDirection;
+    book.style.removeProperty("--turn-progress");
+    book.style.removeProperty("--turn-fold");
+    book.style.removeProperty("--turn-angle");
+    book.style.removeProperty("--turn-shadow");
+    book.style.removeProperty("--stationary-opacity");
+    stationarySnapshot.replaceChildren();
+    Object.values(pageTurns).forEach((pageTurn) => {
+      pageTurn.querySelectorAll(".page-turn__snapshot").forEach((snapshot) => snapshot.replaceChildren());
+    });
+    render({ focusHeading: commit, reuseContent: commit });
+    if (commit) playPageSound(direction, 0.82);
+  }
+
+  function exponentialEaseOut(progress, strength = 10) {
+    if (progress >= 1) return 1;
+    return (1 - Math.pow(2, -strength * progress)) / (1 - Math.pow(2, -strength));
+  }
+
+  function paperTurnEase(progress) {
+    const spineCrossing = 0.46;
+    if (progress <= spineCrossing) {
+      const lift = progress / spineCrossing;
+      const smoothLift = lift * lift * (3 - 2 * lift);
+      return smoothLift * 0.5;
+    }
+    const settle = (progress - spineCrossing) / (1 - spineCrossing);
+    return 0.5 + exponentialEaseOut(settle, 8) * 0.5;
+  }
+
+  function animateTurnTo(destination, { commit = destination === 1, initialVelocity = 0, durationOverride = 0 } = {}) {
+    if (!turnState) return;
+    if (reducedMotion()) {
+      setTurnProgress(destination);
+      finishTurn(commit);
+      return;
+    }
+
+    const start = turnState.progress;
+    const distance = Math.abs(destination - start);
+    const duration = durationOverride || Math.max(170, Math.min(420, 190 + distance * 210 - Math.min(70, Math.abs(initialVelocity) * 45)));
+    const startedAt = performance.now();
+    book.classList.remove("is-page-dragging");
+    book.classList.add("is-page-settling");
+
+    const step = (now) => {
+      if (!turnState) return;
+      const elapsed = Math.min(1, (now - startedAt) / duration);
+      const eased = durationOverride
+        ? paperTurnEase(elapsed)
+        : exponentialEaseOut(elapsed);
+      setTurnProgress(start + (destination - start) * eased);
+      if (elapsed < 1) {
+        turnAnimationFrame = window.requestAnimationFrame(step);
+      } else {
+        finishTurn(commit);
+      }
+    };
+    turnAnimationFrame = window.requestAnimationFrame(step);
+  }
+
+  async function mobileTurnTo(targetIndex, direction, { focusHeading = true, fromShift = 0, fromOpacity = 1 } = {}) {
+    if (targetIndex < 0 || targetIndex >= pageKeys.length || targetIndex === currentPage || isTurning) return;
+    if (reducedMotion()) {
+      currentPage = targetIndex;
+      render({ focusHeading });
+      playPageSound(direction, 0.58);
+      return;
+    }
+
+    isTurning = true;
+    book.classList.add("is-mobile-page-turning", direction > 0 ? "is-mobile-turning-next" : "is-mobile-turning-prev");
+    const exitShift = direction > 0 ? -2.4 : 2.4;
+    const enterShift = direction > 0 ? 2.1 : -2.1;
+
+    try {
+      if (bookContent.animate) {
+        const exitAnimation = bookContent.animate([
+          { opacity: fromOpacity, transform: `translate3d(${fromShift}%, 0, 0)` },
+          { opacity: 0, transform: `translate3d(${exitShift}%, 0, 0)` }
+        ], {
+          duration: 115,
+          easing: "cubic-bezier(0.4, 0, 1, 1)",
+          fill: "forwards"
+        });
+        await exitAnimation.finished.catch(() => {});
+      }
+
+      currentPage = targetIndex;
+      render({ focusHeading });
+
+      if (bookContent.animate) {
+        const enterAnimation = bookContent.animate([
+          { opacity: 0, transform: `translate3d(${enterShift}%, 0, 0)` },
+          { opacity: 1, transform: "translate3d(0, 0, 0)" }
+        ], {
+          duration: 175,
+          easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+          fill: "forwards"
+        });
+        await enterAnimation.finished.catch(() => {});
+      }
+      playPageSound(direction, 0.66);
+    } finally {
+      bookContent.getAnimations?.().forEach((animation) => animation.cancel());
+      bookContent.style.removeProperty("opacity");
+      bookContent.style.removeProperty("transform");
+      book.classList.remove("is-mobile-page-turning", "is-mobile-turning-next", "is-mobile-turning-prev");
+      isTurning = false;
+    }
+  }
+
   function turnTo(target, explicitDirection) {
     const targetIndex = typeof target === "number" ? target : pageIndex(target);
-    if (targetIndex < 0 || targetIndex >= pageKeys.length || targetIndex === currentPage || isTurning) return;
+    if (targetIndex < 0 || targetIndex >= pageKeys.length || targetIndex === currentPage || isTurning || mobileSwipeState) return;
     const direction = explicitDirection || (targetIndex > currentPage ? 1 : -1);
-    const duration = reducedMotion() ? 0 : (window.matchMedia("(max-width: 820px)").matches ? 420 : 520);
-    isTurning = true;
-    playPageSound(direction);
-    book.classList.add(direction > 0 ? "is-turning-next" : "is-turning-prev");
-    window.setTimeout(() => {
+    if (mobileLayout()) {
+      void mobileTurnTo(targetIndex, direction);
+      return;
+    }
+    if (reducedMotion()) {
       currentPage = targetIndex;
       render({ focusHeading: true });
-      book.classList.remove("is-turning-next", "is-turning-prev");
+      playPageSound(direction, 0.58);
+      return;
+    }
+    if (libraryFlipSupported()) {
+      prepareLibraryTurn(targetIndex, direction, { programmatic: true });
+      return;
+    }
+    if (!prepareTurn(targetIndex, direction)) return;
+    window.requestAnimationFrame(() => animateTurnTo(1, { commit: true, durationOverride: 620 }));
+  }
+
+  function beginMobileSwipe(event) {
+    mobileSwipeState = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      lastX: event.clientX,
+      lastTime: performance.now(),
+      direction: 0,
+      velocity: 0,
+      progress: 0,
+      shift: 0,
+      opacity: 1
+    };
+    book.classList.add("is-mobile-swiping");
+    try { book.setPointerCapture?.(event.pointerId); } catch (_) { /* Synthetic input may not own a pointer. */ }
+  }
+
+  function moveMobileSwipe(event) {
+    if (!mobileSwipeState || mobileSwipeState.pointerId !== event.pointerId) return;
+    const bounds = book.getBoundingClientRect();
+    const rawDelta = mobileSwipeState.startX - event.clientX;
+    const direction = rawDelta >= 0 ? 1 : -1;
+    const targetIndex = currentPage + direction;
+    const now = performance.now();
+    const elapsed = Math.max(8, now - mobileSwipeState.lastTime);
+    mobileSwipeState.velocity = Math.abs(event.clientX - mobileSwipeState.lastX) / elapsed;
+    mobileSwipeState.lastX = event.clientX;
+    mobileSwipeState.lastTime = now;
+
+    if (targetIndex < 0 || targetIndex >= pageKeys.length) {
+      mobileSwipeState.progress = 0;
+      return;
+    }
+
+    const progress = Math.min(1, Math.abs(rawDelta) / (bounds.width * 0.72));
+    const shift = direction > 0 ? -progress * 1.6 : progress * 1.6;
+    const opacity = 1 - progress * 0.18;
+    mobileSwipeState.direction = direction;
+    mobileSwipeState.progress = progress;
+    mobileSwipeState.shift = shift;
+    mobileSwipeState.opacity = opacity;
+    bookContent.style.transform = `translate3d(${shift}%, 0, 0)`;
+    bookContent.style.opacity = opacity.toFixed(3);
+    if (Math.abs(rawDelta) > 5) event.preventDefault();
+  }
+
+  async function cancelMobileSwipe(fromShift, fromOpacity) {
+    isTurning = true;
+    try {
+      if (bookContent.animate) {
+        const returnAnimation = bookContent.animate([
+          { opacity: fromOpacity, transform: `translate3d(${fromShift}%, 0, 0)` },
+          { opacity: 1, transform: "translate3d(0, 0, 0)" }
+        ], {
+          duration: 135,
+          easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+          fill: "forwards"
+        });
+        await returnAnimation.finished.catch(() => {});
+      }
+    } finally {
+      bookContent.getAnimations?.().forEach((animation) => animation.cancel());
+      bookContent.style.removeProperty("opacity");
+      bookContent.style.removeProperty("transform");
       isTurning = false;
-    }, duration);
+    }
+  }
+
+  function endMobileSwipe(event, cancelled = false) {
+    if (!mobileSwipeState || mobileSwipeState.pointerId !== event.pointerId) return;
+    try { book.releasePointerCapture?.(event.pointerId); } catch (_) { /* Pointer may already be released. */ }
+    const swipe = mobileSwipeState;
+    mobileSwipeState = null;
+    book.classList.remove("is-mobile-swiping");
+    const targetIndex = currentPage + swipe.direction;
+    const commit = !cancelled
+      && swipe.direction !== 0
+      && targetIndex >= 0
+      && targetIndex < pageKeys.length
+      && (swipe.progress >= 0.24 || swipe.velocity > 0.46);
+
+    if (commit) {
+      void mobileTurnTo(targetIndex, swipe.direction, {
+        fromShift: swipe.shift,
+        fromOpacity: swipe.opacity
+      });
+    } else {
+      void cancelMobileSwipe(swipe.shift, swipe.opacity);
+    }
+  }
+
+  function beginPageDrag(event) {
+    if (isTurning || drawer.open || document.querySelector("#experience-dialog[open]")) return;
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    if (event.target.closest("a, button, input, select, textarea, dialog, [role='tab'], [contenteditable='true']")) return;
+
+    if (mobileLayout()) {
+      beginMobileSwipe(event);
+      return;
+    }
+
+    if (reducedMotion()) return;
+
+    if (libraryFlipSupported()) {
+      const bounds = book.getBoundingClientRect();
+      const direction = event.clientX >= bounds.left + bounds.width / 2 ? 1 : -1;
+      const targetIndex = currentPage + direction;
+      if (!prepareLibraryTurn(targetIndex, direction)) return;
+      libraryTurnState.pointerId = event.pointerId;
+      libraryTurnState.dragStartX = event.clientX;
+      libraryTurnState.dragStartY = event.clientY;
+      book.classList.add("is-library-grabbed");
+      libraryTurnState.instance.startUserTouch({
+        x: event.clientX - bounds.left,
+        y: event.clientY - bounds.top
+      });
+      const activeState = libraryTurnState;
+      activeState.holdTimer = window.setTimeout(() => {
+        if (libraryTurnState !== activeState || activeState.dragMoved) return;
+        activeState.holdLifted = true;
+        activeState.instance.userMove({
+          x: activeState.dragStartX - bounds.left + (direction > 0 ? -10 : 10),
+          y: activeState.dragStartY - bounds.top
+        }, false);
+      }, 90);
+      try { book.setPointerCapture?.(event.pointerId); } catch (_) { /* Pointer capture may be unavailable. */ }
+      event.preventDefault();
+      return;
+    }
+
+    const bounds = book.getBoundingClientRect();
+    const direction = event.clientX >= bounds.left + bounds.width / 2 ? 1 : -1;
+    const targetIndex = currentPage + direction;
+    if (!prepareTurn(targetIndex, direction, { pointerId: event.pointerId, startX: event.clientX })) return;
+
+    book.classList.add("is-page-dragging");
+    try { book.setPointerCapture?.(event.pointerId); } catch (_) { /* Synthetic input may not own a pointer. */ }
+    setTurnProgress(0.012);
+  }
+
+  function movePageDrag(event) {
+    if (mobileSwipeState) {
+      moveMobileSwipe(event);
+      return;
+    }
+    if (libraryTurnState?.pointerId === event.pointerId) {
+      const bounds = book.getBoundingClientRect();
+      const distance = Math.hypot(
+        event.clientX - libraryTurnState.dragStartX,
+        event.clientY - libraryTurnState.dragStartY
+      );
+      if (distance > 5) {
+        libraryTurnState.dragMoved = true;
+        window.clearTimeout(libraryTurnState.holdTimer);
+      }
+      libraryTurnState.pendingPoint = {
+        x: event.clientX - bounds.left,
+        y: event.clientY - bounds.top
+      };
+      libraryTurnState.pendingIsTouch = event.pointerType !== "mouse";
+      if (!libraryTurnState.moveFrame) {
+        const activeState = libraryTurnState;
+        activeState.moveFrame = window.requestAnimationFrame(() => {
+          activeState.moveFrame = 0;
+          if (libraryTurnState !== activeState || !activeState.pendingPoint) return;
+          activeState.instance.userMove(activeState.pendingPoint, activeState.pendingIsTouch);
+        });
+      }
+      if (distance > 5) event.preventDefault();
+      return;
+    }
+    if (!turnState || turnState.pointerId !== event.pointerId || !book.classList.contains("is-page-dragging")) return;
+    const bounds = book.getBoundingClientRect();
+    const travel = bounds.width * (window.matchMedia("(max-width: 820px)").matches ? 0.82 : 0.68);
+    const delta = turnState.direction > 0
+      ? turnState.startX - event.clientX
+      : event.clientX - turnState.startX;
+    const now = performance.now();
+    const elapsed = Math.max(8, now - turnState.lastTime);
+    const directionalDelta = turnState.direction > 0
+      ? turnState.lastX - event.clientX
+      : event.clientX - turnState.lastX;
+    turnState.velocity = directionalDelta / elapsed;
+    turnState.lastX = event.clientX;
+    turnState.lastTime = now;
+    const nextProgress = Math.max(0, Math.min(1, delta / travel));
+
+    window.cancelAnimationFrame(turnRenderFrame);
+    turnRenderFrame = window.requestAnimationFrame(() => setTurnProgress(nextProgress));
+    if (Math.abs(delta) > 5) event.preventDefault();
+  }
+
+  function endPageDrag(event, cancelled = false) {
+    if (mobileSwipeState) {
+      endMobileSwipe(event, cancelled);
+      return;
+    }
+    if (libraryTurnState?.pointerId === event.pointerId) {
+      const state = libraryTurnState;
+      window.clearTimeout(state.holdTimer);
+      window.cancelAnimationFrame(state.moveFrame);
+      try { book.releasePointerCapture?.(event.pointerId); } catch (_) { /* Pointer may already be released. */ }
+      if (!state.dragMoved && !state.holdLifted) {
+        disposeLibraryTurn();
+        isTurning = false;
+        return;
+      }
+      const bounds = book.getBoundingClientRect();
+      if (state.pendingPoint) state.instance.userMove(state.pendingPoint, state.pendingIsTouch);
+      state.instance.userStop({
+        x: event.clientX - bounds.left,
+        y: event.clientY - bounds.top
+      }, false);
+      return;
+    }
+    if (!turnState || turnState.pointerId !== event.pointerId || !book.classList.contains("is-page-dragging")) return;
+    try { book.releasePointerCapture?.(event.pointerId); } catch (_) { /* Pointer may already be released. */ }
+    const progress = turnState.progress;
+    const velocity = turnState.velocity;
+    const commit = !cancelled && (progress >= 0.42 || (progress >= 0.08 && velocity > 0.48));
+    animateTurnTo(commit ? 1 : 0, { commit, initialVelocity: velocity });
   }
 
   function updatePerspective(event) {
-    if (reducedMotion() || window.matchMedia("(max-width: 820px)").matches) return;
+    if (turnState || libraryTurnState?.started || reducedMotion() || window.matchMedia("(max-width: 820px)").matches) return;
+    const bookBounds = book.getBoundingClientRect();
+    const bookX = (event.clientX - bookBounds.left) / bookBounds.width;
+    const insideBookY = event.clientY >= bookBounds.top && event.clientY <= bookBounds.bottom;
+    if (insideBookY && bookX >= 0 && bookX <= 0.11) book.dataset.edgeHover = "left";
+    else if (insideBookY && bookX >= 0.89 && bookX <= 1) book.dataset.edgeHover = "right";
+    else delete book.dataset.edgeHover;
     window.cancelAnimationFrame(perspectiveFrame);
     perspectiveFrame = window.requestAnimationFrame(() => {
       const bounds = bookStage.getBoundingClientRect();
@@ -748,6 +1374,7 @@
   }
 
   function resetPerspective() {
+    delete book.dataset.edgeHover;
     book.style.setProperty("--pointer-x", "0");
     book.style.setProperty("--pointer-y", "0");
     book.style.setProperty("--book-tilt-x", "0deg");
@@ -759,14 +1386,18 @@
   }
 
   function toggleLanguage() {
+    disposeLibraryTurn();
     language = language === "en" ? "zh" : "en";
     localStorage.setItem("yixin-language", language);
+    resetPageCaches();
     render();
   }
 
   function toggleSound() {
+    disposeLibraryTurn();
     soundEnabled = !soundEnabled;
     if (soundEnabled) playPageSound(1, 0.42);
+    resetPageCaches();
     render();
   }
 
@@ -1067,14 +1698,10 @@
     if (event.key === "ArrowRight") turnTo(currentPage + 1, 1);
   });
 
-  book.addEventListener("touchstart", (event) => {
-    touchStartX = event.changedTouches[0].clientX;
-  }, { passive: true });
-  book.addEventListener("touchend", (event) => {
-    const delta = event.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(delta) < 55) return;
-    turnTo(currentPage + (delta < 0 ? 1 : -1), delta < 0 ? 1 : -1);
-  }, { passive: true });
+  book.addEventListener("pointerdown", beginPageDrag);
+  book.addEventListener("pointermove", movePageDrag);
+  book.addEventListener("pointerup", (event) => endPageDrag(event));
+  book.addEventListener("pointercancel", (event) => endPageDrag(event, true));
 
   bookStage.addEventListener("pointermove", updatePerspective, { passive: true });
   bookStage.addEventListener("pointerleave", resetPerspective);

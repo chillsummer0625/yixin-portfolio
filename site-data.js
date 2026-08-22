@@ -72,6 +72,7 @@ window.SITE_DATA = {
             {
               title: "CreteLing 2026 Summer School",
               date: "Jul 2026",
+              certificateHref: "assets/documents/creteling-2026-certificate-public.pdf",
               lines: [
                 "5 intensive English-medium courses",
                 "8 teaching days",
@@ -107,7 +108,7 @@ window.SITE_DATA = {
         },
         hku: {
           label: "HKU",
-          kicker: "Student · Next chapter",
+          kicker: "Student · Academic record",
           title: "The University of Hong Kong",
           meta: "Sep 2026-Nov 2027 · MA in Linguistics",
           details: [
@@ -402,7 +403,7 @@ window.SITE_DATA = {
           ],
           moved: [
             {
-              html: "Generated more than 1 million campaign views.",
+              html: "Generated more than 1 million campaign views on Facebook and X.",
               href: "https://mp.weixin.qq.com/s/PKJQkbQQX-W7b3gBlrG4Mg"
             },
             "Turned one editorial plan into coordinated multi-account delivery."
@@ -552,7 +553,7 @@ window.SITE_DATA = {
           title: "Vibe coding for humanities students",
           tag: "Practical field guide",
           body: "A non-technical route from a real pain point to a working website.",
-          url: "http://xhslink.cn/o/5drrRNvE6Aq"
+          url: "https://xhslink.cn/o/5drrRNvE6Aq"
         }
       ],
       note: "Every collage above opens its original Xiaohongshu post. The work stays connected to where it was first shared."
@@ -568,17 +569,36 @@ window.SITE_DATA = {
     resume: {
       eyebrow: "Two-minute version",
       title: "Yixin Cui",
-      subtitle: "Incoming MA Linguistics student · International business and global communication",
-      summary: "English-major graduate with hands-on experience in export operations, international media, overseas creator campaigns, broadcast, training, and content creation.",
+      subtitle: "HKU · MA in Linguistics · Sep 2026–Nov 2027 (anticipated)",
+      summary: "English-major graduate with diverse experience across international business, media, and communication. Outside work, I explore photo editing and vibe coding.",
+      proficiency: "English proficiency: IELTS 7.5 · TEM-8 (Good) · TEM-4 (Excellent)",
+      linkGroups: [
+        {
+          label: "Content creation",
+          links: [
+            { label: "7,000 followers · 73,000+ likes & saves", href: "https://www.xiaohongshu.com/user/profile/63c4e6830000000026010347?xsec_token=ABwqnZUcm0neau5ryEmXCKamhojl2mX3py0vLHug1Ty2Y=&xsec_source=pc_search" }
+          ]
+        },
+        {
+          label: "Vibe coding",
+          links: [
+            { label: "HKU Compass", href: "https://hku-compass.chillsummery0625.workers.dev" },
+            { label: "Website CV", href: "https://chillsummer0625.github.io/yixin-portfolio/" },
+            { label: "Experience sharing on Xiaohongshu", href: "https://xhslink.cn/m/KvXFiFkmia" }
+          ]
+        }
+      ],
+      experienceLabel: "Internship experience",
       highlights: [
-        "SUMEC: supported end-to-end export orders across 5 factories",
-        "China Daily: coordinated an 18-account campaign with 1M+ views",
-        "Creator operations: screened 50+ international creators daily",
-        "Xiaohongshu: about 7,000 followers and 73,000+ total likes and saves",
-        "NUAA: GPA 4.1/5.0, ranked 3 of 46"
+        "SUMEC · Foreign Trade Business Assistant",
+        "China Daily · English Editor",
+        "Honey Verse · Overseas Influencer Marketing",
+        "Sichuan RTV · New Media Editor",
+        "Chengdu RTV · English Editor",
+        "China Eastern Airlines · English Broadcast Trainer"
       ],
       download: "Download PDF resume",
-      email: "chillsummery0625@gmail.com"
+      email: "yixincui_chill@connect.hku.hk"
     }
   },
   zh: {
@@ -654,6 +674,7 @@ window.SITE_DATA = {
             {
               title: "CreteLing 2026 Summer School",
               date: "2026.07",
+              certificateHref: "assets/documents/creteling-2026-certificate-public.pdf",
               lines: [
                 "5 门全英文密集课程",
                 "8 个教学日",
@@ -689,7 +710,7 @@ window.SITE_DATA = {
         },
         hku: {
           label: "HKU",
-          kicker: "学生 · 下一章节",
+          kicker: "学生 · 学业档案",
           title: "香港大学",
           meta: "2026.09-2027.11 · 语言学文学硕士",
           details: [
@@ -1131,7 +1152,7 @@ window.SITE_DATA = {
           title: "文科生 Vibe Coding 入门攻略",
           tag: "真实项目实践指南",
           body: "从具体痛点出发，走到一个真正可用的网站。",
-          url: "http://xhslink.cn/o/5drrRNvE6Aq"
+          url: "https://xhslink.cn/o/5drrRNvE6Aq"
         }
       ],
       note: "点击上方每张拼贴即可打开对应的小红书原笔记，让作品与最初发布的语境保持连接。"
@@ -1147,17 +1168,36 @@ window.SITE_DATA = {
     resume: {
       eyebrow: "两分钟版本",
       title: "崔逸馨",
-      subtitle: "即将入读港大语言学硕士 · 国际业务与全球传播",
-      summary: "英语专业毕业生，拥有出口业务、国际媒体、海外达人营销、广电培训与内容创作的真实项目经验。",
+      subtitle: "香港大学 · 语言学硕士 · 2026.09–2027.11（预计）",
+      summary: "英语专业毕业生，拥有国际业务、媒体与传播领域的多元实践经历。业余时间进行图片编辑与 Vibe Coding 创作。",
+      proficiency: "英语能力：IELTS 7.5 · TEM-8（良好）· TEM-4（优秀）",
+      linkGroups: [
+        {
+          label: "内容创作",
+          links: [
+            { label: "7,000 粉丝 · 73,000+ 点赞与收藏", href: "https://www.xiaohongshu.com/user/profile/63c4e6830000000026010347?xsec_token=ABwqnZUcm0neau5ryEmXCKamhojl2mX3py0vLHug1Ty2Y=&xsec_source=pc_search" }
+          ]
+        },
+        {
+          label: "Vibe Coding",
+          links: [
+            { label: "HKU Compass", href: "https://hku-compass.chillsummery0625.workers.dev" },
+            { label: "Website CV", href: "https://chillsummer0625.github.io/yixin-portfolio/" },
+            { label: "小红书经验分享", href: "https://xhslink.cn/m/KvXFiFkmia" }
+          ]
+        }
+      ],
+      experienceLabel: "实习经历",
       highlights: [
-        "SUMEC：跟进 5 家工厂的出口订单全流程",
-        "China Daily：协同 18 个国际媒体账号，活动浏览量 100 万+",
-        "海外达人营销：每日筛选 50+ 国际达人",
-        "小红书：约 7,000 粉丝，累计 73,000+ 点赞与收藏",
-        "南航：GPA 4.1/5.0，专业排名 3/46"
+        "SUMEC · 外贸业务助理",
+        "China Daily · 英文编辑",
+        "Honey Verse · 海外达人营销",
+        "四川广电 · 新媒体编辑",
+        "成都广电 · 英文编辑",
+        "中国东航 · 英语广播培训师"
       ],
       download: "下载 PDF 简历",
-      email: "chillsummery0625@gmail.com"
+      email: "yixincui_chill@connect.hku.hk"
     }
   }
 };
