@@ -578,7 +578,7 @@
             <a class="primary-action" href="mailto:${t.resume.email}">${t.closing.emailLabel}<span aria-hidden="true">↗</span></a>
             <button class="secondary-action" type="button" data-action="resume">${t.closing.resumeLabel}</button>
           </div>
-          <p class="closing-meta">Yixin Cui · 2026</p>
+          <p class="closing-meta">Yixin Cui</p>
         </div>
         ${pageCrease()}
       </article>`;

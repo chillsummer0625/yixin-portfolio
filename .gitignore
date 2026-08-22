@@ -25,3 +25,6 @@ assets/*
 !assets/work-professional-v2-balanced.webp
 !assets/documents/
 !assets/documents/creteling-2026-certificate-public.pdf
+!assets/vendor/
+!assets/vendor/page-flip.browser.js
+!assets/vendor/page-flip.LICENSE.txt

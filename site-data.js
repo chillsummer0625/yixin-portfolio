@@ -610,7 +610,7 @@ window.SITE_DATA = {
       learn: "学习",
       work: "工作",
       create: "创作",
-      resume: "简历",
+      resume: "Resume",
       soundOn: "声音：开",
       soundOff: "声音：关",
       language: "EN",
@@ -1158,10 +1158,10 @@ window.SITE_DATA = {
       note: "点击上方每张拼贴即可打开对应的小红书原笔记，让作品与最初发布的语境保持连接。"
     },
     closing: {
-      kicker: "封底",
+      kicker: "尾声",
       title: "下一章会是什么？",
       body: "我正在关注国际业务、海外运营、全球传播，以及围绕这些事情发生的数字化实践。",
-      signoff: "也许我们可以一起写下来。",
+      signoff: "期待我们一起撰写下一章。",
       emailLabel: "邮件联系",
       resumeLabel: "查看简历"
     },
