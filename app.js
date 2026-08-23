@@ -44,6 +44,9 @@
     page: 1
   };
   const soundTemplates = new Map();
+  const soundBuffers = new Map();
+  const soundBufferPromises = new Map();
+  let soundContext = null;
 
   const content = () => data[language];
   const pageIndex = (key) => pageKeys.indexOf(key);
@@ -76,7 +79,7 @@
             <span class="tool-button__desktop-label">${soundEnabled ? t.common.soundOn : t.common.soundOff}</span>
             <span class="tool-button__mobile-label" aria-hidden="true">${language === "zh" ? "声音" : "Sound"}</span>
           </button>
-          <button type="button" class="tool-button tool-button--resume" data-action="resume">${t.common.resume}</button>
+          <button type="button" class="tool-button tool-button--resume" data-page="closing">${t.common.resume}</button>
         </div>
       </header>`;
   }
@@ -695,8 +698,11 @@
     return 330;
   }
 
-  function playLocalSound(name, volume = 1, playbackRate = 1) {
-    if (!soundEnabled || !soundFiles[name]) return;
+  function soundVolume(name, volume) {
+    return Math.max(0, Math.min(1, volume * soundGain * (soundTypeGain[name] || 1)));
+  }
+
+  function ensureSoundTemplate(name) {
     let template = soundTemplates.get(name);
     if (!template) {
       template = document.createElement("audio");
@@ -704,8 +710,78 @@
       template.preload = "auto";
       soundTemplates.set(name, template);
     }
+    return template;
+  }
+
+  function ensureSoundContext() {
+    if (soundContext) return soundContext;
+    const SoundContext = window.AudioContext || window.webkitAudioContext;
+    if (!SoundContext) return null;
+    try {
+      soundContext = new SoundContext({ latencyHint: "interactive" });
+    } catch (_) {
+      soundContext = new SoundContext();
+    }
+    return soundContext;
+  }
+
+  function primeSoundBuffer(name) {
+    if (soundBuffers.has(name)) return Promise.resolve(soundBuffers.get(name));
+    if (soundBufferPromises.has(name)) return soundBufferPromises.get(name);
+    const context = ensureSoundContext();
+    if (!context || !soundFiles[name] || window.location.protocol === "file:") return Promise.resolve(null);
+    const request = fetch(soundFiles[name], { cache: "force-cache" })
+      .then((response) => {
+        if (!response.ok) throw new Error(`Unable to preload ${name}`);
+        return response.arrayBuffer();
+      })
+      .then((data) => context.decodeAudioData(data))
+      .then((buffer) => {
+        soundBuffers.set(name, buffer);
+        return buffer;
+      })
+      .catch(() => null);
+    soundBufferPromises.set(name, request);
+    return request;
+  }
+
+  function warmSoundEngine() {
+    const context = ensureSoundContext();
+    if (context?.state === "suspended") void context.resume().catch(() => {});
+    Object.keys(soundFiles).forEach((name) => {
+      ensureSoundTemplate(name).load();
+      void primeSoundBuffer(name);
+    });
+  }
+
+  function playBufferedSound(name, volume, playbackRate) {
+    const context = ensureSoundContext();
+    const buffer = soundBuffers.get(name);
+    if (!context || !buffer) return false;
+    if (context.state === "suspended") void context.resume().catch(() => {});
+    const source = context.createBufferSource();
+    const gain = context.createGain();
+    source.buffer = buffer;
+    source.playbackRate.value = playbackRate;
+    gain.gain.value = soundVolume(name, volume);
+    source.connect(gain).connect(context.destination);
+    document.documentElement.dataset.soundPlayback = `${name}:started:buffered`;
+    source.addEventListener("ended", () => {
+      document.documentElement.dataset.soundPlayback = `${name}:ended:buffered`;
+      source.disconnect();
+      gain.disconnect();
+    }, { once: true });
+    source.start(0);
+    return true;
+  }
+
+  function playLocalSound(name, volume = 1, playbackRate = 1) {
+    if (!soundEnabled || !soundFiles[name]) return;
+    if (playBufferedSound(name, volume, playbackRate)) return;
+    void primeSoundBuffer(name);
+    const template = ensureSoundTemplate(name);
     const player = template.cloneNode(true);
-    player.volume = Math.max(0, Math.min(1, volume * soundGain * (soundTypeGain[name] || 1)));
+    player.volume = soundVolume(name, volume);
     player.playbackRate = playbackRate;
     player.dataset.portfolioSound = name;
     player.hidden = true;
@@ -825,12 +901,12 @@
 
   function finishLibraryTurn(commit) {
     if (!libraryTurnState) return;
-    const { targetIndex, direction } = libraryTurnState;
+    const { targetIndex, direction, soundPlayed } = libraryTurnState;
     disposeLibraryTurn();
     isTurning = false;
     if (commit) currentPage = targetIndex;
     render({ focusHeading: commit });
-    if (commit) playPageSound(direction, 0.82);
+    if (commit && !soundPlayed) playPageSound(direction, 0.82);
   }
 
   function prepareLibraryTurn(targetIndex, direction, { programmatic = false } = {}) {
@@ -881,6 +957,7 @@
       startPage,
       destinationPage,
       started: programmatic,
+      soundPlayed: programmatic,
       pointerId: null,
       dragStartX: 0,
       dragStartY: 0,
@@ -910,6 +987,7 @@
 
     if (programmatic) {
       isTurning = true;
+      playPageSound(direction, 0.82);
       book.classList.add("is-library-turning", direction > 0 ? "is-library-turning-next" : "is-library-turning-prev");
       window.requestAnimationFrame(() => {
         if (!libraryTurnState || libraryTurnState.instance !== instance) return;
@@ -945,6 +1023,7 @@
     turnState = {
       targetIndex,
       direction,
+      soundPlayed: pointerId === null,
       pointerId,
       startX,
       lastX: startX,
@@ -956,6 +1035,8 @@
       targetUnderlay,
       turningPage
     };
+
+    if (turnState.soundPlayed) playPageSound(direction, 0.82);
 
     setTurnSnapshot(stationarySnapshot, currentPageNode.cloneNode(true), currentSide);
     setTurnSnapshot(frontSnapshot, currentPageNode.cloneNode(true), currentSide);
@@ -993,7 +1074,7 @@
   function finishTurn(commit) {
     if (!turnState) return;
     syncTurnUnderlay(commit ? 1 : 0);
-    const { targetIndex, direction } = turnState;
+    const { targetIndex, direction, soundPlayed } = turnState;
     window.cancelAnimationFrame(turnAnimationFrame);
     window.cancelAnimationFrame(turnRenderFrame);
     if (commit) currentPage = targetIndex;
@@ -1011,7 +1092,7 @@
       pageTurn.querySelectorAll(".page-turn__snapshot").forEach((snapshot) => snapshot.replaceChildren());
     });
     render({ focusHeading: commit, reuseContent: commit });
-    if (commit) playPageSound(direction, 0.82);
+    if (commit && !soundPlayed) playPageSound(direction, 0.82);
   }
 
   function exponentialEaseOut(progress, strength = 10) {
@@ -1071,6 +1152,7 @@
     }
 
     isTurning = true;
+    playPageSound(direction, 0.66);
     book.classList.add("is-mobile-page-turning", direction > 0 ? "is-mobile-turning-next" : "is-mobile-turning-prev");
     const exitShift = direction > 0 ? -2.4 : 2.4;
     const enterShift = direction > 0 ? 2.1 : -2.1;
@@ -1102,7 +1184,6 @@
         });
         await enterAnimation.finished.catch(() => {});
       }
-      playPageSound(direction, 0.66);
     } finally {
       bookContent.getAnimations?.().forEach((animation) => animation.cancel());
       bookContent.style.removeProperty("opacity");
@@ -1403,7 +1484,10 @@
   function toggleSound() {
     disposeLibraryTurn();
     soundEnabled = !soundEnabled;
-    if (soundEnabled) playPageSound(1, 0.42);
+    if (soundEnabled) {
+      warmSoundEngine();
+      playPageSound(1, 0.42);
+    }
     resetPageCaches();
     render();
   }

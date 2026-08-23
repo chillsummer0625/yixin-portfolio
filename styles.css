@@ -154,9 +154,9 @@ h1[tabindex="-1"]:focus {
   aspect-ratio: 1.82;
   max-height: calc(100svh - 7.5rem);
   overflow: hidden;
-  border: 1px solid oklch(1 0 0 / 0.13);
+  border: 0;
   border-radius: 0.7rem 1.15rem 1.15rem 0.7rem;
-  background: var(--page);
+  background: var(--bg);
   box-shadow:
     0 2.5rem 6rem var(--shadow),
     0 0.25rem 0.65rem oklch(0.03 0 0 / 0.42),
@@ -228,57 +228,6 @@ h1[tabindex="-1"]:focus {
   overflow: hidden;
   background: var(--page);
   color: var(--ink);
-}
-
-.book-page-stack {
-  position: absolute;
-  z-index: 14;
-  inset: 0;
-  overflow: hidden;
-  border-radius: inherit;
-  box-shadow:
-    inset -0.42rem 0 0 oklch(0.46 0.025 42 / 0.18),
-    inset -0.68rem 0 0 oklch(0.98 0.012 52 / 0.2),
-    inset 0 -0.38rem 0 oklch(0.45 0.025 42 / 0.16),
-    inset 0 -0.62rem 0 oklch(0.98 0.012 52 / 0.2);
-  pointer-events: none;
-}
-
-.book-page-stack::before,
-.book-page-stack::after {
-  position: absolute;
-  content: "";
-  pointer-events: none;
-}
-
-.book-page-stack::before {
-  top: 3.8rem;
-  right: 0.12rem;
-  bottom: 0.42rem;
-  width: 0.5rem;
-  border-radius: 0 0.85rem 0.85rem 0;
-  background: repeating-linear-gradient(
-    180deg,
-    oklch(0.96 0.014 50) 0 0.11rem,
-    oklch(0.72 0.022 42 / 0.75) 0.11rem 0.13rem,
-    oklch(0.99 0.008 50) 0.13rem 0.2rem
-  );
-  box-shadow: -0.18rem 0 0.35rem oklch(0.08 0.015 40 / 0.16);
-}
-
-.book-page-stack::after {
-  right: 0.5rem;
-  bottom: 0.1rem;
-  left: 0.45rem;
-  height: 0.48rem;
-  border-radius: 0 0 0.95rem 0.65rem;
-  background: repeating-linear-gradient(
-    0deg,
-    oklch(0.97 0.012 50) 0 0.1rem,
-    oklch(0.7 0.025 42 / 0.7) 0.1rem 0.12rem,
-    oklch(0.99 0.008 50) 0.12rem 0.2rem
-  );
-  box-shadow: 0 -0.2rem 0.42rem oklch(0.08 0.015 40 / 0.12);
 }
 
 .page-grab-hint {
@@ -3443,10 +3392,10 @@ html[lang="zh-CN"] .learn-book__title {
 .resume-drawer h2 {
   margin: 0;
   font-family: var(--display);
-  font-size: clamp(3rem, 8vw, 5.6rem);
+  font-size: clamp(2.6rem, 5vw, 4.25rem);
   font-weight: 400;
   letter-spacing: -0.035em;
-  line-height: 0.92;
+  line-height: 0.96;
 }
 
 .drawer-subtitle {
@@ -3570,6 +3519,46 @@ html[lang="zh-CN"] .learn-book__title {
   font-size: 0.78rem;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.25rem;
+}
+
+@media (min-width: 821px) and (max-height: 820px) {
+  .resume-drawer {
+    padding: 2rem 3.5rem;
+  }
+
+  .drawer-eyebrow {
+    margin-bottom: 0.55rem;
+  }
+
+  .resume-drawer h2 {
+    font-size: clamp(2.6rem, 4vw, 3.5rem);
+  }
+
+  .drawer-subtitle {
+    margin-top: 0.65rem;
+  }
+
+  .drawer-summary {
+    margin-top: 1.15rem;
+  }
+
+  .drawer-facts,
+  .drawer-link-groups {
+    margin-top: 0.7rem;
+  }
+
+  .drawer-section-label {
+    margin-top: 0.9rem;
+  }
+
+  .drawer-highlights li {
+    padding-block: 0.42rem;
+  }
+
+  .drawer-actions {
+    gap: 0.6rem;
+    margin-top: 1.1rem;
+  }
 }
 
 .noscript-message {
