@@ -679,6 +679,10 @@ h1[tabindex="-1"]:focus {
   color: var(--white);
 }
 
+.tool-button__mobile-label {
+  display: none;
+}
+
 .tool-button--resume {
   margin-left: 0.35rem;
   border: 1px solid oklch(1 0 0 / 0.45);
@@ -3654,10 +3658,44 @@ html[lang="zh-CN"] .learn-book__title {
   .book-tools {
     grid-column: 2;
     grid-row: 1;
+    gap: 0.12rem;
   }
 
   .tool-button--resume {
+    order: 2;
+    min-width: 3.5rem;
+    min-height: 2.75rem;
+    margin-left: 0;
+    padding-inline: 0.55rem;
+  }
+
+  .tool-button--sound {
+    order: 1;
+    width: auto;
+    min-width: 3.5rem;
+    min-height: 2.75rem;
+    padding-inline: 0.45rem;
+  }
+
+  .tool-button--sound .sound-dot {
+    width: 0.38rem;
+    height: 0.38rem;
+    margin-right: 0.18rem;
+  }
+
+  .tool-button--language {
+    order: 3;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    padding-inline: 0.45rem;
+  }
+
+  .tool-button__desktop-label {
     display: none;
+  }
+
+  .tool-button__mobile-label {
+    display: inline;
   }
 
   .page-turn,
@@ -4294,6 +4332,12 @@ html[lang="zh-CN"] .learn-book__title {
     padding-inline: 0.7rem;
   }
 
+  .wordmark,
+  .chapter-nav__item {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
   .creative-wall__heading {
     align-items: flex-start;
     flex-direction: column;
@@ -4363,8 +4407,19 @@ html[lang="zh-CN"] .learn-book__title {
     font-size: 0.68rem;
   }
 
+  .book-tools {
+    gap: 0.06rem;
+  }
+
+  .tool-button--resume,
   .tool-button--sound {
-    display: none;
+    min-width: 3.15rem;
+    padding-inline: 0.3rem;
+  }
+
+  .tool-button--language {
+    min-width: 44px;
+    padding-inline: 0.3rem;
   }
 
   .room-art {

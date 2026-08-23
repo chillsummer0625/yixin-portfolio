@@ -33,9 +33,15 @@
   let lastObjectHoverAt = 0;
   let lastObjectHoverKey = "";
   const soundFiles = {
-    hover: "assets/object-hover.wav",
-    select: "assets/object-select.wav",
+    hover: "assets/object-hover.wav?v=20260822b",
+    select: "assets/object-select.wav?v=20260822b",
     page: "assets/page-turn.wav"
+  };
+  const soundGain = 1.6;
+  const soundTypeGain = {
+    hover: 1.55,
+    select: 1.35,
+    page: 1
   };
   const soundTemplates = new Map();
 
@@ -64,10 +70,11 @@
           ${navItem("create", t.common.create)}
         </nav>
         <div class="book-tools">
-          <button type="button" class="tool-button" data-action="language">${t.common.language}</button>
-          <button type="button" class="tool-button tool-button--sound" data-action="sound" aria-pressed="${soundEnabled}">
+          <button type="button" class="tool-button tool-button--language" data-action="language">${t.common.language}</button>
+          <button type="button" class="tool-button tool-button--sound" data-action="sound" aria-pressed="${soundEnabled}" aria-label="${soundEnabled ? t.common.soundOn : t.common.soundOff}">
             <span class="sound-dot" aria-hidden="true"></span>
-            ${soundEnabled ? t.common.soundOn : t.common.soundOff}
+            <span class="tool-button__desktop-label">${soundEnabled ? t.common.soundOn : t.common.soundOff}</span>
+            <span class="tool-button__mobile-label" aria-hidden="true">${language === "zh" ? "声音" : "Sound"}</span>
           </button>
           <button type="button" class="tool-button tool-button--resume" data-action="resume">${t.common.resume}</button>
         </div>
@@ -570,7 +577,7 @@
           <div class="closing-orbit" aria-hidden="true">
             <span>LEARN</span><span>WORK</span><span>CREATE</span>
           </div>
-          <p class="chapter-label">${t.closing.kicker}</p>
+          ${t.closing.kicker ? `<p class="chapter-label">${t.closing.kicker}</p>` : ""}
           <h1 tabindex="-1">${t.closing.title}</h1>
           <p class="closing-body">${t.closing.body}</p>
           <p class="closing-signoff">${t.closing.signoff}</p>
@@ -698,7 +705,7 @@
       soundTemplates.set(name, template);
     }
     const player = template.cloneNode(true);
-    player.volume = Math.max(0, Math.min(1, volume));
+    player.volume = Math.max(0, Math.min(1, volume * soundGain * (soundTypeGain[name] || 1)));
     player.playbackRate = playbackRate;
     player.dataset.portfolioSound = name;
     player.hidden = true;
