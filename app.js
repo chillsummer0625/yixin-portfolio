@@ -47,6 +47,8 @@
   const soundBuffers = new Map();
   const soundBufferPromises = new Map();
   let soundContext = null;
+  let soundResumePromise = null;
+  let soundNeedsReset = false;
 
   const content = () => data[language];
   const pageIndex = (key) => pageKeys.indexOf(key);
@@ -708,21 +710,139 @@
       template = document.createElement("audio");
       template.src = soundFiles[name];
       template.preload = "auto";
+      template.hidden = true;
+      template.setAttribute("playsinline", "");
+      template.setAttribute("aria-hidden", "true");
+      document.body.append(template);
       soundTemplates.set(name, template);
     }
     return template;
   }
 
-  function ensureSoundContext() {
+  function updateSoundEngineStatus(context, status = context?.state || "unavailable") {
+    if (context && context !== soundContext) return;
+    document.documentElement.dataset.soundEngine = status;
+  }
+
+  function resetSoundContext() {
+    const previousContext = soundContext;
+    soundContext = null;
+    soundResumePromise = null;
+    soundNeedsReset = false;
+    soundBuffers.clear();
+    soundBufferPromises.clear();
+    if (previousContext && previousContext.state !== "closed") {
+      void previousContext.close().catch(() => {});
+    }
+  }
+
+  function ensureSoundContext({ reset = false } = {}) {
+    if (reset || soundContext?.state === "closed") resetSoundContext();
     if (soundContext) return soundContext;
     const SoundContext = window.AudioContext || window.webkitAudioContext;
-    if (!SoundContext) return null;
+    if (!SoundContext) {
+      updateSoundEngineStatus(null);
+      return null;
+    }
     try {
       soundContext = new SoundContext({ latencyHint: "interactive" });
     } catch (_) {
       soundContext = new SoundContext();
     }
+    const context = soundContext;
+    updateSoundEngineStatus(context);
+    context.addEventListener("statechange", () => {
+      if (context !== soundContext) return;
+      updateSoundEngineStatus(context);
+      if (context.state === "interrupted" || context.state === "closed") soundNeedsReset = true;
+    });
     return soundContext;
+  }
+
+  function playSilentUnlockPulse(context) {
+    try {
+      const buffer = context.createBuffer(1, 1, context.sampleRate || 44100);
+      const source = context.createBufferSource();
+      const gain = context.createGain();
+      source.buffer = buffer;
+      gain.gain.value = 0;
+      source.connect(gain).connect(context.destination);
+      source.addEventListener("ended", () => {
+        source.disconnect();
+        gain.disconnect();
+      }, { once: true });
+      source.start(0);
+    } catch (_) {
+      // The persistent media-element fallback remains available if Safari
+      // declines the Web Audio unlock pulse.
+    }
+  }
+
+  function resumeSoundContext({ fromUserGesture = false } = {}) {
+    const context = ensureSoundContext({ reset: fromUserGesture && soundNeedsReset });
+    if (!context) return Promise.resolve(null);
+    if (fromUserGesture) playSilentUnlockPulse(context);
+    if (context.state === "running") {
+      soundNeedsReset = false;
+      updateSoundEngineStatus(context);
+      return Promise.resolve(context);
+    }
+    if (soundResumePromise && !fromUserGesture) return soundResumePromise;
+
+    let resumeAttempt;
+    try {
+      // This call must happen synchronously inside the click/pointer gesture;
+      // awaiting first can lose Safari's media-playback permission.
+      resumeAttempt = context.resume();
+    } catch (error) {
+      soundNeedsReset = true;
+      updateSoundEngineStatus(context, `blocked:${error.name}`);
+      return Promise.resolve(null);
+    }
+
+    const attempt = Promise.race([
+      Promise.resolve(resumeAttempt).then(() => context),
+      new Promise((resolve) => window.setTimeout(() => resolve(null), 1200))
+    ])
+      .then((resumedContext) => {
+        if (resumedContext === soundContext && resumedContext.state === "running") {
+          soundNeedsReset = false;
+          updateSoundEngineStatus(resumedContext);
+          return resumedContext;
+        }
+        soundNeedsReset = true;
+        updateSoundEngineStatus(context, `blocked:${context.state}`);
+        return null;
+      })
+      .catch((error) => {
+        soundNeedsReset = true;
+        updateSoundEngineStatus(context, `blocked:${error.name}`);
+        return null;
+      })
+      .finally(() => {
+        if (soundResumePromise === attempt) soundResumePromise = null;
+      });
+    soundResumePromise = attempt;
+    return attempt;
+  }
+
+  function decodeSoundData(context, data) {
+    return new Promise((resolve, reject) => {
+      let settled = false;
+      const finish = (callback) => (value) => {
+        if (settled) return;
+        settled = true;
+        callback(value);
+      };
+      const onSuccess = finish(resolve);
+      const onError = finish(reject);
+      try {
+        const result = context.decodeAudioData(data, onSuccess, onError);
+        if (result?.then) result.then(onSuccess, onError);
+      } catch (error) {
+        onError(error);
+      }
+    });
   }
 
   function primeSoundBuffer(name) {
@@ -735,68 +855,89 @@
         if (!response.ok) throw new Error(`Unable to preload ${name}`);
         return response.arrayBuffer();
       })
-      .then((data) => context.decodeAudioData(data))
+      .then((data) => decodeSoundData(context, data))
       .then((buffer) => {
         soundBuffers.set(name, buffer);
+        soundBufferPromises.delete(name);
         return buffer;
       })
-      .catch(() => null);
+      .catch((error) => {
+        soundBufferPromises.delete(name);
+        document.documentElement.dataset.soundError = `${name}:${error.name}`;
+        return null;
+      });
     soundBufferPromises.set(name, request);
     return request;
   }
 
-  function warmSoundEngine() {
-    const context = ensureSoundContext();
-    if (context?.state === "suspended") void context.resume().catch(() => {});
+  function warmSoundEngine({ fromUserGesture = false } = {}) {
+    const resumePromise = resumeSoundContext({ fromUserGesture });
     Object.keys(soundFiles).forEach((name) => {
-      ensureSoundTemplate(name).load();
+      const template = ensureSoundTemplate(name);
+      if (template.readyState === 0) template.load();
       void primeSoundBuffer(name);
     });
+    return resumePromise;
   }
 
   function playBufferedSound(name, volume, playbackRate) {
-    const context = ensureSoundContext();
+    const context = soundContext;
     const buffer = soundBuffers.get(name);
-    if (!context || !buffer) return false;
-    if (context.state === "suspended") void context.resume().catch(() => {});
-    const source = context.createBufferSource();
-    const gain = context.createGain();
-    source.buffer = buffer;
-    source.playbackRate.value = playbackRate;
-    gain.gain.value = soundVolume(name, volume);
-    source.connect(gain).connect(context.destination);
-    document.documentElement.dataset.soundPlayback = `${name}:started:buffered`;
-    source.addEventListener("ended", () => {
-      document.documentElement.dataset.soundPlayback = `${name}:ended:buffered`;
-      source.disconnect();
-      gain.disconnect();
-    }, { once: true });
-    source.start(0);
-    return true;
+    if (!context || context.state !== "running" || !buffer) return false;
+    try {
+      const source = context.createBufferSource();
+      const gain = context.createGain();
+      source.buffer = buffer;
+      source.playbackRate.value = playbackRate;
+      gain.gain.value = soundVolume(name, volume);
+      source.connect(gain).connect(context.destination);
+      document.documentElement.dataset.soundPlayback = `${name}:started:buffered`;
+      source.addEventListener("ended", () => {
+        document.documentElement.dataset.soundPlayback = `${name}:ended:buffered`;
+        source.disconnect();
+        gain.disconnect();
+      }, { once: true });
+      source.start(0);
+      return true;
+    } catch (error) {
+      soundNeedsReset = true;
+      document.documentElement.dataset.soundError = `${name}:${error.name}`;
+      return false;
+    }
+  }
+
+  function playMediaSound(name, volume, playbackRate) {
+    const player = ensureSoundTemplate(name);
+    try {
+      player.pause();
+      player.currentTime = 0;
+    } catch (_) {
+      // Safari can reject seeking before media metadata is ready; play() still
+      // starts from the beginning on the element's first use.
+    }
+    player.volume = soundVolume(name, volume);
+    player.playbackRate = playbackRate;
+    document.documentElement.dataset.soundPlayback = `${name}:requested:media`;
+    const playPromise = player.play();
+    if (!playPromise?.then) {
+      document.documentElement.dataset.soundPlayback = `${name}:started:media`;
+      return;
+    }
+    playPromise
+      .then(() => { document.documentElement.dataset.soundPlayback = `${name}:started:media`; })
+      .catch((error) => {
+        document.documentElement.dataset.soundPlayback = `${name}:blocked:${error.name}:media`;
+      });
   }
 
   function playLocalSound(name, volume = 1, playbackRate = 1) {
     if (!soundEnabled || !soundFiles[name]) return;
     if (playBufferedSound(name, volume, playbackRate)) return;
-    void primeSoundBuffer(name);
-    const template = ensureSoundTemplate(name);
-    const player = template.cloneNode(true);
-    player.volume = soundVolume(name, volume);
-    player.playbackRate = playbackRate;
-    player.dataset.portfolioSound = name;
-    player.hidden = true;
-    document.body.append(player);
-    document.documentElement.dataset.soundPlayback = `${name}:requested`;
-    player.addEventListener("ended", () => {
-      document.documentElement.dataset.soundPlayback = `${name}:ended`;
-      player.remove();
-    }, { once: true });
-    player.play()
-      .then(() => { document.documentElement.dataset.soundPlayback = `${name}:started`; })
-      .catch((error) => {
-        document.documentElement.dataset.soundPlayback = `${name}:blocked:${error.name}`;
-        player.remove();
-      });
+    // Keep one persistent media element per sound. Safari grants playback
+    // permission per element more reliably than it does for a fresh clone on
+    // every interaction, while Web Audio finishes warming in the background.
+    void warmSoundEngine();
+    playMediaSound(name, volume, playbackRate);
   }
 
   function playObjectHoverSound(key) {
@@ -1485,11 +1626,29 @@
     disposeLibraryTurn();
     soundEnabled = !soundEnabled;
     if (soundEnabled) {
-      warmSoundEngine();
+      // Safari requires the AudioContext resume and the first media-element
+      // play to occur in the same trusted click that enables sound.
+      void warmSoundEngine({ fromUserGesture: true });
       playPageSound(1, 0.42);
+    } else {
+      soundTemplates.forEach((player) => {
+        player.pause();
+        try { player.currentTime = 0; } catch (_) { /* Metadata may not be ready. */ }
+      });
+      document.documentElement.dataset.soundPlayback = "off";
     }
     resetPageCaches();
     render();
+  }
+
+  function recoverSoundFromUserGesture() {
+    if (!soundEnabled) return;
+    void warmSoundEngine({ fromUserGesture: true });
+  }
+
+  function recoverSoundAfterVisibilityChange() {
+    if (!soundEnabled || document.hidden) return;
+    void warmSoundEngine();
   }
 
   function openResume() {
@@ -1788,6 +1947,13 @@
     if (event.key === "ArrowLeft") turnTo(currentPage - 1, -1);
     if (event.key === "ArrowRight") turnTo(currentPage + 1, 1);
   });
+
+  // Safari can suspend or interrupt Web Audio after a tab/app switch. Resume
+  // on return when possible, then renew the unlock on the next trusted input.
+  document.addEventListener("pointerdown", recoverSoundFromUserGesture, { capture: true, passive: true });
+  document.addEventListener("keydown", recoverSoundFromUserGesture, { capture: true });
+  document.addEventListener("visibilitychange", recoverSoundAfterVisibilityChange);
+  window.addEventListener("pageshow", recoverSoundAfterVisibilityChange);
 
   book.addEventListener("pointerdown", beginPageDrag);
   book.addEventListener("pointermove", movePageDrag);
