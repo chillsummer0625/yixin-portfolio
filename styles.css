@@ -3855,6 +3855,10 @@ html[lang="zh-CN"] .learn-book__title {
     left: auto;
   }
 
+  .object-hotspot--nuaa .object-hotspot__label {
+    bottom: calc(100% - 1.2rem);
+  }
+
   .object-hotspot--campus .object-hotspot__label,
   .object-hotspot--crete .object-hotspot__label {
     max-width: none;

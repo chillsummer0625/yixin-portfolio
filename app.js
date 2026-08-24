@@ -269,6 +269,8 @@
           : part.html;
         return part.externalUrl
           ? learnDetailLink(emphasized, part.externalUrl, content().common.openScoreReport, true)
+          : part.certificateHref
+            ? learnDetailLink(emphasized, part.certificateHref, content().common.openCertificate, true)
           : part.certificatePage
             ? learnCertificateLink(emphasized, part.certificatePage, true)
             : emphasized;

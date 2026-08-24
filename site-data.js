@@ -189,8 +189,8 @@ window.SITE_DATA = {
                   externalUrl: "assets/documents/ielts-score-report-public.pdf"
                 },
                 { html: "; " },
-                { html: "TEM 8 (Test for English Major Grade 8)--Good", emphasis: true, certificatePage: 33 },
-                { html: "; TEM 4 (Test for English Major Grade 4)--Excellent", certificatePage: 26 }
+                { html: "TEM 8 (Test for English Major Grade 8)--Good", emphasis: true, certificateHref: "assets/documents/tem-8-certificate-public.pdf" },
+                { html: "; TEM 4 (Test for English Major Grade 4)--Excellent", certificateHref: "assets/documents/tem-4-certificate-public.pdf" }
               ],
               date: "2024-2026"
             },
@@ -791,8 +791,8 @@ window.SITE_DATA = {
                   externalUrl: "assets/documents/ielts-score-report-public.pdf"
                 },
                 { html: "；" },
-                { html: "TEM 8（英语专业八级）—良好", emphasis: true, certificatePage: 33 },
-                { html: "；TEM 4（英语专业四级）—优秀", certificatePage: 26 }
+                { html: "TEM 8（英语专业八级）—良好", emphasis: true, certificateHref: "assets/documents/tem-8-certificate-public.pdf" },
+                { html: "；TEM 4（英语专业四级）—优秀", certificateHref: "assets/documents/tem-4-certificate-public.pdf" }
               ],
               date: "2024-2026"
             },
