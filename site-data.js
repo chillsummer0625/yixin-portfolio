@@ -67,7 +67,6 @@ window.SITE_DATA = {
           label: "Academic Experience",
           kicker: "Student · Academic Experience",
           title: "Academic Experience",
-          meta: "CreteLing 2026 · Two undergraduate research projects",
           details: [
             {
               title: "CreteLing 2026 Summer School",
@@ -669,7 +668,6 @@ window.SITE_DATA = {
           label: "Academic Experience",
           kicker: "学生 · Academic Experience",
           title: "学术经历",
-          meta: "CreteLing 2026 · 两段本科研究项目",
           details: [
             {
               title: "CreteLing 2026 Summer School",
