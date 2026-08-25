@@ -180,19 +180,19 @@
             <strong>${t.room.student.label}</strong>
             <span class="character-hotspot__line">${t.room.student.line}</span>
             <span class="character-hotspot__hint">${t.room.student.hint}</span>
-            <span class="character-hotspot__arrow" aria-hidden="true">↗</span>
+            <span class="character-hotspot__arrow" aria-hidden="true">↗&#xfe0e;</span>
           </button>
           <button class="character-hotspot character-hotspot--professional" type="button" data-page="work" aria-label="${t.room.professional.label}: ${t.room.professional.hint}">
             <strong>${t.room.professional.label}</strong>
             <span class="character-hotspot__line">${t.room.professional.line}</span>
             <span class="character-hotspot__hint">${t.room.professional.hint}</span>
-            <span class="character-hotspot__arrow" aria-hidden="true">↗</span>
+            <span class="character-hotspot__arrow" aria-hidden="true">↗&#xfe0e;</span>
           </button>
           <button class="character-hotspot character-hotspot--creator" type="button" data-page="create" aria-label="${t.room.creator.label}: ${t.room.creator.hint}">
             <strong>${t.room.creator.label}</strong>
             <span class="character-hotspot__line">${t.room.creator.line}</span>
             <span class="character-hotspot__hint">${t.room.creator.hint}</span>
-            <span class="character-hotspot__arrow" aria-hidden="true">↗</span>
+            <span class="character-hotspot__arrow" aria-hidden="true">↗&#xfe0e;</span>
           </button>
 
           ${pageCrease("book-gutter")}

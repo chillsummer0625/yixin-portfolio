@@ -1134,7 +1134,10 @@ h1[tabindex="-1"]:focus {
   grid-row: 1 / 4;
   align-self: center;
   color: var(--hotspot-accent, var(--amber));
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 1.15rem;
+  font-weight: 400;
+  line-height: 1;
   transition: transform 260ms var(--ease-out);
 }
 
