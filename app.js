@@ -1690,7 +1690,9 @@
     dialog.dataset.experienceKey = key;
     dialog.querySelector("#experience-dialog-kicker").textContent = item.kicker;
     dialog.querySelector("#experience-dialog-title").textContent = item.title;
-    dialog.querySelector("#experience-dialog-meta").textContent = item.meta;
+    const meta = dialog.querySelector("#experience-dialog-meta");
+    meta.textContent = item.meta || "";
+    meta.hidden = !item.meta;
     dialog.querySelector("#experience-dialog-details").innerHTML = item.details
       .map(experienceDetailMarkup)
       .filter(Boolean)
