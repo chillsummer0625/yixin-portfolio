@@ -4321,6 +4321,16 @@ html[lang="zh-CN"] .learn-book__title {
     display: none;
   }
 
+  [data-learn-detail="education"] .learn-detail__item-heading {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--learn-space-3xs);
+  }
+
+  [data-learn-detail="education"] .learn-detail__date {
+    justify-self: start;
+    text-align: left;
+  }
+
   .book-toolbar {
     padding-inline: 0.7rem;
   }

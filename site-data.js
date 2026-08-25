@@ -109,7 +109,7 @@ window.SITE_DATA = {
           label: "HKU",
           kicker: "Student · Academic record",
           title: "The University of Hong Kong",
-          meta: "Sep 2026-Nov 2027 · MA in Linguistics",
+          meta: "Sep 2026-Nov 2027 (Anticipated) · MA in Linguistics",
           details: [
             "Relevant Courses: Phonetics and Phonology; Grammar: Theories and Applications"
           ],
@@ -335,13 +335,13 @@ window.SITE_DATA = {
       },
       education: [
         {
-          date: "2026-2027",
+          date: "09/2026-11/2027 (Anticipated)",
           school: "The University of Hong Kong",
           degree: "MA in Linguistics",
           detail: "Incoming student. Initial focus: phonetics, phonology, and grammar in use."
         },
         {
-          date: "2022-2026",
+          date: "09/2022-06/2026",
           school: "Nanjing University of Aeronautics and Astronautics",
           degree: "BA in English (Civil Aviation)",
           detail: "<strong class=\"learn-detail__education-result\">GPA 4.1/5.0 · Ranked 3 of 46</strong>"
@@ -710,7 +710,7 @@ window.SITE_DATA = {
           label: "HKU",
           kicker: "学生 · 学业档案",
           title: "香港大学",
-          meta: "2026.09-2027.11 · 语言学文学硕士",
+          meta: "2026.09-2027.11（预计） · 语言学文学硕士",
           details: [
             "相关课程：语音学与音系学；语法：理论与应用"
           ],
@@ -936,13 +936,13 @@ window.SITE_DATA = {
       },
       education: [
         {
-          date: "2026-2027 · 预计",
+          date: "2026.09-2027.11 · 预计",
           school: "香港大学",
           degree: "语言学文学硕士",
           detail: "即将入学；初步关注语音学、音系学与语法应用。"
         },
         {
-          date: "2022-2026",
+          date: "2022.09-2026.06",
           school: "南京航空航天大学",
           degree: "英语（民航业务）文学学士",
           detail: "<strong class=\"learn-detail__education-result\">GPA 4.1/5.0 · 专业排名 3/46</strong>"
