@@ -109,7 +109,7 @@ window.SITE_DATA = {
           label: "HKU",
           kicker: "Student · Academic record",
           title: "The University of Hong Kong",
-          meta: "Sep 2026-Nov 2027 (Anticipated) · MA in Linguistics",
+          meta: "Sep 2026-Jul 2027 (Anticipated) · MA in Linguistics",
           details: [
             "Relevant Courses: Phonetics and Phonology; Grammar: Theories and Applications"
           ],
@@ -335,7 +335,7 @@ window.SITE_DATA = {
       },
       education: [
         {
-          date: "09/2026-11/2027 (Anticipated)",
+          date: "09/2026-07/2027 (Anticipated)",
           school: "The University of Hong Kong",
           degree: "MA in Linguistics",
           detail: "Incoming student. Initial focus: phonetics, phonology, and grammar in use."
@@ -568,7 +568,7 @@ window.SITE_DATA = {
     resume: {
       eyebrow: "Two-minute version",
       title: "Yixin Cui",
-      subtitle: "HKU · MA in Linguistics · Sep 2026–Nov 2027 (anticipated)",
+      subtitle: "HKU · MA in Linguistics · Sep 2026–Jul 2027 (anticipated)",
       summary: "English-major graduate with diverse experience across international business, media, and communication. Outside work, I explore photo editing and vibe coding.",
       proficiency: "English proficiency: IELTS 7.5 · TEM-8 (Good) · TEM-4 (Excellent)",
       linkGroups: [
@@ -710,7 +710,7 @@ window.SITE_DATA = {
           label: "HKU",
           kicker: "学生 · 学业档案",
           title: "香港大学",
-          meta: "2026.09-2027.11（预计） · 语言学文学硕士",
+          meta: "2026.09-2027.07（预计） · 语言学文学硕士",
           details: [
             "相关课程：语音学与音系学；语法：理论与应用"
           ],
@@ -936,7 +936,7 @@ window.SITE_DATA = {
       },
       education: [
         {
-          date: "2026.09-2027.11 · 预计",
+          date: "2026.09-2027.07 · 预计",
           school: "香港大学",
           degree: "语言学文学硕士",
           detail: "即将入学；初步关注语音学、音系学与语法应用。"
@@ -1166,7 +1166,7 @@ window.SITE_DATA = {
     resume: {
       eyebrow: "两分钟版本",
       title: "崔逸馨",
-      subtitle: "香港大学 · 语言学硕士 · 2026.09–2027.11（预计）",
+      subtitle: "香港大学 · 语言学硕士 · 2026.09–2027.07（预计）",
       summary: "英语专业毕业生，拥有国际业务、媒体与传播领域的多元实践经历。业余时间进行图片编辑与 Vibe Coding 创作。",
       proficiency: "英语能力：IELTS 7.5 · TEM-8（良好）· TEM-4（优秀）",
       linkGroups: [
