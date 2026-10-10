@@ -98,7 +98,7 @@
     const leaves=[...volume.querySelectorAll('.book-leaf')];
     let pointer=null, startX=0, startY=0, startYaw=0, lastX=0, lastTime=0, dragged=false, suppressClick=false;
     function orient() {
-      volume.style.transform=`translateX(${opening*26}%) rotateX(${-16-opening*32+tiltX}deg) rotateY(${yaw+tiltY}deg) rotateZ(${roll}deg) scale(${1-opening*.32})`;
+      volume.style.transform=`translateX(${-opening*26}%) rotateX(${-16-opening*32+tiltX}deg) rotateY(${yaw+tiltY}deg) rotateZ(${roll}deg) scale(${1-opening*.45})`;
       front.style.transform=`translateZ(calc(var(--book-depth) / 2)) rotateY(${-24-opening*132}deg)`;
       leaves.forEach((leaf,i)=>{
         const angle=-(4+i*5)*(1-opening) + (-26-i*31)*opening;
