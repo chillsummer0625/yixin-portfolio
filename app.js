@@ -81,7 +81,6 @@
             <span class="tool-button__desktop-label">${soundEnabled ? t.common.soundOn : t.common.soundOff}</span>
             <span class="tool-button__mobile-label" aria-hidden="true">${language === "zh" ? "声音" : "Sound"}</span>
           </button>
-          ${active === "room" ? `<button type="button" class="tool-button room-motion-toggle" data-action="room-motion" aria-pressed="true">${language === "zh" ? "动效" : "Motion"}</button>` : ""}
           <button type="button" class="tool-button tool-button--resume" data-page="closing">${t.common.resume}</button>
         </div>
       </header>`;
@@ -91,10 +90,16 @@
     return `
       <article class="cover-page light-entry page-surface" data-page-key="cover">
         <h1 class="visually-hidden" tabindex="-1">Yixin Cui · A Personal Portfolio</h1>
-        <button class="cover-book" type="button" data-page="room" aria-label="${language === "zh" ? "打开崔逸馨的作品集" : "Open Yixin Cui’s portfolio"}">
-          <img src="assets/portfolio-book-v1.png" alt="Yixin Cui. A Personal Portfolio. Three sides. One curious mind. An ivory embossed book with a visible spine and layered pages." width="1254" height="1254" fetchpriority="high" />
+        <button class="cover-book" type="button" data-page="room" aria-label="${language === "zh" ? "拖动旋转书本，点击打开作品集；方向键旋转，Enter 打开" : "Drag to rotate book, click to open portfolio; arrow keys rotate, Enter opens"}">
+          <span class="book-volume" aria-hidden="true">
+            <span class="book-face book-face--front"><img src="assets/portfolio-book-front-v2.png" alt="" width="1024" height="1024" fetchpriority="high" /></span>
+            <span class="book-face book-face--back"><span class="back-flower">✤</span><span>Three sides.<br>One curious mind.</span></span>
+            <span class="book-face book-face--spine"><span>Yixin Cui</span></span>
+            <span class="book-face book-face--pages"></span>
+            <span class="book-face book-face--top"></span>
+            <span class="book-face book-face--bottom"></span>
+          </span>
         </button>
-        <button class="entry-motion" type="button" aria-pressed="true" aria-label="${language === "zh" ? "暂停光影" : "Pause light animation"}">Ⅱ</button>
       </article>`;
   }
 

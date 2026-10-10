@@ -85,3 +85,11 @@ The Work chapter uses `assets/work-professional-v2-balanced.webp`, a clean verti
 - Do not expose raw certificate scans or identity numbers publicly. Evidence files must be flattened public copies with private fields and source metadata removed.
 - Do not place logos in the room; use meaningful objects.
 - Phone number stays off the public page; email is the primary contact.
+
+## 2026-10-11 — Rotatable book entry
+
+The square cover now uses a six-face CSS 3D volume with a sharp, orthographic front texture, an ivory back cover, a named spine, and paper edges. Pointer drag rotates continuously through 360 degrees; vertical drag tilts within 24 degrees. Arrow keys rotate and Enter opens the room. A drag is distinguished from a click so releasing a rotation does not navigate.
+
+The entry has a black background with a much quieter warm light projection. Both entry and room motion run by default without Motion or pause buttons; system reduced-motion preferences and background/offscreen pauses remain.
+
+Validation: syntax checks, static build, desktop drag past the back cover, a further 360-degree keyboard turn, Enter navigation, and 390 × 844 viewport drag with no horizontal overflow. The room mounts without console errors and has no motion-toggle controls.

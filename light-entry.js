@@ -10,10 +10,8 @@
     root.prepend(canvas);
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    const control = root.querySelector('.entry-motion');
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-    const zh = document.documentElement.lang.startsWith('zh');
-    let enabled = localStorage.getItem('yixin-entry-motion') !== 'off';
+    const enabled = true;
     let alive = true, visible = true, frame = 0, time = 0, previous = 0, last = 0;
     // Stable botanical geometry, composed from the upper right to leave the book clear.
     const branches = Array.from({length: 5}, (_, i) => ({
@@ -28,8 +26,8 @@
       ctx.translate(w*.57,h*.02);
       ctx.rotate(-.22);
       const glow=ctx.createLinearGradient(0,0,0,h*1.1);
-      glow.addColorStop(0,'rgba(255,215,155,.40)');
-      glow.addColorStop(.45,'rgba(237,169,92,.21)');
+      glow.addColorStop(0,'rgba(255,215,155,.12)');
+      glow.addColorStop(.45,'rgba(237,169,92,.045)');
       glow.addColorStop(1,'rgba(171,94,42,0)');
       ctx.fillStyle=glow;
       ctx.globalAlpha=.9+.08*Math.sin(time*.19);
@@ -84,20 +82,58 @@
       cancelAnimationFrame(frame);previous=0;
       const active=enabled&&!reduced.matches;
       root.dataset.lightMotion=String(active);
-      control.textContent=active?'Ⅱ':'▷';
-      control.setAttribute('aria-pressed',String(active));
-      control.setAttribute('aria-label',zh?(active?'暂停光影':'播放光影'):(active?'Pause light animation':'Play light animation'));
-      control.disabled=reduced.matches;
       paint();
       if(alive&&active&&visible&&!document.hidden)frame=requestAnimationFrame(tick);
     }
-    function toggle(){enabled=!enabled;localStorage.setItem('yixin-entry-motion',enabled?'on':'off');update();}
-    control.addEventListener('click',toggle);
     const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(root);
     const visibilityObserver=new IntersectionObserver(e=>{visible=e[0].isIntersecting;update();});visibilityObserver.observe(root);
     document.addEventListener('visibilitychange',update);reduced.addEventListener('change',update);
-    resize();update();
-    dispose=()=>{alive=false;cancelAnimationFrame(frame);resizeObserver.disconnect();visibilityObserver.disconnect();control.removeEventListener('click',toggle);document.removeEventListener('visibilitychange',update);reduced.removeEventListener('change',update);canvas.remove();};
+    const bookButton=root.querySelector('.cover-book');
+    const volume=root.querySelector('.book-volume');
+    let yaw=24, pitch=-9, pointer=null, startX=0, startY=0, startYaw=0, startPitch=0, dragged=false, suppressClick=false;
+    function orient() {
+      volume.style.transform=`rotateX(${pitch}deg) rotateY(${yaw}deg)`;
+      volume.dataset.yaw=String(yaw);
+    }
+    function down(e) {
+      if (e.pointerType==='mouse' && e.button!==0) return;
+      pointer=e.pointerId;startX=e.clientX;startY=e.clientY;startYaw=yaw;startPitch=pitch;dragged=false;suppressClick=false;
+      bookButton.setPointerCapture(e.pointerId);
+      bookButton.classList.add('is-rotating');
+    }
+    function move(e) {
+      if(e.pointerId!==pointer)return;
+      const dx=e.clientX-startX,dy=e.clientY-startY;
+      if(Math.hypot(dx,dy)>6)dragged=true;
+      if(!dragged)return;
+      yaw=startYaw+dx*.65;pitch=Math.max(-24,Math.min(24,startPitch-dy*.15));orient();
+    }
+    function up(e) {
+      if(e.pointerId!==pointer)return;
+      suppressClick=dragged || e.type==='pointercancel';pointer=null;
+      bookButton.classList.remove('is-rotating');
+      if(bookButton.hasPointerCapture(e.pointerId))bookButton.releasePointerCapture(e.pointerId);
+    }
+    function click(e) {
+      if(suppressClick && e.detail!==0){e.preventDefault();e.stopImmediatePropagation();suppressClick=false;}
+    }
+    function key(e) {
+      if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;
+      e.preventDefault();e.stopPropagation();
+      if(e.key==='ArrowLeft')yaw-=20;
+      if(e.key==='ArrowRight')yaw+=20;
+      if(e.key==='ArrowUp')pitch=Math.max(-24,pitch-5);
+      if(e.key==='ArrowDown')pitch=Math.min(24,pitch+5);
+      orient();
+    }
+    bookButton.addEventListener('pointerdown',down);
+    bookButton.addEventListener('pointermove',move);
+    bookButton.addEventListener('pointerup',up);
+    bookButton.addEventListener('pointercancel',up);
+    bookButton.addEventListener('click',click,true);
+    bookButton.addEventListener('keydown',key);
+    orient();resize();update();
+    dispose=()=>{alive=false;cancelAnimationFrame(frame);resizeObserver.disconnect();visibilityObserver.disconnect();document.removeEventListener('visibilitychange',update);reduced.removeEventListener('change',update);canvas.remove();bookButton.removeEventListener('pointerdown',down);bookButton.removeEventListener('pointermove',move);bookButton.removeEventListener('pointerup',up);bookButton.removeEventListener('pointercancel',up);bookButton.removeEventListener('click',click,true);bookButton.removeEventListener('keydown',key);};
   }
   window.LightEntry={mount,stop:()=>{dispose();dispose=()=>{};}};
 })();

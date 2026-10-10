@@ -2,7 +2,7 @@
 (() => {
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   let dispose = () => {};
-  let enabled = localStorage.getItem("yixin-room-motion") !== "off";
+  const enabled = true;
   const positions = {
     crete:[.095,.515,.075,.12], hku:[.44,.235,.10,.17],
     campus:[.213,.375,.11,.15], nuaa:[.18,.495,.09,.10],
@@ -16,17 +16,9 @@
     dispose();
     if (!root) return;
     const image = root.querySelector(".room-art");
-    const button = root.closest("article").querySelector("[data-action='room-motion']");
-    const zh = document.documentElement.lang.startsWith("zh");
     let alive = true, visible = true, frame = 0, gl, canvas, program, texture, buffer;
     let cropLocation, timeLocation;
     let crop = [1,1,0,0], lastFrame = 0, elapsed = 0, previous = 0;
-    const refreshButton = () => {
-      button.textContent = reduced.matches ? (zh ? "静态" : "Still") : (zh ? (enabled ? "动效" : "静态") : (enabled ? "Motion" : "Still"));
-      button.setAttribute("aria-pressed", String(enabled && !reduced.matches));
-      button.setAttribute("aria-label", zh ? "开关场景动效" : "Toggle scene motion");
-      button.disabled = reduced.matches;
-    };
     const shader = (type, text) => {
       const s = gl.createShader(type);
       gl.shaderSource(s,text); gl.compileShader(s);
@@ -130,11 +122,9 @@ void main() {
     }
     function update() {
       cancelAnimationFrame(frame); frame=0; previous=0;
-      refreshButton();
       if (canvas) canvas.hidden=!(enabled && !reduced.matches && gl);
       if (alive && gl && enabled && !reduced.matches && !document.hidden && visible) frame=requestAnimationFrame(render);
     }
-    function toggle() { enabled=!enabled; localStorage.setItem("yixin-room-motion",enabled ? "on":"off"); update(); }
     function lost(event) { event.preventDefault(); cancelAnimationFrame(frame); gl=null; canvas.hidden=true; root.dataset.motionReady="false"; }
     function start() {
       if (!alive || !image.naturalWidth) return;
@@ -143,15 +133,13 @@ void main() {
     }
     const observer=new ResizeObserver(resize); observer.observe(root);
     const intersection=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;update();}); intersection.observe(root);
-    button.addEventListener("click",toggle);
     reduced.addEventListener("change",update);
     document.addEventListener("visibilitychange",update);
     if (image.complete) start(); else image.addEventListener("load",start,{once:true});
-    refreshButton();
     dispose=()=>{
       alive=false; cancelAnimationFrame(frame);
       observer.disconnect(); intersection.disconnect();
-      button.removeEventListener("click",toggle); reduced.removeEventListener("change",update);
+      reduced.removeEventListener("change",update);
       document.removeEventListener("visibilitychange",update); image.removeEventListener("load",start);
       if (gl) { gl.deleteTexture(texture); gl.deleteBuffer(buffer); gl.deleteProgram(program); }
       canvas?.remove();
