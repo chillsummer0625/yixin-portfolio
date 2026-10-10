@@ -129,3 +129,7 @@ Paper faces now use distinct pink, turquoise, gold and violet light, with a full
 ## 2026-10-11 — Restore object click lift
 
 The old object sprites are absent from the updated room artwork, and L’Oréal/KOL/link routes bypassed the activation delay. Object activation now consistently plays a 380ms lift before a dialog, Work case or external navigation. The single-texture room shader displaces the selected image region upward and back with feathered boundaries, so the actual pictured object moves instead of only its invisible hotspot. Existing hover selection supplies a smaller lift. System reduced motion opens immediately. Modified external-link clicks keep native browser behavior.
+
+## 2026-10-11 — Black stage and click to recall
+
+Removed the window-light canvas, dust, broad rainbow aura and ground glow. Only the book's colored rims and page edges emit light against a pure black stage. The entrance plays once and holds the distant fan pose. Clicking recalls the book smoothly; a subsequent front-cover click enters the portfolio. Dragging preserves distance and pose, while back-cover anchors remain independent. Hidden/offscreen time pauses the sequence; reduced motion presents the near pose immediately.

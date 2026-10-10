@@ -4797,7 +4797,6 @@ body[data-portfolio-page="cover"] .ambient-glow { display: none; }
   isolation: isolate; overflow: hidden;
 }
 .light-entry::before,.light-entry::after { display: none; }
-.entry-light { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; animation: light-arrive 1.8s ease both; }
 .cover-book {
   position: relative; z-index: 1; display: block;
   width: min(82vw, 78svh, 780px); aspect-ratio: 1;
@@ -4899,7 +4898,6 @@ body[data-portfolio-page="cover"],
 
 /* Spring flip: the whole hinged book turns, with light and shadow following it. */
 .book-volume { will-change: transform; }
-.book-ground-shadow { position: absolute; left: 8%; right: 8%; bottom: -13%; height: 8%; border-radius: 50%; background: #d2a57818; box-shadow: 0 0 22px 12px #cda06b0c; transform: scaleX(var(--shadow-scale,1)); pointer-events: none; }
 .book-face--front::after,.book-face--back::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; backface-visibility: hidden; background: radial-gradient(ellipse at var(--sheen-x,35%) var(--sheen-y,25%),#fff7df32,transparent 65%); transform: translateZ(1px); }
 .book-enter { position: absolute; bottom: max(2rem,8svh); left: 50%; transform: translateX(-50%); z-index: 2; padding: .65rem .2rem; border: 0; border-bottom: 1px solid #a58c704a; background: none; color: #c8b8a4; font: 13px/1.5 var(--sans); letter-spacing: .04em; cursor: pointer; }
 .book-enter:hover { color: #fff3dc; border-color: #c8b8a4; }
@@ -4912,12 +4910,8 @@ body[data-portfolio-page="cover"],
 .book-enter { bottom: max(1.5rem, 3svh); }
 
 /* Prismatic light belongs to the book; the surrounding stage stays black. */
-.cover-book::before { content: ''; position: absolute; inset: -9%; border-radius: 34%; pointer-events: none; background: conic-gradient(from 30deg,#ff427b,#ff973e,#ffe56b,#65e8a9,#60caff,#847aff,#db71f5,#ff427b); filter: blur(42px); opacity: .28; transform: scale(.92); animation: book-prism 7s ease-in-out infinite alternate; }
 .book-face--front,.book-face--back { box-shadow: inset 0 0 3px #50473760, -2px 0 7px #83cfff70, 2px 0 7px #ffa9be70, 0 -2px 7px #c6a2ff60, 0 2px 7px #ffdd9960; }
 .book-leaf__edge,.book-leaf__top,.book-leaf__bottom { box-shadow: 0 0 5px #b7dbff80, 0 0 9px #fcb9d44a; }
-.light-entry[data-book-animation="fanning"] .cover-book::before { opacity: .44; }
-@keyframes book-prism { from { transform: scale(.9) rotate(-8deg); } to { transform: scale(1.06) rotate(8deg); } }
-@media (prefers-reduced-motion: reduce) { .cover-book::before { animation: none; } }
 
 /* Strong spectral paper edges, distinct from the untouched ivory cover. */
 .book-leaf__front,.book-leaf__back { background: linear-gradient(135deg,#ffffff50,var(--leaf-tint)); box-shadow: inset 0 0 0 1px var(--leaf-tint), 0 0 8px var(--leaf-tint), 0 0 17px color-mix(in srgb,var(--leaf-tint) 65%,transparent); }
@@ -4929,3 +4923,6 @@ body[data-portfolio-page="cover"],
   .character-hotspot--student:active { transform: translateY(-.18rem) scale(.985); }
   .character-hotspot--creator { right: 5%; top: 61%; bottom: auto; }
 }
+
+/* The stage remains pure black; light belongs only to the book edges. */
+.book-ground-shadow { display: none; }
