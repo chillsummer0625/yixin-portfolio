@@ -843,7 +843,7 @@ h1[tabindex="-1"]:focus {
   height: 100%;
   display: block;
   object-fit: cover;
-  object-position: center 48%;
+  object-position: center;
   filter: saturate(1.01) contrast(1.01);
 }
 
@@ -4734,5 +4734,46 @@ html[lang="zh-CN"] .learn-book__title {
   .work-tab:focus-visible,
   .work-tab[aria-selected="true"] {
     transform: none !important;
+  }
+}
+
+/* Approved cover, 2026-10-10: one texture, shared image-coordinate hotspots. */
+.room-motion-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+.room-motion-canvas[hidden] { display: none; }
+.room-art { filter: none; }
+.room-art-stage { transform: none; }
+.object-hotspot { z-index: 8; }
+.object-hotspot:hover, .object-hotspot:focus-visible { z-index: 10; }
+.room-motion-toggle { min-width: 3.4rem; }
+.room-motion-toggle[aria-pressed="false"] { opacity: .65; }
+.work-context { display: block; margin-top: .4rem; color: var(--muted); font-size: .85rem; }
+.work-panel[data-work-panel="loreal"] .work-case-grid { grid-template-columns: 1fr; }
+.object-hotspot--loreal .object-hotspot__label,
+.object-hotspot--kol .object-hotspot__label,
+.object-hotspot--monthly .object-hotspot__label { bottom: calc(50% + .7rem); }
+.object-hotspot--monthly { --object-accent: oklch(0.79 0.16 28); }
+@media (max-width: 820px) {
+  .room-art { aspect-ratio: 3 / 2; object-position: center; }
+  .room-motion-toggle { min-width: 44px; padding-inline: .25rem; }
+  .object-hotspot__label { opacity: 0; }
+  .object-hotspot:focus-visible .object-hotspot__label,
+  .object-hotspot:hover .object-hotspot__label { opacity: 1; }
+  .object-hotspot:focus-visible { outline: 2px solid var(--object-accent); outline-offset: 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .room-motion-canvas { display: none; }
+}
+
+@media (min-width: 821px) {
+  .book[data-current-page="room"] {
+    width: min(94vw, calc((100svh - 11.3rem) * 1.5), 1480px);
+    aspect-ratio: 1.4;
   }
 }

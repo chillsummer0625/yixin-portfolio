@@ -22,6 +22,7 @@
   // The room is the portfolio's homepage. The cover remains available as a
   // previous page once the full book flow is expanded.
   let currentPage = 1;
+  let activeWorkCase = "loreal";
   let soundEnabled = false;
   let isTurning = false;
   let turnState = null;
@@ -81,6 +82,7 @@
             <span class="tool-button__desktop-label">${soundEnabled ? t.common.soundOn : t.common.soundOff}</span>
             <span class="tool-button__mobile-label" aria-hidden="true">${language === "zh" ? "声音" : "Sound"}</span>
           </button>
+          ${active === "room" ? `<button type="button" class="tool-button room-motion-toggle" data-action="room-motion" aria-pressed="true">${language === "zh" ? "动效" : "Motion"}</button>` : ""}
           <button type="button" class="tool-button tool-button--resume" data-page="closing">${t.common.resume}</button>
         </div>
       </header>`;
@@ -124,31 +126,7 @@
         ${toolbar("room")}
         <div class="room-scene">
           <div class="room-art-stage">
-            <img class="room-art" src="assets/homepage-room-v12.png" alt="A luminous animated visual CV: Yixin studies beside an HKU wall crest, NUAA and Crete archive and a fashion-illustrated campus involvement group portrait, works among SUMEC trade materials, China Daily pages and China Eastern broadcast-training notes, and creates beside collage work and an HKU Compass screen." />
-            <img class="room-object-clean-sprite room-object-clean-sprite--crete" src="assets/object-clean-crete.png" alt="" aria-hidden="true" />
-            <img class="room-object-clean-sprite room-object-clean-sprite--hku" src="assets/object-clean-hku-v2.png" alt="" aria-hidden="true" />
-            <img class="room-object-clean-sprite room-object-clean-sprite--campus" src="assets/object-clean-campus.png" alt="" aria-hidden="true" />
-            <img class="room-object-clean-sprite room-object-clean-sprite--nuaa" src="assets/object-clean-nuaa.png" alt="" aria-hidden="true" />
-            <img class="room-object-clean-sprite room-object-clean-sprite--awards" src="assets/object-clean-awards.png" alt="" aria-hidden="true" />
-            <img class="room-object-clean-sprite room-object-clean-sprite--sumec" src="assets/object-clean-sumec.png" alt="" aria-hidden="true" />
-            <img class="room-object-clean-sprite room-object-clean-sprite--chinaDaily" src="assets/object-clean-china-daily.png" alt="" aria-hidden="true" />
-            <img class="room-object-clean-sprite room-object-clean-sprite--broadcast" src="assets/object-clean-broadcast.png" alt="" aria-hidden="true" />
-            <img class="room-object-clean-sprite room-object-clean-sprite--eastern" src="assets/object-clean-eastern.png" alt="" aria-hidden="true" />
-            <img class="room-object-clean-sprite room-object-clean-sprite--collage" src="assets/object-clean-collage.png" alt="" aria-hidden="true" />
-            <img class="room-object-clean-sprite room-object-clean-sprite--hkuCompass" src="assets/object-clean-hku-compass.png" alt="" aria-hidden="true" />
-            <img class="room-object-sprite room-object-sprite--crete" src="assets/object-crete.png" alt="" aria-hidden="true" />
-            <img class="room-object-sprite room-object-sprite--hku" src="assets/object-hku-v2.png" alt="" aria-hidden="true" />
-            <img class="room-object-sprite room-object-sprite--campus" src="assets/object-campus.png" alt="" aria-hidden="true" />
-            <img class="room-object-sprite room-object-sprite--nuaa" src="assets/object-nuaa.png" alt="" aria-hidden="true" />
-            <img class="room-object-sprite room-object-sprite--awards" src="assets/object-awards.png" alt="" aria-hidden="true" />
-            <img class="room-object-sprite room-object-sprite--sumec" src="assets/object-sumec.png" alt="" aria-hidden="true" />
-            <img class="room-object-sprite room-object-sprite--chinaDaily" src="assets/object-china-daily.png" alt="" aria-hidden="true" />
-            <img class="room-object-sprite room-object-sprite--broadcast" src="assets/object-broadcast.png" alt="" aria-hidden="true" />
-            <img class="room-object-sprite room-object-sprite--eastern" src="assets/object-eastern.png" alt="" aria-hidden="true" />
-            <img class="room-object-sprite room-object-sprite--collage" src="assets/object-collage.png" alt="" aria-hidden="true" />
-            <img class="room-object-sprite room-object-sprite--hkuCompass" src="assets/object-hku-compass.png" alt="" aria-hidden="true" />
-            <div class="room-atmosphere room-atmosphere--sun" aria-hidden="true"></div>
-            <div class="room-atmosphere room-atmosphere--dust" aria-hidden="true"></div>
+            <img class="room-art" src="assets/homepage-room-v13.png" alt="A luminous animated visual CV: Yixin studies beside an HKU wall crest, NUAA and Crete archive and a fashion-illustrated campus involvement group portrait, works among SUMEC trade materials, China Daily pages and China Eastern broadcast-training notes, works with L’Oréal beauty content and a Honey Verse creator campaign phone, and creates beside a Monthly Echoes record player and an HKU Compass instrument." />
             <div class="room-vignette" aria-hidden="true"></div>
 
             ${objectButton("crete", "crete")}
@@ -160,6 +138,9 @@
             ${objectButton("chinaDaily", "china-daily")}
             ${objectButton("broadcast", "broadcast")}
             ${objectButton("eastern", "eastern")}
+            ${objectButton("loreal", "loreal")}
+            ${objectButton("kol", "kol")}
+            <a class="object-hotspot object-hotspot--monthly object-hotspot--create" data-object="monthlyEchoes" href="https://elwd84rz457j.meoo.zone/" target="_blank" rel="noopener noreferrer" aria-label="Monthly Echoes"><span class="object-hotspot__label">Monthly Echoes</span></a>
             <button class="object-hotspot object-hotspot--collage object-hotspot--create" type="button" data-object="collage" aria-label="${objects.collage.label}">
               <span class="object-hotspot__dot" aria-hidden="true"></span>
               <span class="object-hotspot__label">${objects.collage.label}</span>
@@ -407,16 +388,16 @@
           <h3 id="work-handled-${item.key}">${t.work.handledTitle}</h3>
           <ul>${item.handled.map(workDetailItem).join("")}</ul>
         </section>
-        <section class="work-case-column" aria-labelledby="work-moved-${item.key}">
+        ${item.moved.length ? `<section class="work-case-column" aria-labelledby="work-moved-${item.key}">
           <h3 id="work-moved-${item.key}">${movedHeading(item)}</h3>
           <ul>${item.moved.map(workDetailItem).join("")}</ul>
-        </section>
+        </section>` : ""}
       </div>
-      <footer class="work-evidence">
+      ${item.evidence.length ? `<footer class="work-evidence">
         <p>${t.work.evidenceTitle}</p>
         <div>${item.evidence.map(evidenceLink).join("")}</div>
         ${item.evidenceNote ? `<small>${item.evidenceNote}</small>` : `<small>${t.work.publicEvidenceNote}</small>`}
-      </footer>`;
+      </footer>` : ""}`;
     const tabs = t.work.cases.map((item, index) => `
       <button
         class="work-tab work-tab--${item.key}"
@@ -438,7 +419,7 @@
         ${index === 0 ? "" : "hidden"}
       >
         <header class="work-panel__heading">
-          <div><h2>${item.company}</h2><p>${item.role}</p></div>
+          <div><h2>${item.company}</h2><p>${item.role}</p>${item.context ? `<small class="work-context">${item.context}</small>` : ""}</div>
           <time>${item.date}</time>
         </header>
         ${process(item.process)}
@@ -685,7 +666,10 @@
     document.title = t.meta.title;
     book.dataset.currentPage = pageKeys[currentPage];
     if (!reuseContent) {
+      window.RoomMotion?.stop();
       bookContent.replaceChildren(clonedPage(currentPage));
+      window.RoomMotion?.mount(bookContent.querySelector(".room-art-stage"));
+      if (pageKeys[currentPage] === "work") activateWorkCase(activeWorkCase);
       resumeContent.innerHTML = resumeMarkup();
     }
     updateReaderControls();
@@ -1763,6 +1747,7 @@
     const targetPanel = page?.querySelector(`[data-work-panel="${key}"]`);
     if (!page || !targetTab || !targetPanel) return;
 
+    activeWorkCase = key;
     page.dataset.activeWorkCase = key;
     page.querySelectorAll("[data-work-tab]").forEach((tab) => {
       const active = tab === targetTab;
@@ -1869,6 +1854,13 @@
     }
     const objectControl = event.target.closest("[data-object]");
     if (objectControl) {
+      if (objectControl.tagName === "A") return;
+      const targetCase = {loreal:"loreal",kol:"creator-campaigns"}[objectControl.dataset.object];
+      if (targetCase) {
+        activeWorkCase = targetCase;
+        turnTo("work");
+        return;
+      }
       if (objectControl.classList.contains("is-activating")) return;
       setActiveRoomObject(objectControl.dataset.object);
       objectControl.classList.add("is-activating");

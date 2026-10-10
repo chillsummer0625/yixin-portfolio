@@ -41,7 +41,7 @@ window.SITE_DATA = {
       professional: {
         label: "Professional",
         line: "I work.",
-        hint: "Trade · Editorial · Global operations"
+        hint: "Social media · Trade · Editorial"
       },
       creator: {
         label: "Creator",
@@ -49,6 +49,9 @@ window.SITE_DATA = {
         hint: "Content · Collage · Creative tech"
       },
       objects: {
+        loreal: {"label": "L’Oréal", "tone": "work"},
+        kol: {"label": "KOL · Honey Verse", "tone": "work"},
+
         nuaa: {
           label: "NUAA",
           kicker: "Student · Academic record",
@@ -370,6 +373,24 @@ window.SITE_DATA = {
       portraitAlt: "Yixin working at a laptop in a sunset-lit editorial office",
       cases: [
         {
+          "key": "loreal",
+          "company": "L’Oréal",
+          "role": "Social Media Operator",
+          "context": "HKU L’Oréal Campreneur",
+          "date": "Sep 2026–present",
+          "process": [
+            "Plan",
+            "Design",
+            "Publish"
+          ],
+          "handled": [
+            "Plan, design and publish social media content and visual assets for HKU L’Oréal Campreneur across WeChat Official Account, Xiaohongshu and Instagram.",
+            "Independently create interactive SVG visuals, WeChat article layouts and social media promotional assets using Canva and Xiumi."
+          ],
+          "moved": [],
+          "evidence": []
+        },
+        {
           key: "sumec",
           company: "SUMEC",
           role: "Foreign Trade Business Assistant",
@@ -642,7 +663,7 @@ window.SITE_DATA = {
       professional: {
         label: "职场人",
         line: "工作",
-        hint: "外贸 · 编辑 · 海外运营"
+        hint: "社交媒体 · 外贸 · 编辑"
       },
       creator: {
         label: "创作者",
@@ -650,6 +671,9 @@ window.SITE_DATA = {
         hint: "内容 · 拼贴 · 创意技术"
       },
       objects: {
+        loreal: {"label": "L’Oréal", "tone": "work"},
+        kol: {"label": "KOL · 海外达人营销", "tone": "work"},
+
         nuaa: {
           label: "NUAA",
           kicker: "学生 · 学业档案",
@@ -970,6 +994,24 @@ window.SITE_DATA = {
       publicEvidenceNote: "公开版本：已移除个人身份信息与扫描二维码。",
       portraitAlt: "夕阳照进编辑办公室，Yixin 正在电脑前工作",
       cases: [
+        {
+          "key": "loreal",
+          "company": "L’Oréal",
+          "role": "社交媒体运营",
+          "context": "HKU L’Oréal Campreneur",
+          "date": "2026年9月–至今",
+          "process": [
+            "策划",
+            "设计",
+            "发布"
+          ],
+          "handled": [
+            "为 HKU L’Oréal Campreneur 负责社交媒体内容与视觉素材，涵盖内容策划、设计，以及微信公众号、小红书和 Instagram 的发布。",
+            "使用 Canva 和秀米独立制作互动 SVG 视觉、微信文章排版及社交媒体宣传素材。"
+          ],
+          "moved": [],
+          "evidence": []
+        },
         {
           key: "sumec",
           company: "SUMEC 苏美达",
