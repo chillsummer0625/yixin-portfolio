@@ -4747,6 +4747,7 @@ html[lang="zh-CN"] .learn-book__title {
   z-index: 1;
 }
 .room-motion-canvas[hidden] { display: none; }
+.room-vignette { z-index: 2; }
 .room-art { filter: none; }
 .room-art-stage { transform: none; }
 .object-hotspot { z-index: 8; }
