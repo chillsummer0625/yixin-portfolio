@@ -4906,3 +4906,7 @@ body[data-portfolio-page="cover"],
 .book-enter:focus-visible { outline: 1px solid #c8b8a4; outline-offset: 6px; }
 .entry-opening .book-enter { opacity: 0; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .book-volume { will-change: auto; } }
+/* The entry fills the viewport even where chapter pages use a shorter mobile canvas. */
+.book[data-current-page="cover"] .book-content,
+.light-entry.cover-page { min-height: 100svh; }
+.book-enter { bottom: max(1.5rem, 3svh); }
