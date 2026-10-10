@@ -19,9 +19,8 @@
 
   const pageKeys = ["cover", "room", "learn", "work", "create", "closing"];
   let language = localStorage.getItem("yixin-language") || "en";
-  // The room is the portfolio's homepage. The cover remains available as a
-  // previous page once the full book flow is expanded.
-  let currentPage = 1;
+  // The dimensional book is the entry; opening it reveals the room.
+  let currentPage = 0;
   let activeWorkCase = "loreal";
   let soundEnabled = false;
   let isTurning = false;
@@ -89,27 +88,13 @@
   }
 
   function coverPage() {
-    const t = content();
     return `
-      <article class="cover-page page-surface" data-page-key="cover">
-        <div class="cover-noise" aria-hidden="true"></div>
-        <p class="cover-kicker">${t.cover.kicker}</p>
-        <div class="cover-title-group">
-          <h1 tabindex="-1">${t.cover.title.replace("\n", "<br>")}</h1>
-          <p class="cover-subtitle">${t.cover.subtitle}</p>
-        </div>
-        <div class="cover-figure" aria-hidden="true">
-          <span class="cover-figure__orbit"></span>
-          <span class="cover-figure__one">L</span>
-          <span class="cover-figure__two">W</span>
-          <span class="cover-figure__three">C</span>
-        </div>
-        <p class="cover-note">${t.cover.note}</p>
-        <button class="open-book" type="button" data-page="room">
-          <span>${t.cover.action}</span>
-          <span aria-hidden="true">→</span>
+      <article class="cover-page light-entry page-surface" data-page-key="cover">
+        <h1 class="visually-hidden" tabindex="-1">Yixin Cui · A Personal Portfolio</h1>
+        <button class="cover-book" type="button" data-page="room" aria-label="${language === "zh" ? "打开崔逸馨的作品集" : "Open Yixin Cui’s portfolio"}">
+          <img src="assets/portfolio-book-v1.png" alt="Yixin Cui. A Personal Portfolio. Three sides. One curious mind. An ivory embossed book with a visible spine and layered pages." width="1254" height="1254" fetchpriority="high" />
         </button>
-        <p class="cover-spine-copy" aria-hidden="true">YIXIN CUI · DIFFERENT SIDES OF ME · 2026</p>
+        <button class="entry-motion" type="button" aria-pressed="true" aria-label="${language === "zh" ? "暂停光影" : "Pause light animation"}">Ⅱ</button>
       </article>`;
   }
 
@@ -665,10 +650,13 @@
     document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
     document.title = t.meta.title;
     book.dataset.currentPage = pageKeys[currentPage];
+    document.body.dataset.portfolioPage = pageKeys[currentPage];
     if (!reuseContent) {
       window.RoomMotion?.stop();
+      window.LightEntry?.stop();
       bookContent.replaceChildren(clonedPage(currentPage));
       window.RoomMotion?.mount(bookContent.querySelector(".room-art-stage"));
+      window.LightEntry?.mount(bookContent.querySelector(".light-entry"));
       if (pageKeys[currentPage] === "work") activateWorkCase(activeWorkCase);
       resumeContent.innerHTML = resumeMarkup();
     }
@@ -1323,6 +1311,17 @@
   function turnTo(target, explicitDirection) {
     const targetIndex = typeof target === "number" ? target : pageIndex(target);
     if (targetIndex < 0 || targetIndex >= pageKeys.length || targetIndex === currentPage || isTurning || mobileSwipeState) return;
+    if (currentPage === 0 || targetIndex === 0) {
+      isTurning = true;
+      bookContent.classList.add("entry-leaving");
+      window.setTimeout(() => {
+        currentPage = targetIndex;
+        bookContent.classList.remove("entry-leaving");
+        render({ focusHeading: true });
+        isTurning = false;
+      }, reducedMotion() ? 0 : 360);
+      return;
+    }
     const direction = explicitDirection || (targetIndex > currentPage ? 1 : -1);
     if (mobileLayout()) {
       void mobileTurnTo(targetIndex, direction);
@@ -1433,6 +1432,7 @@
   }
 
   function beginPageDrag(event) {
+    if (currentPage === 0) return;
     if (isTurning || drawer.open || document.querySelector("#experience-dialog[open]")) return;
     if (event.pointerType === "mouse" && event.button !== 0) return;
     if (event.target.closest("a, button, input, select, textarea, dialog, [role='tab'], [contenteditable='true']")) return;
