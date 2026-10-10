@@ -103,3 +103,9 @@ The back cover now contains the existing HKU email and a direct link to the exis
 Opening unfolds the cover and sheets before entering the room. The header includes an accessible close-book control that folds the current page away while the small book closes into its resting pose. System reduced-motion uses an immediate change.
 
 Validation: syntax/static build; desktop intermediate frames of both unfolding and closing; return overlay cleanup; mobile Enter/open/close and drag to back without navigation or overflow; direct CV navigation to the PDF; email mailto readback; no console errors.
+
+## 2026-10-11 — Repair detached fore-edge
+
+Side rotation exposed a geometry error: the rigid fore-edge and bottom of the previous closed box remained in place while the inner sheets fanned outward. Removed these stationary box faces. Each sheet is now a two-sided, 2px thick volume with attached top, bottom and fore-edge faces under the same hinge transform. Added clearance between the foremost sheet and cover. Email, CV links, rotation and opening/closing behavior are retained.
+
+Validation: syntax/static build, staged-only export, and runtime asset readback. Browser verification is recorded separately from build checks.

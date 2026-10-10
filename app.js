@@ -101,10 +101,7 @@
               <a class="back-cv" href="assets/Cui-Yixin-CV.pdf" target="_blank" rel="noreferrer">${language === "zh" ? "查看简历" : "Read my CV"}<span aria-hidden="true"> ↗</span></a>
             </span>
             <span class="book-face book-face--spine" aria-hidden="true"><span>Yixin Cui</span></span>
-            <span class="book-face book-face--pages" aria-hidden="true"></span>
-            <span class="book-face book-face--top" aria-hidden="true"></span>
-            <span class="book-face book-face--bottom" aria-hidden="true"></span>
-            ${[4, 9, 14, 19].map((angle, i) => `<span class="book-leaf" aria-hidden="true" style="--leaf-angle:${-angle}deg;--leaf-offset:${10 - i * 3}px;--leaf-tint:${['#ded4d1','#d4ddd1','#ede4de','#ded4d1'][i]}"></span>`).join('')}
+            ${[4, 9, 14, 19].map((angle, i) => `<span class="book-leaf" aria-hidden="true" style="--leaf-angle:${-angle}deg;--leaf-offset:${12 - i * 3}px;--leaf-tint:${['#ded4d1','#d4ddd1','#ede4de','#ded4d1'][i]}"><span class="book-leaf__front"></span><span class="book-leaf__back"></span><span class="book-leaf__edge"></span><span class="book-leaf__top"></span><span class="book-leaf__bottom"></span></span>`).join('')}
             <button class="book-face book-face--front" type="button" data-page="room" aria-label="${language === "zh" ? "打开作品集" : "Open portfolio"}"><img src="assets/portfolio-book-front-v2.png" alt="Yixin Cui · A Personal Portfolio · Three sides. One curious mind." width="1024" height="1024" fetchpriority="high" /><span class="book-front-inside" aria-hidden="true"></span></button>
           </div>
         </div>
