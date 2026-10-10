@@ -125,3 +125,7 @@ The user's follow-up asks for seven-color light emitted by their book. Added a s
 Removed the text entry beneath the book. The actual front cover opens the room; back email/CV anchors remain independent. Horizontal and vertical pointer movement control yaw and pitch continuously, and the release keeps the exact pose instead of snapping front/back. Arrow keys move each axis by 15 degrees; Enter/Space opens. Pitch extends through horizontal poses. User interaction stops the automatic showcase.
 
 Paper faces now use distinct pink, turquoise, gold and violet light, with a full rainbow on the thin sheet edges and spine. The front face remains ivory. Desktop Student moves to the floor at bottom left; Creator moves upward over the right figure's trousers. Mobile retains the separate stacked chapter links.
+
+## 2026-10-11 — Restore object click lift
+
+The old object sprites are absent from the updated room artwork, and L’Oréal/KOL/link routes bypassed the activation delay. Object activation now consistently plays a 380ms lift before a dialog, Work case or external navigation. The single-texture room shader displaces the selected image region upward and back with feathered boundaries, so the actual pictured object moves instead of only its invisible hotspot. Existing hover selection supplies a smaller lift. System reduced motion opens immediately. Modified external-link clicks keep native browser behavior.

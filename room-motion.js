@@ -2,6 +2,7 @@
 (() => {
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   let dispose = () => {};
+  let bounce = () => {};
   const enabled = true;
   const positions = {
     crete:[.095,.515,.075,.12], hku:[.44,.235,.10,.17],
@@ -17,7 +18,9 @@
     if (!root) return;
     const image = root.querySelector(".room-art");
     let alive = true, visible = true, frame = 0, gl, canvas, program, texture, buffer;
-    let cropLocation, timeLocation;
+    let cropLocation, timeLocation, objectLocation, liftLocation;
+    let pulseKey="", pulseAt=0;
+    bounce=key=>{pulseKey=key;pulseAt=performance.now();};
     let crop = [1,1,0,0], lastFrame = 0, elapsed = 0, previous = 0;
     const shader = (type, text) => {
       const s = gl.createShader(type);
@@ -37,6 +40,8 @@ varying vec2 uv;
 uniform sampler2D photo;
 uniform vec4 crop;
 uniform float time;
+uniform vec4 object;
+uniform float lift;
 float region(vec2 p, vec2 c, vec2 r) {
   float d=length((p-c)/r); return 1.-smoothstep(.15,1.,d);
 }
@@ -59,6 +64,9 @@ void main() {
   shift += vec2(.0007*sin(time*2.7),.001*sin(time*2.7))*cutting;
   float paper=region(p,vec2(.914,.354),vec2(.035,.045));
   shift.y += .0007*sin(time*2.7+.4)*paper;
+  // Lift the selected object within the same texture, with feathered boundaries.
+  float objectMask=region(p,object.xy,object.zw*.65);
+  shift.y += lift*objectMask;
   vec4 color=texture2D(photo,vec2(p.x+shift.x,1.-p.y-shift.y));
   float left=region(p,vec2(.275,.175),vec2(.125,.23));
   float right=region(p,vec2(.875,.20),vec2(.18,.27));
@@ -71,6 +79,7 @@ void main() {
       if (!gl.getProgramParameter(program,gl.LINK_STATUS)) throw Error("Scene shader linking failed");
       gl.useProgram(program);
       cropLocation=gl.getUniformLocation(program,"crop"); timeLocation=gl.getUniformLocation(program,"time");
+      objectLocation=gl.getUniformLocation(program,"object");liftLocation=gl.getUniformLocation(program,"lift");
       buffer=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
       gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);
       const attr=gl.getAttribLocation(program,"a"); gl.enableVertexAttribArray(attr); gl.vertexAttribPointer(attr,2,gl.FLOAT,false,0,0);
@@ -108,6 +117,14 @@ void main() {
     function draw() {
       gl.uniform4fv(cropLocation,crop);
       gl.uniform1f(timeLocation,elapsed);
+      const age=(performance.now()-pulseAt)/1000;
+      const pulsing=pulseKey && age<.38;
+      const key=pulsing?pulseKey:root.dataset.activeObject;
+      const bounds=positions[key] || [0,0,.01,.01];
+      gl.uniform4fv(objectLocation,bounds);
+      const hover=key ? .003 : 0;
+      const jump=pulsing?.023*Math.sin(Math.PI*Math.max(0,age)/.38):0;
+      gl.uniform1f(liftLocation,reduced.matches?0:hover+jump);
       gl.drawArrays(gl.TRIANGLES,0,6);
     }
     function render(now) {
@@ -145,5 +162,5 @@ void main() {
       canvas?.remove();
     };
   }
-  window.RoomMotion={mount, stop:()=>{dispose();dispose=()=>{};}};
+  window.RoomMotion={mount,bounce:key=>bounce(key), stop:()=>{dispose();dispose=()=>{};bounce=()=>{};}};
 })();

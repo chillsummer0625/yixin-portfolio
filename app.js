@@ -1899,21 +1899,21 @@
     }
     const objectControl = event.target.closest("[data-object]");
     if (objectControl) {
-      if (objectControl.tagName === "A") return;
-      const targetCase = {loreal:"loreal",kol:"creator-campaigns"}[objectControl.dataset.object];
-      if (targetCase) {
-        activeWorkCase = targetCase;
-        turnTo("work");
-        return;
-      }
+      if(objectControl.tagName==="A" && (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey))return;
+      event.preventDefault();
       if (objectControl.classList.contains("is-activating")) return;
-      setActiveRoomObject(objectControl.dataset.object);
+      const key=objectControl.dataset.object;
+      setActiveRoomObject(key);
       objectControl.classList.add("is-activating");
-      playObjectSelectSound(objectControl.dataset.object);
-      const revealDelay = reducedMotion() ? 0 : 180;
+      playObjectSelectSound(key);
+      window.RoomMotion?.bounce(key);
+      const revealDelay = reducedMotion() ? 0 : 380;
       window.setTimeout(() => {
-        openExperience(objectControl.dataset.object);
         objectControl.classList.remove("is-activating");
+        const targetCase={loreal:"loreal",kol:"creator-campaigns"}[key];
+        if(objectControl.tagName==="A") window.location.assign(objectControl.href);
+        else if(targetCase){activeWorkCase=targetCase;turnTo("work");}
+        else openExperience(key);
       }, revealDelay);
       return;
     }
