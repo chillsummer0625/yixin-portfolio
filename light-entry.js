@@ -49,10 +49,10 @@
       if(returning){
         returnTime+=dt;
         const p=smooth(returnTime/.95);
-        opening=returnPose.opening*(1-p);roll=returnPose.roll*(1-p);
+        opening=returnPose.opening+(returnPose.targetOpening-returnPose.opening)*p;roll=returnPose.roll+(returnPose.targetRoll-returnPose.roll)*p;
         yaw=returnPose.yaw+(returnPose.targetYaw-returnPose.yaw)*p;
-        pitch=returnPose.pitch+(-16-returnPose.pitch)*p;
-        if(p===1){returning=false;root.dataset.bookAnimation='near';}
+        pitch=returnPose.pitch+(returnPose.targetPitch-returnPose.pitch)*p;
+        if(p===1){returning=false;root.dataset.bookAnimation=returnPose.targetOpening?'far':'near';}
         orient();return;
       }
       if(!showcase)return;
@@ -68,19 +68,26 @@
       showcase=false;showcaseLast=0;
       root.dataset.bookAnimation=opening>.01?'far':'near';
     }
-    function recall() {
+    function travel(far) {
       stopShowcase();tiltX=tiltY=0;
-      returnPose={opening,roll,yaw,pitch,targetYaw:40+360*Math.round((yaw-40)/360)};
-      returnTime=0;returning=true;root.dataset.bookAnimation='returning';
-      if(reduced.matches){opening=roll=0;yaw=returnPose.targetYaw;pitch=-16;returning=false;root.dataset.bookAnimation='near';orient();}
+      const base=40+360*Math.round((yaw-40)/360);
+      returnPose={opening,roll,yaw,pitch,targetOpening:far?1:0,targetRoll:far?-5:0,targetYaw:base+(far?35:0),targetPitch:-16};
+      returnTime=0;returning=true;root.dataset.bookAnimation=far?'retreating':'returning';
+      if(reduced.matches){opening=returnPose.targetOpening;roll=returnPose.targetRoll;yaw=returnPose.targetYaw;pitch=-16;returning=false;root.dataset.bookAnimation=far?'far':'near';orient();}
       else update();
+    }
+    function recall(){travel(false);}
+    function backgroundClick(e) {
+      // Only the empty stage is a retreat control; links and the book remain independent.
+      if(e.target.closest('.cover-book,a,button') || returning || pointer!==null)return;
+      if(opening<.99)travel(true);
     }
     function down(e) {
       if(returning || pointer!==null || e.target.closest('a') || (e.pointerType==='mouse' && e.button!==0))return;
       stopShowcase();
       pointer=e.pointerId;startX=e.clientX;startY=e.clientY;startYaw=yaw;startPitch=pitch;
       dragged=false;suppressClick=false;tiltX=tiltY=0;
-      bookButton.setPointerCapture(pointer);bookButton.classList.add('is-rotating');
+      bookButton.classList.add('is-rotating');
     }
     function move(e) {
       if(pointer===null) {
@@ -95,6 +102,7 @@
       const dx=e.clientX-startX;
       if(Math.hypot(dx,e.clientY-startY)>6)dragged=true;
       if(!dragged)return;
+      if(!bookButton.hasPointerCapture(pointer))bookButton.setPointerCapture(pointer);
       yaw=startYaw+dx*.65;pitch=Math.max(-110,Math.min(110,startPitch-(e.clientY-startY)*.55));orient();
     }
     function leave(){if(pointer===null){tiltX=tiltY=0;orient();}}
@@ -109,6 +117,7 @@
     function click(e) {
       if(e.target.closest('a'))return;
       if(suppressClick && e.detail!==0){e.preventDefault();e.stopImmediatePropagation();suppressClick=false;return;}
+      if((e.target===bookButton || e.target===volume) && !suppressClick){e.preventDefault();e.stopImmediatePropagation();if(!returning && opening<.99)travel(true);return;}
       if(returning || opening>.01){e.preventDefault();e.stopImmediatePropagation();if(!returning)recall();return;}
       if(e.target.closest('.book-face--front')){prepareOpen();return;}
       if(root.dataset.bookSide==='front'){e.preventDefault();e.stopImmediatePropagation();front.click();}
@@ -127,6 +136,7 @@
       if(e.key==='ArrowDown')pitch=Math.min(110,pitch+15);
       orient();
     }
+    root.addEventListener('click',backgroundClick);
     bookButton.addEventListener('pointerdown',down);
     bookButton.addEventListener('pointermove',move);
     bookButton.addEventListener('pointerup',up);
@@ -135,7 +145,7 @@
     bookButton.addEventListener('click',click,true);
     bookButton.addEventListener('keydown',key);
     orient();update();
-    dispose=()=>{alive=false;cancelAnimationFrame(frame);visibilityObserver.disconnect();document.removeEventListener('visibilitychange',update);reduced.removeEventListener('change',update);bookButton.removeEventListener('pointerdown',down);bookButton.removeEventListener('pointermove',move);bookButton.removeEventListener('pointerup',up);bookButton.removeEventListener('pointerleave',leave);bookButton.removeEventListener('pointercancel',up);bookButton.removeEventListener('click',click,true);bookButton.removeEventListener('keydown',key);};
+    dispose=()=>{root.removeEventListener('click',backgroundClick);alive=false;cancelAnimationFrame(frame);visibilityObserver.disconnect();document.removeEventListener('visibilitychange',update);reduced.removeEventListener('change',update);bookButton.removeEventListener('pointerdown',down);bookButton.removeEventListener('pointermove',move);bookButton.removeEventListener('pointerup',up);bookButton.removeEventListener('pointerleave',leave);bookButton.removeEventListener('pointercancel',up);bookButton.removeEventListener('click',click,true);bookButton.removeEventListener('keydown',key);};
   }
   window.LightEntry={mount,stop:()=>{dispose();dispose=()=>{};}};
 })();

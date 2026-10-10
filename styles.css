@@ -4926,3 +4926,27 @@ body[data-portfolio-page="cover"],
 
 /* The stage remains pure black; light belongs only to the book edges. */
 .book-ground-shadow { display: none; }
+
+/* Closed cover boards and a capped, two-sided binding remain solid from below. */
+.book-face--back { transform-style: preserve-3d; backface-visibility: visible; }
+.book-face--spine { backface-visibility: visible; }
+
+.book-front-inside,.book-back-inside { position:absolute; inset:0; background:#e9e0d2; transform:rotateY(180deg) translateZ(1.5px); backface-visibility:hidden; pointer-events:none; }
+.cover-book .book-face--front img { transform:translateZ(1.5px); }
+.book-cover-edge { position:absolute; display:block; background:linear-gradient(90deg,#ff8bc9,#ffe38e,#98ffc6,#89dfff,#be98ff); backface-visibility:visible; pointer-events:none; }
+.book-cover-edge--left,.book-cover-edge--right { top:0; width:3px; height:100%; transform:rotateY(90deg); }
+.book-cover-edge--left { left:-1.5px; }
+.book-cover-edge--right { right:-1.5px; }
+.book-cover-edge--top,.book-cover-edge--bottom { left:0; width:100%; height:3px; transform:rotateX(90deg); }
+.book-cover-edge--top { top:-1.5px; }
+.book-cover-edge--bottom { bottom:-1.5px; }
+.book-binding-cap { position:absolute; left:0; width:3px; height:var(--book-depth); background:linear-gradient(0deg,#ff8bc9,#ffe38e,#89dfff); transform:rotateX(90deg); backface-visibility:visible; }
+.book-binding-cap--top { top:calc(var(--book-depth) / -2); }
+.book-binding-cap--bottom { bottom:calc(var(--book-depth) / -2); }
+.book-binding-inner { position:absolute; left:calc(3px - var(--book-depth) / 2); top:0; width:var(--book-depth); height:100%; transform:rotateY(90deg); background:linear-gradient(90deg,#ff8bc9,#ffe38e,#89dfff); backface-visibility:visible; }
+.book-leaf { inset:3px 2px 3px 0; }
+.book-leaf > span { backface-visibility:visible; }
+.book-leaf__front,.book-leaf__back { backface-visibility:hidden !important; }
+.book-leaf__hinge { left:-1px; top:0; height:100%; width:var(--sheet-thickness); transform:rotateY(-90deg); background:var(--leaf-tint); }
+
+.book-face--back { border:0; }

@@ -133,3 +133,7 @@ The old object sprites are absent from the updated room artwork, and L’Oréal/
 ## 2026-10-11 — Black stage and click to recall
 
 Removed the window-light canvas, dust, broad rainbow aura and ground glow. Only the book's colored rims and page edges emit light against a pure black stage. The entrance plays once and holds the distant fan pose. Clicking recalls the book smoothly; a subsequent front-cover click enters the portfolio. Dragging preserves distance and pose, while back-cover anchors remain independent. Hidden/offscreen time pauses the sequence; reduced motion presents the near pose immediately.
+
+## 2026-10-11 — Capped book geometry and reversible distance
+
+Cover boards now have their own four thickness faces; the binding has inner and end-cap faces. Binding and thin edge materials remain visible from either side, and page hinges align at the binding. This removes missing surfaces at low and rear viewing angles without restoring detached fixed fore-edges. Empty black-stage clicks retreat the book; distant-book clicks recall it. Both transitions interpolate from the current pose and ignore repeated activation until finished.

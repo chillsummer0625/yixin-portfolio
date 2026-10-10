@@ -89,6 +89,7 @@
 
   function coverPage() {
     const t = content();
+    const coverEdges = ['left','right','top','bottom'].map(side => `<span class="book-cover-edge book-cover-edge--${side}" aria-hidden="true"></span>`).join('');
     return `
       <article class="cover-page light-entry page-surface" data-page-key="cover">
         <h1 class="visually-hidden" tabindex="-1">Yixin Cui · A Personal Portfolio</h1>
@@ -96,14 +97,16 @@
           <span class="book-ground-shadow" aria-hidden="true"></span>
           <div class="book-volume">
             <span class="book-face book-face--back">
+              ${coverEdges}<span class="book-back-inside" aria-hidden="true"></span>
               <span class="back-flower" aria-hidden="true">✤</span>
               <span class="back-contact-title">Yixin Cui</span>
               <a class="back-email" href="mailto:${t.resume.email}">${t.resume.email}</a>
               <a class="back-cv" href="assets/Cui-Yixin-CV.pdf" target="_blank" rel="noreferrer">${language === "zh" ? "查看简历" : "Read my CV"}<span aria-hidden="true"> ↗</span></a>
             </span>
+            <span class="book-binding-cap book-binding-cap--top" aria-hidden="true"></span><span class="book-binding-cap book-binding-cap--bottom" aria-hidden="true"></span><span class="book-binding-inner" aria-hidden="true"></span>
             <span class="book-face book-face--spine" aria-hidden="true"><span>Yixin Cui</span></span>
-            ${[4, 9, 14, 19].map((angle, i) => `<span class="book-leaf" aria-hidden="true" style="--leaf-angle:${-angle}deg;--leaf-offset:${12 - i * 3}px;--leaf-tint:${['#ff76b4','#7af2e2','#ffe47a','#aa94ff'][i]}"><span class="book-leaf__front"></span><span class="book-leaf__back"></span><span class="book-leaf__edge"></span><span class="book-leaf__top"></span><span class="book-leaf__bottom"></span></span>`).join('')}
-            <button class="book-face book-face--front" type="button" data-page="room" aria-label="${language === "zh" ? "打开作品集" : "Open portfolio"}"><img src="assets/portfolio-book-front-v2.png" alt="Yixin Cui · A Personal Portfolio · Three sides. One curious mind." width="1024" height="1024" fetchpriority="high" /><span class="book-front-inside" aria-hidden="true"></span></button>
+            ${[4, 9, 14, 19].map((angle, i) => `<span class="book-leaf" aria-hidden="true" style="--leaf-angle:${-angle}deg;--leaf-offset:${12 - i * 3}px;--leaf-tint:${['#ff76b4','#7af2e2','#ffe47a','#aa94ff'][i]}"><span class="book-leaf__front"></span><span class="book-leaf__back"></span><span class="book-leaf__edge"></span><span class="book-leaf__hinge"></span><span class="book-leaf__top"></span><span class="book-leaf__bottom"></span></span>`).join('')}
+            <button class="book-face book-face--front" type="button" data-page="room" aria-label="${language === "zh" ? "打开作品集" : "Open portfolio"}"><img src="assets/portfolio-book-front-v2.png" alt="Yixin Cui · A Personal Portfolio · Three sides. One curious mind." width="1024" height="1024" fetchpriority="high" /><span class="book-front-inside" aria-hidden="true"></span>${coverEdges}</button>
           </div>
         </div>
       </article>`;
