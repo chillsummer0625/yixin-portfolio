@@ -90,13 +90,17 @@
     document.addEventListener('visibilitychange',update);reduced.addEventListener('change',update);
     const bookButton=root.querySelector('.cover-book');
     const volume=root.querySelector('.book-volume');
-    let yaw=24, pitch=-9, pointer=null, startX=0, startY=0, startYaw=0, startPitch=0, dragged=false, suppressClick=false;
+    let yaw=40, pitch=-16, pointer=null, startX=0, startY=0, startYaw=0, startPitch=0, dragged=false, suppressClick=false;
     function orient() {
       volume.style.transform=`rotateX(${pitch}deg) rotateY(${yaw}deg)`;
       volume.dataset.yaw=String(yaw);
+      const backVisible = Math.cos(yaw*Math.PI/180)<0;
+      root.dataset.bookSide=backVisible?'back':'front';
+      volume.querySelector('.book-face--back').inert=!backVisible;
+      volume.querySelector('.book-face--front').inert=backVisible;
     }
     function down(e) {
-      if (e.pointerType==='mouse' && e.button!==0) return;
+      if (pointer!==null || e.target.closest('a') || (e.pointerType==='mouse' && e.button!==0)) return;
       pointer=e.pointerId;startX=e.clientX;startY=e.clientY;startYaw=yaw;startPitch=pitch;dragged=false;suppressClick=false;
       bookButton.setPointerCapture(e.pointerId);
       bookButton.classList.add('is-rotating');
@@ -115,9 +119,16 @@
       if(bookButton.hasPointerCapture(e.pointerId))bookButton.releasePointerCapture(e.pointerId);
     }
     function click(e) {
-      if(suppressClick && e.detail!==0){e.preventDefault();e.stopImmediatePropagation();suppressClick=false;}
+      if(suppressClick && e.detail!==0){e.preventDefault();e.stopImmediatePropagation();suppressClick=false;return;}
+      if(!e.target.closest('a,button') && root.dataset.bookSide==='front') {
+        volume.querySelector('.book-face--front').click();
+      }
     }
     function key(e) {
+      if(e.target.closest('a'))return;
+      if(e.key==='Enter' && e.target===bookButton && root.dataset.bookSide==='front') {
+        e.preventDefault();volume.querySelector('.book-face--front').click();return;
+      }
       if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;
       e.preventDefault();e.stopPropagation();
       if(e.key==='ArrowLeft')yaw-=20;

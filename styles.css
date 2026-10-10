@@ -4850,3 +4850,44 @@ body[data-portfolio-page="cover"],
 .book-face--top { top: calc(var(--book-depth) / -2); transform: rotateX(90deg); }
 .book-face--bottom { bottom: calc(var(--book-depth) / -2); transform: rotateX(-90deg); }
 .entry-motion,.room-motion-toggle { display: none; }
+
+/* Hinged cover and a small fan of real inner sheets. */
+.book-volume { transform: rotateX(-16deg) rotateY(40deg); }
+.book-face--front { padding: 0; border: 0; cursor: inherit; transform-origin: left center; transform: translateZ(calc(var(--book-depth) / 2)) rotateY(-24deg); }
+.book-leaf { position: absolute; inset: 3px 2px; display: block; transform-origin: left center; transform: translateZ(calc(var(--book-depth) / 2 - var(--leaf-offset))) rotateY(var(--leaf-angle)); background: var(--leaf-tint); border: 1px solid #b5ae9f; box-shadow: inset -3px 0 #f6f1e7, 1px 0 1px #847b6d; backface-visibility: visible; }
+.book-face--back { gap: 1.3rem; font-style: normal; }
+.back-contact-title { font: italic clamp(28px,4vw,45px) var(--display); }
+.back-email { font: clamp(12px,1.5vw,17px)/1.5 var(--sans); color: #403126; text-decoration: none; overflow-wrap: anywhere; max-width: 90%; }
+.back-cv { padding: .35rem .1rem; color: #403126; font: clamp(15px,1.6vw,19px)/1.5 var(--sans); border-bottom: 1px solid #9f8e7d; text-decoration: none; }
+.book-face--back a:hover { color: #743940; }
+.book-face--back a:focus-visible { outline: 2px solid #743940; outline-offset: 5px; }
+.tool-button--cover { font-size: 1.8rem; line-height: 1; }
+.entry-opening .book-face--front { animation: cover-unfold 950ms cubic-bezier(.45,0,.2,1) both; }
+.entry-opening .book-leaf { animation: leaf-unfold 950ms cubic-bezier(.45,0,.2,1) both; }
+.entry-opening .cover-book { animation: book-approach 950ms ease both; pointer-events: none; }
+.entry-closing .book-face--front { animation: cover-unfold 850ms 150ms cubic-bezier(.45,0,.2,1) reverse both; }
+.cover-return-sheet { position: absolute; inset: 0; z-index: 100; transform-origin: left center; backface-visibility: hidden; pointer-events: none; box-shadow: 30px 0 60px #0009; background: #e8e0d3; }
+.cover-return-sheet > .page-surface { height: 100%; }
+@keyframes cover-unfold {
+  from { transform: translateZ(calc(var(--book-depth) / 2)) rotateY(-24deg); }
+  to { transform: translateZ(calc(var(--book-depth) / 2)) rotateY(-156deg); }
+}
+@keyframes leaf-unfold {
+  from { transform: translateZ(calc(var(--book-depth) / 2 - var(--leaf-offset))) rotateY(var(--leaf-angle)); }
+  to { transform: translateZ(calc(var(--book-depth) / 2 - var(--leaf-offset))) rotateY(calc(var(--leaf-angle) - 105deg)); }
+}
+@keyframes book-approach {
+  0%, 65% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.13); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .entry-opening .book-face--front,.entry-opening .book-leaf,.entry-opening .cover-book,.entry-closing .book-face--front { animation: none; }
+}
+
+.book-face--front { transform-style: preserve-3d; backface-visibility: visible; }
+.book-face--front img { backface-visibility: hidden; transform: translateZ(.3px); }
+.book-front-inside { position: absolute; inset: 0; background: #e9e0d2; border: 2px solid #c8bead; transform: rotateY(180deg) translateZ(.3px); backface-visibility: hidden; }
+.entry-opening .book-face--top,.entry-opening .book-face--bottom,.entry-opening .book-face--pages { opacity: 0; transition: opacity 250ms ease; }
+
+/* The fanned sheets supply the visible top edge of the open book. */
+.book-face--top { display: none; }

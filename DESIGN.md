@@ -93,3 +93,13 @@ The square cover now uses a six-face CSS 3D volume with a sharp, orthographic fr
 The entry has a black background with a much quieter warm light projection. Both entry and room motion run by default without Motion or pause buttons; system reduced-motion preferences and background/offscreen pauses remain.
 
 Validation: syntax checks, static build, desktop drag past the back cover, a further 360-degree keyboard turn, Enter navigation, and 390 × 844 viewport drag with no horizontal overflow. The room mounts without console errors and has no motion-toggle controls.
+
+## 2026-10-11 — Slightly open book and contact back cover
+
+The front cover hinges open by 24 degrees, with four separately hinged ivory, muted green and blush inner sheets. Their depth is derived from the responsive book thickness to prevent sheets covering the front on mobile. The black entry and continuous rotation remain.
+
+The back cover now contains the existing HKU email and a direct link to the existing public PDF CV. These are real accessible anchors, not raster text. Only the facing side is interactive; pointer dragging suppresses navigation, while clicking a back link leaves rotation alone. The front is a separate open button inside the rotatable group.
+
+Opening unfolds the cover and sheets before entering the room. The header includes an accessible close-book control that folds the current page away while the small book closes into its resting pose. System reduced-motion uses an immediate change.
+
+Validation: syntax/static build; desktop intermediate frames of both unfolding and closing; return overlay cleanup; mobile Enter/open/close and drag to back without navigation or overflow; direct CV navigation to the PDF; email mailto readback; no console errors.

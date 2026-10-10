@@ -81,25 +81,33 @@
             <span class="tool-button__desktop-label">${soundEnabled ? t.common.soundOn : t.common.soundOff}</span>
             <span class="tool-button__mobile-label" aria-hidden="true">${language === "zh" ? "声音" : "Sound"}</span>
           </button>
+          <button type="button" class="tool-button tool-button--cover" data-page="cover" aria-label="${language === "zh" ? "合上书，返回封面" : "Close book, return to cover"}"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 4h13v16H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M6 4v16M17 8h-7m3-3-3 3 3 3"/></svg></button>
           <button type="button" class="tool-button tool-button--resume" data-page="closing">${t.common.resume}</button>
         </div>
       </header>`;
   }
 
   function coverPage() {
+    const t = content();
     return `
       <article class="cover-page light-entry page-surface" data-page-key="cover">
         <h1 class="visually-hidden" tabindex="-1">Yixin Cui · A Personal Portfolio</h1>
-        <button class="cover-book" type="button" data-page="room" aria-label="${language === "zh" ? "拖动旋转书本，点击打开作品集；方向键旋转，Enter 打开" : "Drag to rotate book, click to open portfolio; arrow keys rotate, Enter opens"}">
-          <span class="book-volume" aria-hidden="true">
-            <span class="book-face book-face--front"><img src="assets/portfolio-book-front-v2.png" alt="" width="1024" height="1024" fetchpriority="high" /></span>
-            <span class="book-face book-face--back"><span class="back-flower">✤</span><span>Three sides.<br>One curious mind.</span></span>
-            <span class="book-face book-face--spine"><span>Yixin Cui</span></span>
-            <span class="book-face book-face--pages"></span>
-            <span class="book-face book-face--top"></span>
-            <span class="book-face book-face--bottom"></span>
-          </span>
-        </button>
+        <div class="cover-book" tabindex="0" role="group" aria-label="${language === "zh" ? "拖动旋转书本，点击封面打开；方向键旋转，Enter 打开" : "Drag to rotate book, click the cover to open; arrow keys rotate, Enter opens"}">
+          <div class="book-volume">
+            <span class="book-face book-face--back">
+              <span class="back-flower" aria-hidden="true">✤</span>
+              <span class="back-contact-title">Yixin Cui</span>
+              <a class="back-email" href="mailto:${t.resume.email}">${t.resume.email}</a>
+              <a class="back-cv" href="assets/Cui-Yixin-CV.pdf" target="_blank" rel="noreferrer">${language === "zh" ? "查看简历" : "Read my CV"}<span aria-hidden="true"> ↗</span></a>
+            </span>
+            <span class="book-face book-face--spine" aria-hidden="true"><span>Yixin Cui</span></span>
+            <span class="book-face book-face--pages" aria-hidden="true"></span>
+            <span class="book-face book-face--top" aria-hidden="true"></span>
+            <span class="book-face book-face--bottom" aria-hidden="true"></span>
+            ${[4, 9, 14, 19].map((angle, i) => `<span class="book-leaf" aria-hidden="true" style="--leaf-angle:${-angle}deg;--leaf-offset:${10 - i * 3}px;--leaf-tint:${['#ded4d1','#d4ddd1','#ede4de','#ded4d1'][i]}"></span>`).join('')}
+            <button class="book-face book-face--front" type="button" data-page="room" aria-label="${language === "zh" ? "打开作品集" : "Open portfolio"}"><img src="assets/portfolio-book-front-v2.png" alt="Yixin Cui · A Personal Portfolio · Three sides. One curious mind." width="1024" height="1024" fetchpriority="high" /><span class="book-front-inside" aria-hidden="true"></span></button>
+          </div>
+        </div>
       </article>`;
   }
 
@@ -1313,18 +1321,52 @@
     }
   }
 
+  async function turnCover(targetIndex) {
+    isTurning = true;
+    let sheet;
+    try {
+      if (reducedMotion()) {
+        currentPage = targetIndex;
+        render({ focusHeading: true });
+        return;
+      }
+      playPageSound(targetIndex === 0 ? -1 : 1, .7);
+      if (targetIndex !== 0) {
+        bookContent.classList.add('entry-opening');
+        await new Promise(resolve => window.setTimeout(resolve, 950));
+        bookContent.classList.remove('entry-opening');
+        currentPage = targetIndex;
+        render({ focusHeading: true });
+      } else {
+        // Fold the current sheet over the emerging, closing book.
+        sheet = document.createElement('div');
+        sheet.className = 'cover-return-sheet';
+        sheet.inert = true;
+        sheet.setAttribute('aria-hidden', 'true');
+        sheet.append(bookContent.firstElementChild.cloneNode(true));
+        currentPage = 0;
+        render({ focusHeading: true });
+        bookContent.classList.add('entry-closing');
+        book.append(sheet);
+        const fold = sheet.animate([
+          { transform: 'rotateY(0deg)', opacity: 1 },
+          { transform: 'rotateY(-58deg)', opacity: 1, offset: .55 },
+          { transform: 'rotateY(-112deg)', opacity: 0 }
+        ], { duration: 1000, easing: 'cubic-bezier(.45,0,.2,1)', fill: 'forwards' });
+        await fold.finished.catch(() => {});
+      }
+    } finally {
+      sheet?.remove();
+      bookContent.classList.remove('entry-opening', 'entry-closing');
+      isTurning = false;
+    }
+  }
+
   function turnTo(target, explicitDirection) {
     const targetIndex = typeof target === "number" ? target : pageIndex(target);
     if (targetIndex < 0 || targetIndex >= pageKeys.length || targetIndex === currentPage || isTurning || mobileSwipeState) return;
     if (currentPage === 0 || targetIndex === 0) {
-      isTurning = true;
-      bookContent.classList.add("entry-leaving");
-      window.setTimeout(() => {
-        currentPage = targetIndex;
-        bookContent.classList.remove("entry-leaving");
-        render({ focusHeading: true });
-        isTurning = false;
-      }, reducedMotion() ? 0 : 360);
+      void turnCover(targetIndex);
       return;
     }
     const direction = explicitDirection || (targetIndex > currentPage ? 1 : -1);
