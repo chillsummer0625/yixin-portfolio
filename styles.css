@@ -4896,3 +4896,13 @@ body[data-portfolio-page="cover"],
 .book-leaf__top,.book-leaf__bottom { left: 0; width: 100%; height: var(--sheet-thickness); background: #e8dfd0; }
 .book-leaf__top { top: -1px; transform: rotateX(90deg); }
 .book-leaf__bottom { bottom: -1px; transform: rotateX(-90deg); }
+
+/* Spring flip: the whole hinged book turns, with light and shadow following it. */
+.book-volume { will-change: transform; }
+.book-ground-shadow { position: absolute; left: 8%; right: 8%; bottom: -13%; height: 8%; border-radius: 50%; background: #d2a57818; box-shadow: 0 0 22px 12px #cda06b0c; transform: scaleX(var(--shadow-scale,1)); pointer-events: none; }
+.book-face--front::after,.book-face--back::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; backface-visibility: hidden; background: radial-gradient(ellipse at var(--sheen-x,35%) var(--sheen-y,25%),#fff7df32,transparent 65%); transform: translateZ(1px); }
+.book-enter { position: absolute; bottom: max(2rem,8svh); left: 50%; transform: translateX(-50%); z-index: 2; padding: .65rem .2rem; border: 0; border-bottom: 1px solid #a58c704a; background: none; color: #c8b8a4; font: 13px/1.5 var(--sans); letter-spacing: .04em; cursor: pointer; }
+.book-enter:hover { color: #fff3dc; border-color: #c8b8a4; }
+.book-enter:focus-visible { outline: 1px solid #c8b8a4; outline-offset: 6px; }
+.entry-opening .book-enter { opacity: 0; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .book-volume { will-change: auto; } }

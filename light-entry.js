@@ -90,61 +90,97 @@
     document.addEventListener('visibilitychange',update);reduced.addEventListener('change',update);
     const bookButton=root.querySelector('.cover-book');
     const volume=root.querySelector('.book-volume');
-    let yaw=40, pitch=-16, pointer=null, startX=0, startY=0, startYaw=0, startPitch=0, dragged=false, suppressClick=false;
+    let yaw=40, target=40, velocity=0, tiltX=0, tiltY=0, springFrame=0, springLast=0;
+    let pointer=null, startX=0, startY=0, startYaw=0, lastX=0, lastTime=0, dragged=false, suppressClick=false;
     function orient() {
-      volume.style.transform=`rotateX(${pitch}deg) rotateY(${yaw}deg)`;
+      volume.style.transform=`rotateX(${-16+tiltX}deg) rotateY(${yaw+tiltY}deg)`;
       volume.dataset.yaw=String(yaw);
-      const backVisible = Math.cos(yaw*Math.PI/180)<0;
+      const backVisible=Math.cos(yaw*Math.PI/180)<0;
       root.dataset.bookSide=backVisible?'back':'front';
       volume.querySelector('.book-face--back').inert=!backVisible;
       volume.querySelector('.book-face--front').inert=backVisible;
+      bookButton.style.setProperty('--shadow-scale', String(.25+.75*Math.abs(Math.cos(yaw*Math.PI/180))));
+    }
+    function spring(now) {
+      const dt=Math.min((now-springLast)/1000 || 1/60, 1/30);springLast=now;
+      velocity+=(target-yaw)*180*dt;
+      velocity*=Math.exp(-22*dt);
+      yaw+=velocity*dt;orient();
+      if(Math.abs(target-yaw)<.03 && Math.abs(velocity)<.08) {
+        yaw=target;velocity=0;springFrame=0;orient();return;
+      }
+      springFrame=requestAnimationFrame(spring);
+    }
+    function settle(next) {
+      target=next;cancelAnimationFrame(springFrame);springFrame=0;springLast=0;
+      if(reduced.matches){yaw=target;velocity=0;orient();return;}
+      springFrame=requestAnimationFrame(spring);
+    }
+    function flip(direction=1) {
+      velocity=0;settle(target+direction*180);
     }
     function down(e) {
-      if (pointer!==null || e.target.closest('a') || (e.pointerType==='mouse' && e.button!==0)) return;
-      pointer=e.pointerId;startX=e.clientX;startY=e.clientY;startYaw=yaw;startPitch=pitch;dragged=false;suppressClick=false;
-      bookButton.setPointerCapture(e.pointerId);
-      bookButton.classList.add('is-rotating');
+      if(pointer!==null || e.target.closest('a') || (e.pointerType==='mouse' && e.button!==0))return;
+      cancelAnimationFrame(springFrame);springFrame=0;
+      pointer=e.pointerId;startX=lastX=e.clientX;startY=e.clientY;startYaw=yaw;lastTime=e.timeStamp;
+      dragged=false;suppressClick=false;velocity=0;tiltX=tiltY=0;
+      bookButton.setPointerCapture(pointer);bookButton.classList.add('is-rotating');
     }
     function move(e) {
+      if(pointer===null) {
+        if(e.pointerType!=='mouse' || reduced.matches)return;
+        const rect=bookButton.getBoundingClientRect();
+        const x=(e.clientX-rect.left)/rect.width, y=(e.clientY-rect.top)/rect.height;
+        tiltX=(.5-y)*5;tiltY=(x-.5)*5;
+        bookButton.style.setProperty('--sheen-x', `${x*100}%`);
+        bookButton.style.setProperty('--sheen-y', `${y*100}%`);orient();return;
+      }
       if(e.pointerId!==pointer)return;
-      const dx=e.clientX-startX,dy=e.clientY-startY;
-      if(Math.hypot(dx,dy)>6)dragged=true;
+      const dx=e.clientX-startX;
+      if(Math.hypot(dx,e.clientY-startY)>6)dragged=true;
       if(!dragged)return;
-      yaw=startYaw+dx*.65;pitch=Math.max(-24,Math.min(24,startPitch-dy*.15));orient();
+      const elapsed=Math.max(1,e.timeStamp-lastTime);
+      velocity=velocity*.35+((e.clientX-lastX)*.65/elapsed*1000)*.65;
+      lastX=e.clientX;lastTime=e.timeStamp;yaw=startYaw+dx*.65;orient();
     }
+    function leave(){if(pointer===null){tiltX=tiltY=0;orient();}}
     function up(e) {
       if(e.pointerId!==pointer)return;
       suppressClick=dragged || e.type==='pointercancel';pointer=null;
       bookButton.classList.remove('is-rotating');
       if(bookButton.hasPointerCapture(e.pointerId))bookButton.releasePointerCapture(e.pointerId);
+      if(dragged) {
+        if(e.timeStamp-lastTime>100 || e.type==='pointercancel')velocity=0;
+        const projected=yaw+Math.max(-110,Math.min(110,velocity*.12));
+        settle(40+Math.round((projected-40)/180)*180);
+      }
     }
     function click(e) {
-      if(suppressClick && e.detail!==0){e.preventDefault();e.stopImmediatePropagation();suppressClick=false;return;}
-      if(!e.target.closest('a,button') && root.dataset.bookSide==='front') {
-        volume.querySelector('.book-face--front').click();
-      }
+      if(e.target.closest('a'))return;
+      e.preventDefault();e.stopImmediatePropagation();
+      if(suppressClick && e.detail!==0){suppressClick=false;return;}
+      flip();
     }
     function key(e) {
       if(e.target.closest('a'))return;
-      if(e.key==='Enter' && e.target===bookButton && root.dataset.bookSide==='front') {
-        e.preventDefault();volume.querySelector('.book-face--front').click();return;
+      if(e.key==='Enter') {
+        e.preventDefault();e.stopPropagation();root.querySelector('.book-enter').click();return;
       }
-      if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;
-      e.preventDefault();e.stopPropagation();
-      if(e.key==='ArrowLeft')yaw-=20;
-      if(e.key==='ArrowRight')yaw+=20;
-      if(e.key==='ArrowUp')pitch=Math.max(-24,pitch-5);
-      if(e.key==='ArrowDown')pitch=Math.min(24,pitch+5);
-      orient();
+      if(!['ArrowLeft','ArrowRight',' '].includes(e.key))return;
+      e.preventDefault();e.stopPropagation();flip(e.key==='ArrowLeft'?-1:1);
     }
     bookButton.addEventListener('pointerdown',down);
     bookButton.addEventListener('pointermove',move);
     bookButton.addEventListener('pointerup',up);
+    bookButton.addEventListener('pointerleave',leave);
     bookButton.addEventListener('pointercancel',up);
     bookButton.addEventListener('click',click,true);
     bookButton.addEventListener('keydown',key);
+    const enter=root.querySelector('.book-enter');
+    function prepareOpen(){cancelAnimationFrame(springFrame);yaw=target=40;velocity=tiltX=tiltY=0;orient();}
+    enter.addEventListener('click',prepareOpen);
     orient();resize();update();
-    dispose=()=>{alive=false;cancelAnimationFrame(frame);resizeObserver.disconnect();visibilityObserver.disconnect();document.removeEventListener('visibilitychange',update);reduced.removeEventListener('change',update);canvas.remove();bookButton.removeEventListener('pointerdown',down);bookButton.removeEventListener('pointermove',move);bookButton.removeEventListener('pointerup',up);bookButton.removeEventListener('pointercancel',up);bookButton.removeEventListener('click',click,true);bookButton.removeEventListener('keydown',key);};
+    dispose=()=>{enter.removeEventListener('click',prepareOpen);alive=false;cancelAnimationFrame(frame);cancelAnimationFrame(springFrame);resizeObserver.disconnect();visibilityObserver.disconnect();document.removeEventListener('visibilitychange',update);reduced.removeEventListener('change',update);canvas.remove();bookButton.removeEventListener('pointerdown',down);bookButton.removeEventListener('pointermove',move);bookButton.removeEventListener('pointerup',up);bookButton.removeEventListener('pointerleave',leave);bookButton.removeEventListener('pointercancel',up);bookButton.removeEventListener('click',click,true);bookButton.removeEventListener('keydown',key);};
   }
   window.LightEntry={mount,stop:()=>{dispose();dispose=()=>{};}};
 })();

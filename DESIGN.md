@@ -109,3 +109,7 @@ Validation: syntax/static build; desktop intermediate frames of both unfolding a
 Side rotation exposed a geometry error: the rigid fore-edge and bottom of the previous closed box remained in place while the inner sheets fanned outward. Removed these stationary box faces. Each sheet is now a two-sided, 2px thick volume with attached top, bottom and fore-edge faces under the same hinge transform. Added clearance between the foremost sheet and cover. Email, CV links, rotation and opening/closing behavior are retained.
 
 Validation: syntax/static build, staged-only export, and runtime asset readback. Browser verification is recorded separately from build checks.
+
+## 2026-10-11 — Book spring flip
+
+Adapted the React Bits Flip Card interaction concept to the existing hinged book using a native damped spring: click, horizontal drag and release velocity turn the complete volume and settle to front/back poses. Pointer tilt and a restrained paper sheen follow the cursor; a ground shadow narrows as the book turns edge-on. The ivory cover, named spine, slightly open sheets, black background and warm ambient light are retained. Click flips; a separate understated entry below the book opens the portfolio. Enter opens, arrows/Space flip. Back-cover contact links remain native anchors and do not start a drag. Reduced-motion uses immediate settling, and the spring is canceled on unmount.
