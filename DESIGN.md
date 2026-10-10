@@ -113,3 +113,9 @@ Validation: syntax/static build, staged-only export, and runtime asset readback.
 ## 2026-10-11 — Book spring flip
 
 Adapted the React Bits Flip Card interaction concept to the existing hinged book using a native damped spring: click, horizontal drag and release velocity turn the complete volume and settle to front/back poses. Pointer tilt and a restrained paper sheen follow the cursor; a ground shadow narrows as the book turns edge-on. The ivory cover, named spine, slightly open sheets, black background and warm ambient light are retained. Click flips; a separate understated entry below the book opens the portfolio. Enter opens, arrows/Space flip. Back-cover contact links remain native anchors and do not start a drag. Reduced-motion uses immediate settling, and the spring is canceled on unmount.
+
+## 2026-10-11 — Recorded book choreography and prismatic glow
+
+The supplied 12.6-second recording shows a rotating physical book, a fan opening, a short page flutter, then a closing pose. The entry now repeats a 12-second version of that sequence using the existing cover and individually hinged sheets. Opening changes the viewing angle and scale to keep the whole fan in frame. Pointer/keyboard interaction hands control to the visitor; the back links and portfolio entry remain. Reduced-motion disables the automatic sequence. Hidden/offscreen time does not advance the sequence.
+
+The user's follow-up asks for seven-color light emitted by their book. Added a soft prismatic aura behind the book, colored rim highlights on covers and sheet edges, and stronger light during the fan pose. The ivory face texture and black stage remain.

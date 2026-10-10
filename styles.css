@@ -4910,3 +4910,11 @@ body[data-portfolio-page="cover"],
 .book[data-current-page="cover"] .book-content,
 .light-entry.cover-page { min-height: 100svh; }
 .book-enter { bottom: max(1.5rem, 3svh); }
+
+/* Prismatic light belongs to the book; the surrounding stage stays black. */
+.cover-book::before { content: ''; position: absolute; inset: -9%; border-radius: 34%; pointer-events: none; background: conic-gradient(from 30deg,#ff427b,#ff973e,#ffe56b,#65e8a9,#60caff,#847aff,#db71f5,#ff427b); filter: blur(42px); opacity: .28; transform: scale(.92); animation: book-prism 7s ease-in-out infinite alternate; }
+.book-face--front,.book-face--back { box-shadow: inset 0 0 3px #50473760, -2px 0 7px #83cfff70, 2px 0 7px #ffa9be70, 0 -2px 7px #c6a2ff60, 0 2px 7px #ffdd9960; }
+.book-leaf__edge,.book-leaf__top,.book-leaf__bottom { box-shadow: 0 0 5px #b7dbff80, 0 0 9px #fcb9d44a; }
+.light-entry[data-book-animation="fanning"] .cover-book::before { opacity: .44; }
+@keyframes book-prism { from { transform: scale(.9) rotate(-8deg); } to { transform: scale(1.06) rotate(8deg); } }
+@media (prefers-reduced-motion: reduce) { .cover-book::before { animation: none; } }
