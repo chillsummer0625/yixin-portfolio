@@ -98,7 +98,7 @@
     const leaves=[...volume.querySelectorAll('.book-leaf')];
     let pointer=null, startX=0, startY=0, startYaw=0, startPitch=0, dragged=false, suppressClick=false;
     function orient() {
-      volume.style.transform=`translateX(${-opening*18}%) rotateX(${pitch-opening*32+tiltX}deg) rotateY(${yaw+tiltY}deg) rotateZ(${roll}deg) scale3d(${1-opening*.62},${1-opening*.62},${1-opening*.62})`;
+      volume.style.transform=`translateX(${-opening*18}%) rotateY(${yaw+tiltY}deg) rotateX(${pitch-opening*32+tiltX}deg) rotateZ(${roll}deg) scale3d(${1-opening*.62},${1-opening*.62},${1-opening*.62})`;
       front.style.transform=`translateZ(calc(var(--book-depth) / 2)) rotateY(${-24-opening*132}deg)`;
       leaves.forEach((leaf,i)=>{
         const angle=-(4+i*5)*(1-opening) + (-26-i*31)*opening;
@@ -106,7 +106,7 @@
         leaf.style.transform=`translateZ(calc(var(--book-depth) / 2 - var(--leaf-offset))) rotateY(${angle+flutter}deg)`;
       });
       volume.dataset.yaw=String(yaw);volume.dataset.pitch=String(pitch);
-      const backVisible=Math.cos(yaw*Math.PI/180)<0;
+      const backVisible=Math.cos(yaw*Math.PI/180)*Math.cos(pitch*Math.PI/180)<0;
       root.dataset.bookSide=backVisible?'back':'front';
       volume.querySelector('.book-face--back').inert=!backVisible;
       volume.querySelector('.book-face--front').inert=backVisible;
