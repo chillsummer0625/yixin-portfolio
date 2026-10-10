@@ -4918,3 +4918,14 @@ body[data-portfolio-page="cover"],
 .light-entry[data-book-animation="fanning"] .cover-book::before { opacity: .44; }
 @keyframes book-prism { from { transform: scale(.9) rotate(-8deg); } to { transform: scale(1.06) rotate(8deg); } }
 @media (prefers-reduced-motion: reduce) { .cover-book::before { animation: none; } }
+
+/* Strong spectral paper edges, distinct from the untouched ivory cover. */
+.book-leaf__front,.book-leaf__back { background: linear-gradient(135deg,#ffffff50,var(--leaf-tint)); box-shadow: inset 0 0 0 1px var(--leaf-tint), 0 0 8px var(--leaf-tint), 0 0 17px color-mix(in srgb,var(--leaf-tint) 65%,transparent); }
+.book-leaf__edge,.book-leaf__top,.book-leaf__bottom { background: linear-gradient(90deg,#ff4994,#ff9d40,#ffe96c,#6affb9,#57daff,#9a7aff,#ed7cff); box-shadow: 0 0 6px var(--leaf-tint),0 0 13px var(--leaf-tint); }
+.book-face--spine { background: linear-gradient(90deg,#ff8bc9,#ffe38e,#98ffc6,#89dfff,#be98ff); box-shadow: 0 0 10px #93dfff90; }
+@media (min-width: 821px) {
+  .character-hotspot--student { left: 4%; top: auto; bottom: 6%; transform: none; }
+  .character-hotspot--student:hover,.character-hotspot--student:focus-visible { transform: translateY(-.45rem); }
+  .character-hotspot--student:active { transform: translateY(-.18rem) scale(.985); }
+  .character-hotspot--creator { right: 5%; top: 61%; bottom: auto; }
+}

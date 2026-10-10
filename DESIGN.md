@@ -119,3 +119,9 @@ Adapted the React Bits Flip Card interaction concept to the existing hinged book
 The supplied 12.6-second recording shows a rotating physical book, a fan opening, a short page flutter, then a closing pose. The entry now repeats a 12-second version of that sequence using the existing cover and individually hinged sheets. Opening changes the viewing angle and scale to keep the whole fan in frame. Pointer/keyboard interaction hands control to the visitor; the back links and portfolio entry remain. Reduced-motion disables the automatic sequence. Hidden/offscreen time does not advance the sequence.
 
 The user's follow-up asks for seven-color light emitted by their book. Added a soft prismatic aura behind the book, colored rim highlights on covers and sheet edges, and stronger light during the fan pose. The ivory face texture and black stage remain.
+
+## 2026-10-11 — Direct entry and free book positioning
+
+Removed the text entry beneath the book. The actual front cover opens the room; back email/CV anchors remain independent. Horizontal and vertical pointer movement control yaw and pitch continuously, and the release keeps the exact pose instead of snapping front/back. Arrow keys move each axis by 15 degrees; Enter/Space opens. Pitch extends through horizontal poses. User interaction stops the automatic showcase.
+
+Paper faces now use distinct pink, turquoise, gold and violet light, with a full rainbow on the thin sheet edges and spine. The front face remains ivory. Desktop Student moves to the floor at bottom left; Creator moves upward over the right figure's trousers. Mobile retains the separate stacked chapter links.

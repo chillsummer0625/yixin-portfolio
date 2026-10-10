@@ -92,7 +92,7 @@
     return `
       <article class="cover-page light-entry page-surface" data-page-key="cover">
         <h1 class="visually-hidden" tabindex="-1">Yixin Cui · A Personal Portfolio</h1>
-        <div class="cover-book" tabindex="0" role="group" aria-label="${language === "zh" ? "点击或拖动翻转书本；方向键或空格翻面，Enter 打开作品集" : "Click or drag to flip book; arrows or Space flip, Enter opens portfolio"}">
+        <div class="cover-book" tabindex="0" role="group" aria-label="${language === "zh" ? "拖动自由旋转和放平书本，点击封面或按 Enter 打开作品集" : "Drag to rotate and tilt freely; click the front cover or Enter to open portfolio"}">
           <span class="book-ground-shadow" aria-hidden="true"></span>
           <div class="book-volume">
             <span class="book-face book-face--back">
@@ -102,11 +102,10 @@
               <a class="back-cv" href="assets/Cui-Yixin-CV.pdf" target="_blank" rel="noreferrer">${language === "zh" ? "查看简历" : "Read my CV"}<span aria-hidden="true"> ↗</span></a>
             </span>
             <span class="book-face book-face--spine" aria-hidden="true"><span>Yixin Cui</span></span>
-            ${[4, 9, 14, 19].map((angle, i) => `<span class="book-leaf" aria-hidden="true" style="--leaf-angle:${-angle}deg;--leaf-offset:${12 - i * 3}px;--leaf-tint:${['#ded4d1','#d4ddd1','#ede4de','#ded4d1'][i]}"><span class="book-leaf__front"></span><span class="book-leaf__back"></span><span class="book-leaf__edge"></span><span class="book-leaf__top"></span><span class="book-leaf__bottom"></span></span>`).join('')}
-            <button class="book-face book-face--front" type="button" aria-label="${language === "zh" ? "翻到背面" : "Flip to back cover"}"><img src="assets/portfolio-book-front-v2.png" alt="Yixin Cui · A Personal Portfolio · Three sides. One curious mind." width="1024" height="1024" fetchpriority="high" /><span class="book-front-inside" aria-hidden="true"></span></button>
+            ${[4, 9, 14, 19].map((angle, i) => `<span class="book-leaf" aria-hidden="true" style="--leaf-angle:${-angle}deg;--leaf-offset:${12 - i * 3}px;--leaf-tint:${['#ff76b4','#7af2e2','#ffe47a','#aa94ff'][i]}"><span class="book-leaf__front"></span><span class="book-leaf__back"></span><span class="book-leaf__edge"></span><span class="book-leaf__top"></span><span class="book-leaf__bottom"></span></span>`).join('')}
+            <button class="book-face book-face--front" type="button" data-page="room" aria-label="${language === "zh" ? "打开作品集" : "Open portfolio"}"><img src="assets/portfolio-book-front-v2.png" alt="Yixin Cui · A Personal Portfolio · Three sides. One curious mind." width="1024" height="1024" fetchpriority="high" /><span class="book-front-inside" aria-hidden="true"></span></button>
           </div>
         </div>
-        <button class="book-enter" type="button" data-page="room">${language === "zh" ? "进入作品集" : "Explore portfolio"}<span aria-hidden="true"> ↗</span></button>
       </article>`;
   }
 

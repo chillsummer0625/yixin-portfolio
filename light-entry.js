@@ -84,7 +84,7 @@
       const active=enabled&&!reduced.matches;
       root.dataset.lightMotion=String(active);
       paint();
-      if(reduced.matches && typeof volume!=='undefined'){stopShowcase();yaw=target=40;orient();}
+      if(reduced.matches && typeof volume!=='undefined'){stopShowcase();yaw=40;pitch=-16;orient();}
       if(alive&&active&&visible&&!document.hidden)frame=requestAnimationFrame(tick);
     }
     const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(root);
@@ -92,20 +92,20 @@
     document.addEventListener('visibilitychange',update);reduced.addEventListener('change',update);
     const bookButton=root.querySelector('.cover-book');
     const volume=root.querySelector('.book-volume');
-    let yaw=40, target=40, velocity=0, tiltX=0, tiltY=0, springFrame=0, springLast=0;
+    let yaw=40, pitch=-16, tiltX=0, tiltY=0;
     let showcase=true, showcaseTime=0, showcaseLast=0, opening=0, roll=0;
     const front=volume.querySelector('.book-face--front');
     const leaves=[...volume.querySelectorAll('.book-leaf')];
-    let pointer=null, startX=0, startY=0, startYaw=0, lastX=0, lastTime=0, dragged=false, suppressClick=false;
+    let pointer=null, startX=0, startY=0, startYaw=0, startPitch=0, dragged=false, suppressClick=false;
     function orient() {
-      volume.style.transform=`translateX(${-opening*18}%) rotateX(${-16-opening*32+tiltX}deg) rotateY(${yaw+tiltY}deg) rotateZ(${roll}deg) scale3d(${1-opening*.62},${1-opening*.62},${1-opening*.62})`;
+      volume.style.transform=`translateX(${-opening*18}%) rotateX(${pitch-opening*32+tiltX}deg) rotateY(${yaw+tiltY}deg) rotateZ(${roll}deg) scale3d(${1-opening*.62},${1-opening*.62},${1-opening*.62})`;
       front.style.transform=`translateZ(calc(var(--book-depth) / 2)) rotateY(${-24-opening*132}deg)`;
       leaves.forEach((leaf,i)=>{
         const angle=-(4+i*5)*(1-opening) + (-26-i*31)*opening;
         const flutter=opening*Math.sin(showcaseTime*2-i*.85)*4;
         leaf.style.transform=`translateZ(calc(var(--book-depth) / 2 - var(--leaf-offset))) rotateY(${angle+flutter}deg)`;
       });
-      volume.dataset.yaw=String(yaw);
+      volume.dataset.yaw=String(yaw);volume.dataset.pitch=String(pitch);
       const backVisible=Math.cos(yaw*Math.PI/180)<0;
       root.dataset.bookSide=backVisible?'back':'front';
       volume.querySelector('.book-face--back').inert=!backVisible;
@@ -126,32 +126,13 @@
     }
     function stopShowcase() {
       showcase=false;showcaseLast=0;opening=roll=0;
-      target=40+Math.round((yaw-40)/180)*180;
       root.dataset.bookAnimation='manual';
-    }
-    function spring(now) {
-      const dt=Math.min((now-springLast)/1000 || 1/60, 1/30);springLast=now;
-      velocity+=(target-yaw)*180*dt;
-      velocity*=Math.exp(-22*dt);
-      yaw+=velocity*dt;orient();
-      if(Math.abs(target-yaw)<.03 && Math.abs(velocity)<.08) {
-        yaw=target;velocity=0;springFrame=0;orient();return;
-      }
-      springFrame=requestAnimationFrame(spring);
-    }
-    function settle(next) {
-      target=next;cancelAnimationFrame(springFrame);springFrame=0;springLast=0;
-      if(reduced.matches){yaw=target;velocity=0;orient();return;}
-      springFrame=requestAnimationFrame(spring);
-    }
-    function flip(direction=1) {
-      stopShowcase();velocity=0;settle(target+direction*180);
     }
     function down(e) {
       if(pointer!==null || e.target.closest('a') || (e.pointerType==='mouse' && e.button!==0))return;
-      stopShowcase();cancelAnimationFrame(springFrame);springFrame=0;
-      pointer=e.pointerId;startX=lastX=e.clientX;startY=e.clientY;startYaw=yaw;lastTime=e.timeStamp;
-      dragged=false;suppressClick=false;velocity=0;tiltX=tiltY=0;
+      stopShowcase();
+      pointer=e.pointerId;startX=e.clientX;startY=e.clientY;startYaw=yaw;startPitch=pitch;
+      dragged=false;suppressClick=false;tiltX=tiltY=0;
       bookButton.setPointerCapture(pointer);bookButton.classList.add('is-rotating');
     }
     function move(e) {
@@ -167,9 +148,7 @@
       const dx=e.clientX-startX;
       if(Math.hypot(dx,e.clientY-startY)>6)dragged=true;
       if(!dragged)return;
-      const elapsed=Math.max(1,e.timeStamp-lastTime);
-      velocity=velocity*.35+((e.clientX-lastX)*.65/elapsed*1000)*.65;
-      lastX=e.clientX;lastTime=e.timeStamp;yaw=startYaw+dx*.65;orient();
+      yaw=startYaw+dx*.65;pitch=Math.max(-110,Math.min(110,startPitch-(e.clientY-startY)*.55));orient();
     }
     function leave(){if(pointer===null){tiltX=tiltY=0;orient();}}
     function up(e) {
@@ -177,27 +156,29 @@
       suppressClick=dragged || e.type==='pointercancel';pointer=null;
       bookButton.classList.remove('is-rotating');
       if(bookButton.hasPointerCapture(e.pointerId))bookButton.releasePointerCapture(e.pointerId);
-      if(dragged) {
-        if(e.timeStamp-lastTime>100 || e.type==='pointercancel')velocity=0;
-        const projected=yaw+Math.max(-110,Math.min(110,velocity*.12));
-        settle(40+Math.round((projected-40)/180)*180);
-      }
+      // Keep the exact released pose; there is no front/back snap.
     }
+    function prepareOpen(){stopShowcase();yaw=40;pitch=-16;tiltX=tiltY=0;orient();}
     function click(e) {
       if(e.target.closest('a'))return;
-      e.preventDefault();e.stopImmediatePropagation();
-      if(suppressClick && e.detail!==0){suppressClick=false;return;}
-      flip();
+      if(suppressClick && e.detail!==0){e.preventDefault();e.stopImmediatePropagation();suppressClick=false;return;}
+      if(e.target.closest('.book-face--front')){prepareOpen();return;}
+      if(root.dataset.bookSide==='front'){e.preventDefault();e.stopImmediatePropagation();front.click();}
     }
     function key(e) {
       if(e.target.closest('a'))return;
-      if(e.key==='Enter') {
-        e.preventDefault();e.stopPropagation();root.querySelector('.book-enter').click();return;
+      if(e.key==='Enter' || e.key===' ') {
+        e.preventDefault();e.stopPropagation();prepareOpen();front.click();return;
       }
-      if(!['ArrowLeft','ArrowRight',' '].includes(e.key))return;
-      e.preventDefault();e.stopPropagation();flip(e.key==='ArrowLeft'?-1:1);
+      if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;
+      e.preventDefault();e.stopPropagation();stopShowcase();
+      if(e.key==='ArrowLeft')yaw-=15;
+      if(e.key==='ArrowRight')yaw+=15;
+      if(e.key==='ArrowUp')pitch=Math.max(-110,pitch-15);
+      if(e.key==='ArrowDown')pitch=Math.min(110,pitch+15);
+      orient();
     }
-    function focus(){if(showcase){stopShowcase();settle(target);}}
+    function focus(){if(showcase){stopShowcase();orient();}}
     bookButton.addEventListener('focusin',focus);
     bookButton.addEventListener('pointerdown',down);
     bookButton.addEventListener('pointermove',move);
@@ -206,11 +187,8 @@
     bookButton.addEventListener('pointercancel',up);
     bookButton.addEventListener('click',click,true);
     bookButton.addEventListener('keydown',key);
-    const enter=root.querySelector('.book-enter');
-    function prepareOpen(){stopShowcase();cancelAnimationFrame(springFrame);yaw=target=40;velocity=tiltX=tiltY=0;orient();}
-    enter.addEventListener('click',prepareOpen);
     orient();resize();update();
-    dispose=()=>{enter.removeEventListener('click',prepareOpen);alive=false;cancelAnimationFrame(frame);cancelAnimationFrame(springFrame);resizeObserver.disconnect();visibilityObserver.disconnect();document.removeEventListener('visibilitychange',update);reduced.removeEventListener('change',update);canvas.remove();bookButton.removeEventListener('focusin',focus);bookButton.removeEventListener('pointerdown',down);bookButton.removeEventListener('pointermove',move);bookButton.removeEventListener('pointerup',up);bookButton.removeEventListener('pointerleave',leave);bookButton.removeEventListener('pointercancel',up);bookButton.removeEventListener('click',click,true);bookButton.removeEventListener('keydown',key);};
+    dispose=()=>{alive=false;cancelAnimationFrame(frame);resizeObserver.disconnect();visibilityObserver.disconnect();document.removeEventListener('visibilitychange',update);reduced.removeEventListener('change',update);canvas.remove();bookButton.removeEventListener('focusin',focus);bookButton.removeEventListener('pointerdown',down);bookButton.removeEventListener('pointermove',move);bookButton.removeEventListener('pointerup',up);bookButton.removeEventListener('pointerleave',leave);bookButton.removeEventListener('pointercancel',up);bookButton.removeEventListener('click',click,true);bookButton.removeEventListener('keydown',key);};
   }
   window.LightEntry={mount,stop:()=>{dispose();dispose=()=>{};}};
 })();
