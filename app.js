@@ -111,10 +111,12 @@
           <div class="book-volume">
             <span class="book-face book-face--back">
               ${coverEdges}<span class="book-back-inside" aria-hidden="true"></span>
-              <span class="back-flower" aria-hidden="true">✤</span>
-              <span class="back-contact-title">Yixin Cui</span>
-              <a class="back-email" href="mailto:${t.resume.email}">${t.resume.email}</a>
-              <a class="back-cv" href="assets/Cui-Yixin-CV.pdf" target="_blank" rel="noreferrer">Read My CV</a>
+              <span class="book-back-outside">
+                <span class="back-flower" aria-hidden="true">✤</span>
+                <span class="back-contact-title">Yixin Cui</span>
+                <a class="back-email" href="mailto:${t.resume.email}">${t.resume.email}</a>
+                <a class="back-cv" href="assets/Cui-Yixin-CV.pdf" target="_blank" rel="noreferrer">Read My CV</a>
+              </span>
             </span>
             <span class="book-binding-cap book-binding-cap--top" aria-hidden="true"></span><span class="book-binding-cap book-binding-cap--bottom" aria-hidden="true"></span><span class="book-binding-inner" aria-hidden="true"></span>
             <span class="book-face book-face--spine" aria-hidden="true"></span>
@@ -674,7 +676,7 @@
 
   function resumeMarkup() {
     const t = content();
-    const highlights = t.resume.highlights.map((item) => `<li>${item}</li>`).join("");
+    const highlights = t.work.cases.map((item) => `<li>${item.company} · ${item.role}</li>`).join("");
     const linkGroups = t.resume.linkGroups.map((group) => `
       <div class="drawer-link-group">
         <h3 class="drawer-section-title">${group.label}</h3>

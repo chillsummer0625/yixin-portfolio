@@ -6987,13 +6987,13 @@ body[data-portfolio-page="closing"] :is(.portfolio-toolbar,#reader-controls) { t
 .light-entry .book-face--back {
  background:#efe9dd url('assets/portfolio-book-front-v2.webp') center/100% 100% no-repeat;
 }
-.light-entry .book-face--back::before {
+.light-entry .book-back-outside::before {
  content:""; position:absolute; inset:20% 18%; pointer-events:none;
  background:#e9e4d8 url('assets/portfolio-book-front-v2.webp') center 22% / 166.667% 1428.571% no-repeat;
  mask-image:linear-gradient(to right,transparent,#000 6px,#000 calc(100% - 6px),transparent),linear-gradient(to bottom,transparent,#000 6px,#000 calc(100% - 6px),transparent);
  mask-composite:intersect;
 }
-.light-entry .book-face--back > :is(.back-flower,.back-contact-title,.back-email,.back-cv) {
+.light-entry .book-back-outside > :is(.back-flower,.back-contact-title,.back-email,.back-cv) {
  position:relative; z-index:1;
 }
 
@@ -7090,4 +7090,50 @@ body[data-portfolio-page="closing"] :is(.portfolio-toolbar,#reader-controls) { t
 }
 @media (max-width: 820px) {
   .chapter-page .work-tabs { gap: 5px; }
+}
+
+/* Separate opaque cover surfaces prevent WebKit from compositing leaves
+   into the printed covers while the parent turns through the back side. */
+.light-entry .book-volume,
+.light-entry .book-face--front,
+.light-entry .book-face--back,
+.light-entry .book-leaf {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+.light-entry .book-face--front,
+.light-entry .book-face--back {
+  background: transparent;
+  -webkit-backface-visibility: visible;
+  backface-visibility: visible;
+}
+.light-entry .book-face--front { -webkit-appearance: none; appearance: none; }
+.light-entry .book-face--back::after { display: none; }
+.light-entry .book-back-outside {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 1.3rem;
+  background: #efe9dd url('assets/portfolio-book-front-v2.webp') center/100% 100% no-repeat;
+  transform: translateZ(2px);
+}
+.light-entry .book-back-outside,
+.light-entry .book-front-inside,
+.light-entry .book-back-inside,
+.light-entry .book-face--front img,
+.light-entry .book-cover-caption,
+.light-entry .cover-flower-foil,
+.light-entry .book-leaf__front,
+.light-entry .book-leaf__back {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.light-entry .book-back-outside > :is(.back-flower,.back-contact-title,.back-email,.back-cv) {
+  z-index: 1;
+}
+@media (hover: none) and (pointer: coarse) {
+  /* Opacity animations flatten a nested 3D scene during WebKit compositing. */
+  .light-entry .cover-book { animation: none; }
 }
