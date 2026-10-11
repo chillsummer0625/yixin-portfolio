@@ -36,21 +36,21 @@ window.SITE_DATA = {
       student: {
         label: "Student",
         line: "I learn.",
-        hint: "Linguistics · Research · Awards"
+        hint: "Linguistics · Research · Campus · Awards"
       },
       professional: {
         label: "Professional",
         line: "I work.",
-        hint: "Social media · Trade · Editorial"
+        hint: "Social media · Trade · Editorial · Airlines"
       },
       creator: {
         label: "Creator",
         line: "I create.",
-        hint: "Content · Collage · Creative tech"
+        hint: "Collage · Vibecoding"
       },
       objects: {
         loreal: {"label": "L’Oréal", "tone": "work"},
-        kol: {"label": "KOL · Honey Verse", "tone": "work"},
+        kol: {"label": "KOL", "tone": "work"},
 
         nuaa: {
           label: "NUAA",
@@ -112,7 +112,7 @@ window.SITE_DATA = {
           label: "HKU",
           kicker: "Student · Academic record",
           title: "The University of Hong Kong",
-          meta: "Sep 2026-Jul 2027 (Anticipated) · MA in Linguistics",
+          meta: "Sep 2026-Nov 2027 (Anticipated) · MA in Linguistics",
           details: [
             "Relevant Courses: Phonetics and Phonology; Grammar: Theories and Applications"
           ],
@@ -283,7 +283,7 @@ window.SITE_DATA = {
           meta: "Selected work · Xiaohongshu",
           details: [
             "Built a collage-focused account to about <strong>7,000</strong> followers and <strong>73,000+</strong> total likes and saves, demonstrating strong photo-editing skills, visual aesthetics, and visual storytelling.",
-            "Established a long-term partnership with <strong>Meitu</strong> and created promotional content for <strong>JUSTFOTO</strong>, <strong>Xingtu</strong>, HBN, K-COFFEE, PROF. LING, and other brands."
+            "Established a long-term partnership with <strong>Meitu</strong> and created promotional content for <strong>Teddi Lab</strong>, <strong>JUSTFOTO</strong>, <strong>Xingtu</strong>, HBN, K-COFFEE, PROF. LING, and other brands."
           ],
           page: "create",
           action: "Open the Create chapter",
@@ -338,10 +338,10 @@ window.SITE_DATA = {
       },
       education: [
         {
-          date: "09/2026-07/2027 (Anticipated)",
+          date: "09/2026-11/2027 (Anticipated)",
           school: "The University of Hong Kong",
           degree: "MA in Linguistics",
-          detail: "Incoming student. Initial focus: phonetics, phonology, and grammar in use."
+          detail: "Currently studying linguistics, with a focus on phonetics, phonology, and grammar in use."
         },
         {
           date: "09/2022-06/2026",
@@ -384,7 +384,7 @@ window.SITE_DATA = {
             "Publish"
           ],
           "handled": [
-            "Plan, design and publish social media content and visual assets for HKU L’Oréal Campreneur across WeChat Official Account, Xiaohongshu and Instagram.",
+            "Plan, design and publish social media content and visual assets for HKU L’Oréal Campreneur across <a class=\"work-platform-link\" href=\"https://mp.weixin.qq.com/s/gD08WVkcrJ472XYw3KRlgA\" target=\"_blank\" rel=\"noopener noreferrer\">WeChat Official Account</a>, <a class=\"work-platform-link\" href=\"https://xhslink.cn/o/2ngu93q5oEF\" target=\"_blank\" rel=\"noopener noreferrer\">Xiaohongshu</a> and <a class=\"work-platform-link\" href=\"https://www.instagram.com/hku.loreal.campreneur?cplk=MXBibnM3ejl3bjY4Mg==\" target=\"_blank\" rel=\"noopener noreferrer\">Instagram</a>.",
             "Independently create interactive SVG visuals, WeChat article layouts and social media promotional assets using Canva and Xiumi."
           ],
           "moved": [],
@@ -502,7 +502,7 @@ window.SITE_DATA = {
             "Translated and refined 6 sets of in-flight announcements.",
             {
               html: "Organized and produced 37 sets of training materials for the Siyun learning platform.",
-              href: "assets/china-eastern-thinkcloud-siyun.png"
+              href: "assets/china-eastern-thinkcloud-siyun.webp"
             }
           ],
           moved: [
@@ -561,13 +561,16 @@ window.SITE_DATA = {
       digitalTitle: "Vibe Coding",
       featuredProject: {
         title: "HKU Compass",
-        tag: "Source-linked student dashboard",
+        tag: "Campus Information Aggregator",
+        objectImage: "assets/project-compass.webp",
         body: "A real working website that turns scattered information into a daily decision system.",
         image: "assets/hku-compass-preview.png",
         alt: "Preview of the pink and cream HKU Compass student information dashboard",
         url: "https://hku-compass.chillsummery0625.workers.dev",
         action: "Open the live website"
       },
+      musicProject: {title: "Monthly Echoes", tag: "Music Photo Card Generator", objectImage: "assets/project-monthly.webp", url: "https://elwd84rz457j.meoo.zone/"},
+      halloweenProject: {title: "HKU × L’Oréal — Halloween Beauty Vote", tag: "Halloween Beauty Persona & Voting", objectImage: "assets/project-halloween.webp", url: "https://hku-loreal-halloween-beauty-world.chillsummery0625.workers.dev/#landing"},
       digitalProjects: [
         {
           title: "Vibe coding for humanities students",
@@ -587,38 +590,53 @@ window.SITE_DATA = {
       resumeLabel: "Read the resume"
     },
     resume: {
-      eyebrow: "Two-minute version",
-      title: "Yixin Cui",
-      subtitle: "HKU · MA in Linguistics · Sep 2026–Jul 2027 (anticipated)",
-      summary: "English-major graduate with diverse experience across international business, media, and communication. Outside work, I explore photo editing and vibe coding.",
-      proficiency: "English proficiency: IELTS 7.5 · TEM-8 (Good) · TEM-4 (Excellent)",
-      linkGroups: [
+      "eyebrow": "Two-minute version",
+      "title": "Yixin Cui",
+      "subtitle": "HKU · MA in Linguistics · Sep 2026–Nov 2027 (anticipated)",
+      "summary": "An English graduate from Nanjing University of Aeronautics and Astronautics, currently pursuing an MA in Linguistics at HKU, with multiple internships across social media, international communication, overseas influencer marketing and export coordination. I also run a Xiaohongshu account, create content and explore vibe coding.",
+      "education": "NUAA · BA in English (Civil Aviation), 2022–2026 · GPA 4.1/5.0 · Ranked 3/46",
+      "availability": "Availability: 3 days per week for a minimum of 3 months",
+      "proficiency": "English: IELTS 7.5 · TEM-8 (Good) · TEM-4 (Excellent) · CET-6",
+      "tools": "Tools: Canva, Xiumi, ChatGPT, Codex, WorkBuddy · Excel, Word & PowerPoint",
+      "linkGroups": [
         {
-          label: "Content creation",
-          links: [
-            { label: "7,000 followers · 73,000+ likes & saves", href: "https://www.xiaohongshu.com/user/profile/63c4e6830000000026010347?xsec_token=ABwqnZUcm0neau5ryEmXCKamhojl2mX3py0vLHug1Ty2Y=&xsec_source=pc_search" }
-          ]
+          "label": "Content creation",
+          "links": [
+            {
+              "label": "7,000 followers · 73,000+ likes & saves",
+              "href": "https://www.xiaohongshu.com/user/profile/63c4e6830000000026010347?xsec_token=ABwqnZUcm0neau5ryEmXCKamhojl2mX3py0vLHug1Ty2Y=&xsec_source=pc_search"
+            }
+          ],
+          "description": "Run a collage-focused Xiaohongshu account, with a long-term Meitu partnership and promotional content for Teddi Lab, JUSTFOTO, Xingtu, HBN, K-COFFEE and PROF. LING."
         },
         {
-          label: "Vibe coding",
-          links: [
-            { label: "HKU Compass", href: "https://hku-compass.chillsummery0625.workers.dev" },
-            { label: "Website CV", href: "https://chillsummer0625.github.io/yixin-portfolio/" },
-            { label: "Experience sharing on Xiaohongshu", href: "https://xhslink.cn/m/KvXFiFkmia" }
+          "label": "Vibe coding",
+          "links": [
+            {
+              "label": "HKU × L’Oréal Halloween Beauty World",
+              "href": "https://hku-loreal-halloween-beauty-world.chillsummery0625.workers.dev/#landing"
+            },
+            {
+              "label": "Monthly Echoes",
+              "href": "https://elwd84rz457j.meoo.zone/"
+            },
+            {
+              "label": "HKU Compass",
+              "href": "https://hku-compass.chillsummery0625.workers.dev/"
+            }
           ]
         }
       ],
-      experienceLabel: "Internship experience",
-      highlights: [
+      "experienceLabel": "Professional experience",
+      "highlights": [
+        "L’Oréal · Social Media Operator",
         "SUMEC · Foreign Trade Business Assistant",
-        "China Daily · English Editor",
         "Honey Verse · Overseas Influencer Marketing",
-        "Sichuan RTV · New Media Editor",
-        "Chengdu RTV · English Editor",
-        "China Eastern Airlines · English Broadcast Trainer"
+        "China Daily · English Editor",
+        "Sichuan Radio & Television · New Media Editor"
       ],
-      download: "Download PDF resume",
-      email: "yixincui_chill@connect.hku.hk"
+      "download": "Download PDF resume",
+      "email": "yixincui_chill@connect.hku.hk"
     }
   },
   zh: {
@@ -658,21 +676,21 @@ window.SITE_DATA = {
       student: {
         label: "学生",
         line: "学习",
-        hint: "语言学 · 研究 · 荣誉"
+        hint: "语言学 · 研究 · 校园参与 · 荣誉"
       },
       professional: {
         label: "职场人",
         line: "工作",
-        hint: "社交媒体 · 外贸 · 编辑"
+        hint: "社交媒体 · 外贸 · 编辑 · 航空"
       },
       creator: {
         label: "创作者",
         line: "创作",
-        hint: "内容 · 拼贴 · 创意技术"
+        hint: "拼贴 · Vibecoding"
       },
       objects: {
         loreal: {"label": "L’Oréal", "tone": "work"},
-        kol: {"label": "KOL · 海外达人营销", "tone": "work"},
+        kol: {"label": "KOL", "tone": "work"},
 
         nuaa: {
           label: "NUAA",
@@ -734,7 +752,7 @@ window.SITE_DATA = {
           label: "HKU",
           kicker: "学生 · 学业档案",
           title: "香港大学",
-          meta: "2026.09-2027.07（预计） · 语言学文学硕士",
+          meta: "2026.09-2027.11（预计） · 语言学文学硕士",
           details: [
             "相关课程：语音学与音系学；语法：理论与应用"
           ],
@@ -905,7 +923,7 @@ window.SITE_DATA = {
           meta: "精选作品 · 小红书",
           details: [
             "运营以拼贴为主的账号，拥有约 <strong>7,000</strong> 名粉丝，累计获得 <strong>73,000+</strong> 点赞与收藏，展现扎实的修图能力、视觉审美与视觉叙事能力。",
-            "与 <strong>Meitu</strong> 建立长期合作，并为 <strong>JUSTFOTO</strong>、<strong>Xingtu</strong>、HBN、K-COFFEE、PROF. LING 等品牌创作推广内容。"
+            "与 <strong>Meitu</strong> 建立长期合作，并为 <strong>Teddi Lab</strong>、<strong>JUSTFOTO</strong>、<strong>Xingtu</strong>、HBN、K-COFFEE、PROF. LING 等品牌创作推广内容。"
           ],
           page: "create",
           action: "进入创作章节",
@@ -960,10 +978,10 @@ window.SITE_DATA = {
       },
       education: [
         {
-          date: "2026.09-2027.07 · 预计",
+          date: "2026.09-2027.11 · 预计",
           school: "香港大学",
           degree: "语言学文学硕士",
-          detail: "即将入学；初步关注语音学、音系学与语法应用。"
+          detail: "在读；关注语音学、音系学与语法应用。"
         },
         {
           date: "2022.09-2026.06",
@@ -1006,7 +1024,7 @@ window.SITE_DATA = {
             "发布"
           ],
           "handled": [
-            "为 HKU L’Oréal Campreneur 负责社交媒体内容与视觉素材，涵盖内容策划、设计，以及微信公众号、小红书和 Instagram 的发布。",
+            "为 HKU L’Oréal Campreneur 负责社交媒体内容与视觉素材，涵盖内容策划、设计，以及<a class=\"work-platform-link\" href=\"https://mp.weixin.qq.com/s/gD08WVkcrJ472XYw3KRlgA\" target=\"_blank\" rel=\"noopener noreferrer\">微信公众号</a>、<a class=\"work-platform-link\" href=\"https://xhslink.cn/o/2ngu93q5oEF\" target=\"_blank\" rel=\"noopener noreferrer\">小红书</a>和 <a class=\"work-platform-link\" href=\"https://www.instagram.com/hku.loreal.campreneur?cplk=MXBibnM3ejl3bjY4Mg==\" target=\"_blank\" rel=\"noopener noreferrer\">Instagram</a> 的发布。",
             "使用 Canva 和秀米独立制作互动 SVG 视觉、微信文章排版及社交媒体宣传素材。"
           ],
           "moved": [],
@@ -1121,7 +1139,7 @@ window.SITE_DATA = {
             "翻译并润色 6 套机上广播词。",
             {
               html: "为思云在线学习平台整理并制作 37 套培训资料。",
-              href: "assets/china-eastern-thinkcloud-siyun.png"
+              href: "assets/china-eastern-thinkcloud-siyun.webp"
             }
           ],
           moved: [
@@ -1180,13 +1198,16 @@ window.SITE_DATA = {
       digitalTitle: "Vibe Coding",
       featuredProject: {
         title: "HKU Compass",
-        tag: "保留来源链接的学生信息看板",
+        tag: "校园信息聚合网站",
+        objectImage: "assets/project-compass.webp",
         body: "把分散信息转化成每日决策系统的真实可用网站。",
         image: "assets/hku-compass-preview.png",
         alt: "粉色与奶油色 HKU Compass 学生信息看板网页预览",
         url: "https://hku-compass.chillsummery0625.workers.dev",
         action: "打开真实网站"
       },
+      musicProject: {title: "Monthly Echoes", tag: "音乐照片卡片生成网站", objectImage: "assets/project-monthly.webp", url: "https://elwd84rz457j.meoo.zone/"},
+      halloweenProject: {title: "HKU × L’Oréal — Halloween Beauty Vote", tag: "万圣节美妆人格与投票互动", objectImage: "assets/project-halloween.webp", url: "https://hku-loreal-halloween-beauty-world.chillsummery0625.workers.dev/#landing"},
       digitalProjects: [
         {
           title: "文科生 Vibe Coding 入门攻略",
@@ -1206,38 +1227,924 @@ window.SITE_DATA = {
       resumeLabel: "查看简历"
     },
     resume: {
-      eyebrow: "两分钟版本",
-      title: "崔逸馨",
-      subtitle: "香港大学 · 语言学硕士 · 2026.09–2027.07（预计）",
-      summary: "英语专业毕业生，拥有国际业务、媒体与传播领域的多元实践经历。业余时间进行图片编辑与 Vibe Coding 创作。",
-      proficiency: "英语能力：IELTS 7.5 · TEM-8（良好）· TEM-4（优秀）",
-      linkGroups: [
+      "eyebrow": "两分钟版本",
+      "title": "崔逸馨",
+      "subtitle": "香港大学 · 语言学硕士 · 2026.09–2027.11（预计）",
+      "summary": "南京航空航天大学英语专业毕业，现于香港大学修读语言学硕士，有多段实习经历，覆盖社交媒体、国际传播、海外达人营销与外贸协作等，同时运营小红书自媒体，进行内容创作与 Vibe Coding。",
+      "education": "南京航空航天大学 · 英语（民航业务）学士 · 2022–2026 · GPA 4.1/5.0 · 排名 3/46",
+      "availability": "可工作时间：每周 3 天，至少 3 个月",
+      "proficiency": "英语：IELTS 7.5 · TEM-8（良好）· TEM-4（优秀）· CET-6",
+      "tools": "工具：Canva、秀米、ChatGPT、Codex、WorkBuddy · Excel、Word、PowerPoint",
+      "linkGroups": [
         {
-          label: "内容创作",
-          links: [
-            { label: "7,000 粉丝 · 73,000+ 点赞与收藏", href: "https://www.xiaohongshu.com/user/profile/63c4e6830000000026010347?xsec_token=ABwqnZUcm0neau5ryEmXCKamhojl2mX3py0vLHug1Ty2Y=&xsec_source=pc_search" }
-          ]
+          "label": "内容创作",
+          "links": [
+            {
+              "label": "7,000 粉丝 · 73,000+ 点赞与收藏",
+              "href": "https://www.xiaohongshu.com/user/profile/63c4e6830000000026010347?xsec_token=ABwqnZUcm0neau5ryEmXCKamhojl2mX3py0vLHug1Ty2Y=&xsec_source=pc_search"
+            }
+          ],
+          "description": "运营拼贴主题小红书账号，与美图建立长期合作，为 Teddi Lab、JUSTFOTO、醒图、HBN、K-COFFEE、PROF. LING 等品牌制作推广内容。"
         },
         {
-          label: "Vibe Coding",
-          links: [
-            { label: "HKU Compass", href: "https://hku-compass.chillsummery0625.workers.dev" },
-            { label: "Website CV", href: "https://chillsummer0625.github.io/yixin-portfolio/" },
-            { label: "小红书经验分享", href: "https://xhslink.cn/m/KvXFiFkmia" }
+          "label": "Vibe Coding",
+          "links": [
+            {
+              "label": "HKU × L’Oréal Halloween Beauty World",
+              "href": "https://hku-loreal-halloween-beauty-world.chillsummery0625.workers.dev/#landing"
+            },
+            {
+              "label": "Monthly Echoes",
+              "href": "https://elwd84rz457j.meoo.zone/"
+            },
+            {
+              "label": "HKU Compass",
+              "href": "https://hku-compass.chillsummery0625.workers.dev/"
+            }
           ]
         }
       ],
-      experienceLabel: "实习经历",
-      highlights: [
+      "experienceLabel": "专业经历",
+      "highlights": [
+        "L’Oréal · 社交媒体运营",
         "SUMEC · 外贸业务助理",
-        "China Daily · 英文编辑",
         "Honey Verse · 海外达人营销",
-        "四川广电 · 新媒体编辑",
-        "成都广电 · 英文编辑",
-        "中国东航 · 英语广播培训师"
+        "China Daily · 英文编辑",
+        "四川广播电视台 · 新媒体编辑"
       ],
-      download: "下载 PDF 简历",
-      email: "yixincui_chill@connect.hku.hk"
+      "download": "下载 PDF 简历",
+      "email": "yixincui_chill@connect.hku.hk"
     }
+  }
+};
+
+Object.assign(window.SITE_DATA.en.common, {
+  "soundShort": "Sound",
+  "returnToCover": "Close book, return to cover",
+  "rotateCover": "Drag to rotate and tilt freely; click the front cover or Enter to open portfolio",
+  "openPortfolio": "Open portfolio",
+  "openRole": "Open",
+  "explorePortfolio": "Explore portfolio",
+  "awardsPages": "Awards pages",
+  "pagePrefix": "Page ",
+  "pageSuffix": "",
+  "pagesUnit": "pages",
+  "contentCollage": "Content &amp; Collage",
+  "rotateClosingBook": "Drag to rotate the book; double-click or press Home to reset",
+  "nextChapter": "The next chapter",
+  "closeBook": "Close the book",
+  "language": "Language"
+});
+
+Object.assign(window.SITE_DATA.zh.common, {
+  "soundShort": "声音",
+  "returnToCover": "合上书，返回封面",
+  "rotateCover": "拖动自由旋转和放平书本，点击封面或按 Enter 打开作品集",
+  "openPortfolio": "打开作品集",
+  "openRole": "进入",
+  "explorePortfolio": "探索作品集",
+  "awardsPages": "奖项内页",
+  "pagePrefix": "第",
+  "pageSuffix": "页",
+  "pagesUnit": "页",
+  "contentCollage": "内容与拼贴",
+  "rotateClosingBook": "拖动旋转书本；双击或按 Home 恢复角度",
+  "nextChapter": "下一章",
+  "closeBook": "合上书",
+  "language": "语言"
+});
+
+// Traditional Chinese copy; resource paths retain their original filenames.
+window.SITE_DATA["zh-Hant"] = {
+  "meta": {
+    "title": "yixincui_chill · Personal Website"
+  },
+  "common": {
+    "name": "崔逸馨",
+    "learn": "學習",
+    "work": "工作",
+    "create": "創作",
+    "resume": "Resume",
+    "soundOn": "聲音：開",
+    "soundOff": "聲音：關",
+    "language": "語言",
+    "previous": "上一頁",
+    "next": "下一頁",
+    "close": "關閉",
+    "openCertificate": "查看證書",
+    "openArticle": "查看公眾號文章",
+    "openScoreReport": "查看雅思成績單",
+    "page": "第",
+    "of": "/",
+    "openCase": "打開章節",
+    "soundShort": "聲音",
+    "returnToCover": "合上書，返回封面",
+    "rotateCover": "拖動自由旋轉和放平書本，點擊封面或按 Enter 打開作品集",
+    "openPortfolio": "打開作品集",
+    "openRole": "進入",
+    "explorePortfolio": "探索作品集",
+    "awardsPages": "獎項內頁",
+    "pagePrefix": "第",
+    "pageSuffix": "頁",
+    "pagesUnit": "頁",
+    "contentCollage": "內容與拼貼",
+    "rotateClosingBook": "拖動旋轉書本；雙擊或按 Home 恢復角度",
+    "nextChapter": "下一章",
+    "closeBook": "合上書"
+  },
+  "cover": {
+    "kicker": "個人作品集 · 2026",
+    "title": "不同面的\n我",
+    "subtitle": "三個側面，同一顆好奇心。",
+    "note": "語言 · 國際傳播 · 創意科技",
+    "action": "打開這本書"
+  },
+  "room": {
+    "eyebrow": "歡迎來到我的世界。",
+    "title": "嗨，我是崔逸馨。",
+    "intro": "我是學生、職場人，也是創作者。",
+    "student": {
+      "label": "學生",
+      "line": "學習",
+      "hint": "語言學 · 研究 · 校園參與 · 榮譽"
+    },
+    "professional": {
+      "label": "職場人",
+      "line": "工作",
+      "hint": "社交媒體 · 外貿 · 編輯 · 航空"
+    },
+    "creator": {
+      "label": "創作者",
+      "line": "創作",
+      "hint": "拼貼 · Vibecoding"
+    },
+    "objects": {
+      "loreal": {
+        "label": "L’Oréal",
+        "tone": "work"
+      },
+      "kol": {
+        "label": "KOL",
+        "tone": "work"
+      },
+      "nuaa": {
+        "label": "NUAA",
+        "kicker": "學生 · 學業檔案",
+        "title": "南京航空航天大學",
+        "meta": "2022-2026 · 英語（民航業務）文學學士",
+        "details": [
+          "GPA 4.1/5.0",
+          "專業排名 3/46",
+          "國家 211 工程高校"
+        ],
+        "page": "learn",
+        "action": "進入學習章節",
+        "tone": "learn"
+      },
+      "crete": {
+        "label": "Academic Experience",
+        "kicker": "學生 · Academic Experience",
+        "title": "學術經歷",
+        "details": [
+          {
+            "title": "CreteLing 2026 Summer School",
+            "date": "2026.07",
+            "certificateHref": "assets/documents/creteling-2026-certificate-public.pdf",
+            "lines": [
+              "5 門全英文密集課程",
+              "8 個教學日",
+              "約 43 個計劃課堂小時"
+            ]
+          },
+          {
+            "title": "南航自由探索項目",
+            "date": "2024.01-06",
+            "certificatePage": 2,
+            "lines": [
+              "為民航員工開展 3 個月英語輔導",
+              "用 SPSS 分析 200+ 份問卷",
+              "完成 10,000 字研究論文",
+              "結項評定良好"
+            ]
+          },
+          {
+            "title": "語料庫話語分析項目",
+            "date": "2023.05-2024.05",
+            "role": "研究負責人",
+            "certificatePage": 1,
+            "lines": [
+              "分析 77 篇語篇",
+              {
+                "html": "獲第十五屆本科生學術論壇二等獎",
+                "certificatePage": 20
+              },
+              "以第一作者發表省級期刊論文"
+            ]
+          }
+        ],
+        "page": "learn",
+        "action": "進入學習章節",
+        "tone": "learn"
+      },
+      "hku": {
+        "label": "HKU",
+        "kicker": "學生 · 學業檔案",
+        "title": "香港大學",
+        "meta": "2026.09-2027.11（預計） · 語言學文學碩士",
+        "details": [
+          "相關課程：語音學與音系學；語法：理論與應用"
+        ],
+        "page": "learn",
+        "action": "進入學習章節",
+        "tone": "learn"
+      },
+      "campus": {
+        "label": "Campus Involvement",
+        "kicker": "學生 · Campus Involvement",
+        "title": "校園參與經歷",
+        "meta": "2022-2026 · 南京航空航天大學",
+        "details": [
+          {
+            "title": "南航 Mr. China 項目",
+            "date": "2023.01-08",
+            "role": "翻譯與撰稿",
+            "externalUrl": "https://mp.weixin.qq.com/s/152yupgEBlXYgqPSdZIJaQ",
+            "lines": [
+              "翻譯、編寫 10,000+ 字雙語視頻文案",
+              "視頻播放量 <b class=\"learn-detail__evidence-emphasis\">320 萬+</b>",
+              {
+                "html": "獲二等獎",
+                "certificatePage": 14
+              }
+            ]
+          },
+          {
+            "title": "青年志願者協會",
+            "date": "2022.09-2023.06",
+            "role": "策劃部幹事",
+            "certificatePage": 25,
+            "lines": [
+              "組織 15 場大型志願服務活動",
+              "覆蓋 500+ 人次",
+              {
+                "html": "獲中國志願者協會“優秀志願者”榮譽",
+                "className": "learn-detail__recognition",
+                "certificatePage": 6
+              }
+            ]
+          },
+          {
+            "title": "南京航空航天大學外國語學院",
+            "date": "2022.09-2023.04",
+            "role": "輔導員助理",
+            "lines": [
+              "協助近 400 名學生的日常事務",
+              "組織 10+ 項實踐活動",
+              {
+                "html": "完成多篇官方微信推文",
+                "links": [
+                  "https://mp.weixin.qq.com/s/wS-OWbTtWc1En9JfZN73uw",
+                  "https://mp.weixin.qq.com/s/YXHkohyRLSdNrZgd-E7dMQ",
+                  "https://mp.weixin.qq.com/s/F2N_CFueyrQLXTBvi8OlyQ",
+                  "https://mp.weixin.qq.com/s/EHKGUed1yqrvNu3dHD8YBQ",
+                  "https://mp.weixin.qq.com/s/ws5Gz-WyGI3gIwQ1OhZ92w"
+                ]
+              }
+            ]
+          }
+        ],
+        "page": "learn",
+        "action": "進入學習章節",
+        "tone": "learn"
+      },
+      "awards": {
+        "label": "獎項",
+        "kicker": "學生 · 榮譽檔案",
+        "title": "獎項與證書",
+        "meta": "2023-2026 · 當前簡歷中的完整獎項清單",
+        "details": [
+          {
+            "titleParts": [
+              {
+                "html": "語言能力："
+              },
+              {
+                "html": "IELTS（7.5）",
+                "emphasis": true,
+                "externalUrl": "assets/documents/ielts-score-report-public.pdf"
+              },
+              {
+                "html": "；"
+              },
+              {
+                "html": "TEM 8（英語專業八級）—良好",
+                "emphasis": true,
+                "certificateHref": "assets/documents/tem-8-certificate-public.pdf"
+              },
+              {
+                "html": "；TEM 4（英語專業四級）—優秀",
+                "certificateHref": "assets/documents/tem-4-certificate-public.pdf"
+              }
+            ],
+            "date": "2024-2026"
+          },
+          {
+            "title": "2025-2026 年度三好學生 · 南京航空航天大學",
+            "date": "2026.06",
+            "certificatePage": 31
+          },
+          {
+            "title": "2025-2026 年度優秀學生獎學金三等獎 · 南京航空航天大學",
+            "date": "2026.06",
+            "certificatePage": 32
+          },
+          {
+            "title": "第五屆江蘇省“阿拉丁杯”翻譯與配音大賽二等獎（南航賽區）",
+            "date": "2025.06",
+            "certificatePage": 30
+          },
+          {
+            "title": "第十屆 FDP 杯全國大學生學術英語詞彙競賽本碩組一等獎",
+            "date": "2025.05",
+            "certificatePage": 29,
+            "national": true
+          },
+          {
+            "title": "2024-2025 年度學業獎學金一等獎 · 南京航空航天大學",
+            "date": "2025.04",
+            "certificatePage": 27
+          },
+          {
+            "title": "第十五屆本科生學術論壇二等獎 · 南京航空航天大學",
+            "date": "2024.12",
+            "certificatePage": 20
+          },
+          {
+            "title": "外國語學院“奮進獎學金”三等獎",
+            "date": "2024.12",
+            "certificatePage": 19
+          },
+          {
+            "title": "優秀學生獎學金三等獎 · 南京航空航天大學",
+            "date": "2024.11",
+            "certificatePage": 17
+          },
+          {
+            "title": "2023-2024 年度力群獎學金 · 南京航空航天大學",
+            "date": "2024.11",
+            "certificatePage": 18
+          },
+          {
+            "title": "2024 外研社·國才杯“理解當代中國”全國大學生外語能力大賽英語組翻譯賽項校級銀獎",
+            "date": "2024.10",
+            "certificatePage": 16
+          },
+          {
+            "title": "2024 外研社·國才杯“理解當代中國”全國大學生外語能力大賽英語組綜合能力賽項校級金獎",
+            "date": "2024.10",
+            "certificatePage": 15
+          },
+          {
+            "title": "第九屆 FDP 杯全國大學生學術英語詞彙競賽本碩組二等獎",
+            "date": "2024.06",
+            "certificatePage": 13,
+            "national": true
+          },
+          {
+            "title": "第二十九屆 China Daily“21 世紀杯”全國英語演講比賽南航校園選拔賽三等獎",
+            "date": "2024.06",
+            "certificatePage": 11
+          },
+          {
+            "title": "2023-2024 年度學業獎學金一等獎 · 南京航空航天大學",
+            "date": "2024.04",
+            "certificatePage": 9
+          },
+          {
+            "title": "2022-2023 年度優秀學生獎學金三等獎 · 南京航空航天大學",
+            "date": "2023.12",
+            "certificatePage": 7
+          },
+          {
+            "title": "2022-2023 年度三好學生 · 南京航空航天大學",
+            "date": "2023.12",
+            "certificatePage": 8
+          },
+          {
+            "title": "2022-2023 年度學業獎學金一等獎 · 南京航空航天大學",
+            "date": "2023.04",
+            "certificatePage": 4
+          },
+          {
+            "title": "中國志願者協會 · 優秀志願者",
+            "date": "2023.06",
+            "certificatePage": 6
+          }
+        ],
+        "page": "learn",
+        "action": "查看完整學習檔案",
+        "tone": "learn"
+      },
+      "sumec": {
+        "label": "蘇美達",
+        "kicker": "職場 · 外貿業務",
+        "title": "江蘇蘇美達輕紡國際貿易有限公司",
+        "meta": "2026.03-06 · 外貿業務助理",
+        "details": [
+          "翻譯約 30 個服裝款式的相關材料",
+          "跟進 5 家工廠的出口訂單全流程，覆蓋面輔料確認採購、生產排期與出貨協調",
+          "每周製作約 20 套樣衣模特圖，並協助樣衣開發和整理",
+          "通過 OA 完成線上付款、合同資料提交與對賬"
+        ],
+        "page": "work",
+        "action": "進入工作章節",
+        "tone": "work"
+      },
+      "chinaDaily": {
+        "label": "China Daily",
+        "kicker": "職場 · 國際媒體",
+        "title": "China Daily",
+        "meta": "2025.07-09 · 英文編輯",
+        "details": [
+          "協同 Facebook 與 X 上 18 個國際媒體賬號開展英文傳播活動",
+          "覆蓋策劃、推廣、收官文案與視頻製作 · 活動瀏覽量 100 萬+",
+          "每日完成 2-3 篇英文稿件，主題包括傳統文化與科技會議"
+        ],
+        "page": "work",
+        "action": "進入工作章節",
+        "tone": "work"
+      },
+      "broadcast": {
+        "label": "電視台",
+        "kicker": "職場 · 廣電檔案",
+        "title": "四川廣播電視台與成都廣播電視台",
+        "meta": "2024-2025 · 英語編輯與文旅新媒體",
+        "details": [
+          "四川廣播電視台 · 每日撰寫、編輯約 8,000 中文字的旅行直播稿件",
+          "協助融媒體直播 · 平均觀看 200+ · 頻道增長至 2,000+ 粉絲",
+          "成都廣播電視台 · 復盤往期節目，並細緻編輯英文新聞、特寫與節目稿件"
+        ],
+        "page": "work",
+        "action": "進入工作章節",
+        "tone": "work"
+      },
+      "eastern": {
+        "label": "中國東航",
+        "kicker": "職場 · 民航英語",
+        "title": "中國東方航空",
+        "meta": "2023.11-2024.01 · 英語廣播培訓",
+        "details": [
+          "為一線服務人員完成 40+ 小時英語培訓",
+          "翻譯並優化 6 套機上廣播詞",
+          "為“思雲”在線學習平台整理、製作 37 套培訓材料"
+        ],
+        "page": "work",
+        "action": "進入工作章節",
+        "tone": "work"
+      },
+      "collage": {
+        "label": "拼貼",
+        "kicker": "創作者 · 視覺實踐",
+        "title": "拼貼創作",
+        "meta": "精選作品 · 小紅書",
+        "details": [
+          "運營以拼貼為主的賬號，擁有約 <strong>7,000</strong> 名粉絲，累計獲得 <strong>73,000+</strong> 點贊與收藏，展現扎實的修圖能力、視覺審美與視覺敘事能力。",
+          "與 <strong>Meitu</strong> 建立長期合作，並為 <strong>Teddi Lab</strong>、<strong>JUSTFOTO</strong>、<strong>Xingtu</strong>、HBN、K-COFFEE、PROF. LING 等品牌創作推廣內容。"
+        ],
+        "page": "create",
+        "action": "進入創作章節",
+        "tone": "create"
+      },
+      "hkuCompass": {
+        "label": "HKU Compass",
+        "kicker": "創作者 · 數字項目",
+        "title": "HKU Compass",
+        "meta": "保留來源鏈接的學生信息看板",
+        "details": [
+          "將證件、學校、課程、就業、畢業、生活和探店信息集中整理",
+          "用 P1 / P2 / P3 區分今日明確時限、近期關注與參考信息",
+          "這是個人學習項目，並非香港大學官方產品"
+        ],
+        "externalUrl": "https://hku-compass.chillsummery0625.workers.dev",
+        "action": "打開真實網站",
+        "tone": "create"
+      }
+    }
+  },
+  "learn": {
+    "chapter": "第一章",
+    "title": "我在連接線索的過程中學習。",
+    "lede": "語言讓我觀察想法如何流動；研究、旅行和動手做東西，讓我不斷提出更好的問題。",
+    "sectionListLabel": "學習檔案",
+    "portraitAlt": "學生時期的崔逸馨身穿淡紫色開衫，黑色長髮扎成低雙馬尾，輪廓被珊瑚色窗光照亮",
+    "closeDetail": "返回四個學習板塊",
+    "sections": {
+      "education": {
+        "title": "教育背景",
+        "preview": "學位、關注方向，以及支撐它們的學業記錄。",
+        "kicker": "學生 · 教育背景",
+        "meta": "2022-2027 · 南京與香港"
+      },
+      "academic": {
+        "title": "學術經歷",
+        "preview": "研究項目、密集課程與把問題寫成成果的過程。",
+        "kicker": "學生 · 學術經歷"
+      },
+      "campus": {
+        "title": "校園參與",
+        "preview": "翻譯、志願服務，以及真正參與校園生活的工作。",
+        "kicker": "學生 · 校園參與"
+      },
+      "awards": {
+        "title": "獎項與證書",
+        "preview": "語言能力、獎學金與持續投入獲得的認可。",
+        "kicker": "學生 · 獎項檔案",
+        "note": "（加粗條目為國家級獎項）"
+      }
+    },
+    "education": [
+      {
+        "date": "2026.09-2027.11 · 預計",
+        "school": "香港大學",
+        "degree": "語言學文學碩士",
+        "detail": "在讀；關注語音學、音系學與語法應用。"
+      },
+      {
+        "date": "2022.09-2026.06",
+        "school": "南京航空航天大學",
+        "degree": "英語（民航業務）文學學士",
+        "detail": "<strong class=\"learn-detail__education-result\">GPA 4.1/5.0 · 專業排名 3/46</strong>"
+      }
+    ],
+    "marginNote": "研究 → 洞察 → 傳播 → 創作",
+    "awardsTitle": "獎項與證書",
+    "awards": [
+      "語言能力：<strong class=\"learn-detail__inline-emphasis\">IELTS（7.5）；TEM 8（英語專業八級）—良好</strong>；TEM 4（英語專業四級）—優秀",
+      "7 次南京航空航天大學學業獎學金",
+      "力群特等獎學金",
+      "奮進獎學金",
+      "FDP 杯全國大學生學術英語詞彙競賽 · 第十屆一等獎 · 第九屆二等獎"
+    ],
+    "footer": "檔案比這一頁更長。證書不是終點，它們共同呈現的是持續投入和好奇心。"
+  },
+  "work": {
+    "chapter": "第二章",
+    "title": "工作檔案",
+    "archiveLabel": "職業經歷檔案",
+    "tabListLabel": "選擇一份工作檔案",
+    "handledTitle": "我負責的事",
+    "movedTitle": "我推動的結果",
+    "evidenceTitle": "实习证明",
+    "publicEvidenceNote": "公开版本：已移除个人身份信息与扫描二维码。",
+    "portraitAlt": "夕陽照進編輯辦公室，Yixin 正在電腦前工作",
+    "cases": [
+      {
+        "key": "loreal",
+        "company": "L’Oréal",
+        "role": "社交媒體運營",
+        "context": "HKU L’Oréal Campreneur",
+        "date": "2026年9月–至今",
+        "process": [
+          "策劃",
+          "設計",
+          "發佈"
+        ],
+        "handled": [
+          "為 HKU L’Oréal Campreneur 負責社交媒體內容與視覺素材，涵蓋內容策劃、設計，以及<a class=\"work-platform-link\" href=\"https://mp.weixin.qq.com/s/gD08WVkcrJ472XYw3KRlgA\" target=\"_blank\" rel=\"noopener noreferrer\">微信公眾號</a>、<a class=\"work-platform-link\" href=\"https://xhslink.cn/o/2ngu93q5oEF\" target=\"_blank\" rel=\"noopener noreferrer\">小紅書</a>和 <a class=\"work-platform-link\" href=\"https://www.instagram.com/hku.loreal.campreneur?cplk=MXBibnM3ejl3bjY4Mg==\" target=\"_blank\" rel=\"noopener noreferrer\">Instagram</a> 的發佈。",
+          "使用 Canva 和秀米獨立製作互動 SVG 視覺、微信文章排版及社交媒體宣傳素材。"
+        ],
+        "moved": [],
+        "evidence": []
+      },
+      {
+        "key": "sumec",
+        "company": "SUMEC 蘇美達",
+        "role": "外貿業務助理",
+        "date": "2026.03-06",
+        "process": [
+          "面輔料",
+          "採購",
+          "生產",
+          "樣衣",
+          "出貨"
+        ],
+        "handled": [
+          "翻譯約 30 個服裝款式的資料，並對接客戶、供應商與工廠。",
+          "跟進 5 家工廠的出口訂單，從面輔料確認、採購到排產與出貨。",
+          "使用 OA 流程處理線上付款、合同提交與對賬。"
+        ],
+        "moved": [
+          "讓多家供應商之間的生產節點與交接狀態持續可見。",
+          "每周製作約 20 套樣衣模特圖，支持樣衣開發與整理。"
+        ],
+        "evidence": [
+          {
+            "label": "實習證明",
+            "href": "assets/documents/internship-evidence-public.pdf#page=6"
+          },
+          {
+            "label": "實習鑒定",
+            "href": "assets/documents/internship-evidence-public.pdf#page=7"
+          }
+        ]
+      },
+      {
+        "key": "china-daily",
+        "company": "China Daily",
+        "role": "英文編輯",
+        "date": "2025.07-09",
+        "process": [
+          "策劃",
+          "協同",
+          "寫作",
+          "製作",
+          "發佈"
+        ],
+        "handled": [
+          "統籌 Facebook 與 X 上 18 個國際媒體賬號的聯動傳播。",
+          "覆蓋前期策劃、推廣文案、收官內容與視頻製作。",
+          "每日產出 2-3 篇英文稿件，主題包括中國傳統文化與科技會議觀察。"
+        ],
+        "moved": [
+          {
+            "html": "聯動傳播累計獲得 100 萬+ 瀏覽量。",
+            "href": "https://mp.weixin.qq.com/s/PKJQkbQQX-W7b3gBlrG4Mg"
+          },
+          "將一套編輯策劃轉化為多賬號協同發佈。"
+        ],
+        "evidence": [
+          {
+            "label": "實習鑒定",
+            "href": "assets/documents/internship-evidence-public.pdf#page=4"
+          }
+        ]
+      },
+      {
+        "key": "creator-campaigns",
+        "company": "Honey Verse",
+        "role": "海外達人營銷",
+        "date": "2025.09-10",
+        "process": [
+          "調研",
+          "篩選",
+          "觸達",
+          "投放",
+          "復盤"
+        ],
+        "handled": [
+          "圍繞約 20 個產品，為墨西哥和法國市場篩選並評估達人。",
+          "用英語開展跨境觸達，每日篩選 50+ 位平均粉絲量 5 萬+ 的創作者。",
+          "分析 TikTok 爆款內容，並參與 JEEP、PAPAFEEL 與 CEELIKE 的達人活動。"
+        ],
+        "moved": [
+          "把達人畫像與具體產品、市場語境進行匹配。",
+          "單條活動內容獲得 20 萬+ 瀏覽量。"
+        ],
+        "evidence": [
+          {
+            "label": "實習證明",
+            "href": "assets/documents/internship-evidence-public.pdf#page=5"
+          }
+        ]
+      },
+      {
+        "key": "sichuan-rtv",
+        "company": "四川廣播電視台",
+        "role": "文旅節目新媒體編輯",
+        "date": "2025.01-02",
+        "process": [
+          "調研",
+          "寫稿",
+          "直播",
+          "復盤"
+        ],
+        "handled": [
+          "每日撰寫與編輯約 8,000 字文旅直播腳本。",
+          "支持融媒體直播，並根據內容準確性和觀眾吸引力調整腳本。"
+        ],
+        "moved": [
+          "幫助直播保持 200+ 平均觀看人數。",
+          "支持頻道增長至 2,000+ 粉絲。"
+        ],
+        "movedTitleHref": "https://v.douyin.com/_deftwUhn9M/",
+        "evidence": [
+          {
+            "label": "實習鑒定",
+            "href": "assets/documents/internship-evidence-public.pdf#page=3"
+          }
+        ]
+      },
+      {
+        "key": "chengdu-rtv",
+        "company": "成都廣播電視台",
+        "role": "《Earth at Your Feet》英文編輯",
+        "date": "2024.06-08",
+        "process": [
+          "復盤",
+          "編輯",
+          "潤色",
+          "交付"
+        ],
+        "handled": [
+          "復盤往期節目，識別有效的廣電表達與節目慣例。",
+          "細緻編輯英文新聞、人物故事與節目腳本。"
+        ],
+        "moved": [
+          "讓不同內容類型使用更一致的英文廣電表達。",
+          "在進入節目製作前提升稿件清晰度。"
+        ],
+        "evidence": [
+          {
+            "label": "實習鑒定",
+            "href": "assets/documents/internship-evidence-public.pdf#page=2"
+          }
+        ]
+      },
+      {
+        "key": "china-eastern",
+        "company": "中國東方航空",
+        "role": "英語廣播培訓師",
+        "date": "2023.11-2024.01",
+        "process": [
+          "規劃",
+          "培訓",
+          "翻譯",
+          "平台"
+        ],
+        "handled": [
+          "完成 40+ 小時一線服務人員英語培訓。",
+          "翻譯並潤色 6 套機上廣播詞。",
+          {
+            "html": "為思雲在線學習平台整理並製作 37 套培訓資料。",
+            "href": "assets/china-eastern-thinkcloud-siyun.webp"
+          }
+        ],
+        "moved": [
+          "把線下培訓沈澱成可復用的自主學習資料庫。",
+          "讓一線播報語言更加清晰、統一。"
+        ],
+        "evidence": [
+          {
+            "label": "實習證明",
+            "href": "assets/documents/internship-evidence-public.pdf#page=1"
+          }
+        ]
+      }
+    ]
+  },
+  "create": {
+    "chapter": "第三章",
+    "archiveLabel": "創作檔案",
+    "title": "我通過創作讓想法變得可見。",
+    "lede": "拼貼、內容與小型數字系統只是不同材料；驅動它們的是同一種衝動：先發現，再塑形，然後邀請別人進入。",
+    "stats": [
+      [
+        "≈7,000",
+        "小紅書粉絲"
+      ],
+      [
+        "73,000+",
+        "累計點贊與收藏"
+      ]
+    ],
+    "wallTitle": "內容創作",
+    "profileLabel": "查看完整賬號",
+    "profileUrl": "https://www.xiaohongshu.com/user/profile/63c4e6830000000026010347?xsec_token=ABwqnZUcm0neau5ryEmXCKamhojl2mX3py0vLHug1Ty2Y=&xsec_source=pc_search",
+    "openWork": "打開原筆記",
+    "works": [
+      {
+        "title": "四個拼貼模板",
+        "image": "assets/collage-templates.jpg",
+        "alt": "由甜品、照片和手繪批注構成的深棕色拼貼作品",
+        "engagement": [
+          "贊 1.3萬",
+          "收藏 6,816",
+          "評論 72"
+        ],
+        "url": "https://www.xiaohongshu.com/discovery/item/6842d123000000002001f506?source=webshare&xhsshare=pc_web&xsec_token=AByz21WPlcljncfLnDFSQ_EUMLfKWXp7b-HwzkOCeznuM=&xsec_source=pc_share"
+      },
+      {
+        "title": "手把手拼貼教程",
+        "image": "assets/collage-tutorial.jpg",
+        "alt": "包含食物照片和插畫批注的手作拼貼教程",
+        "engagement": [
+          "贊 4,650",
+          "收藏 2,814",
+          "評論 32"
+        ],
+        "url": "https://www.xiaohongshu.com/discovery/item/683bcc9a000000002100ab91?source=webshare&xhsshare=pc_web&xsec_token=ABSW1d1xtxyqcPO84RSzuNjBdJFJ8-1A1lN_BrH5rTQ0w=&xsec_source=pc_share"
+      },
+      {
+        "title": "四個韓女拼貼模板",
+        "image": "assets/collage-korean.jpg",
+        "alt": "包含照片、星星和音樂播放器元素的淺藍綠色拼貼模板",
+        "engagement": [
+          "贊 1,568",
+          "收藏 732",
+          "評論 27"
+        ],
+        "url": "https://www.xiaohongshu.com/discovery/item/693a7cc9000000001f007b68?source=webshare&xhsshare=pc_web&xsec_token=ABvGhfv7OJoHMslM96ku6zP4AFPwncByz0H031kpjby-Y=&xsec_source=pc_share"
+      },
+      {
+        "title": "拼貼思路與模板",
+        "image": "assets/collage-sense.jpg",
+        "alt": "由校園照片、星星、音符和文字構成的淺藍色拼貼",
+        "engagement": [
+          "贊 1,013",
+          "收藏 526",
+          "評論 8"
+        ],
+        "url": "https://www.xiaohongshu.com/discovery/item/68862011000000002203f97a?source=webshare&xhsshare=pc_web&xsec_token=ABy_VlBlDps7_d-NAJUd5vacU3X8VzXXyoynpnixLvov8=&xsec_source=pc_share"
+      }
+    ],
+    "digitalTitle": "Vibe Coding",
+    "featuredProject": {
+      "title": "HKU Compass",
+      "tag": "校園信息聚合網站",
+      "objectImage": "assets/project-compass.webp",
+      "body": "把分散信息轉化成每日決策系統的真實可用網站。",
+      "image": "assets/hku-compass-preview.png",
+      "alt": "粉色與奶油色 HKU Compass 學生信息看板網頁預覽",
+      "url": "https://hku-compass.chillsummery0625.workers.dev",
+      "action": "打開真實網站"
+    },
+    "musicProject": {
+      "title": "Monthly Echoes",
+      "tag": "音樂照片卡片生成網站",
+      "objectImage": "assets/project-monthly.webp",
+      "url": "https://elwd84rz457j.meoo.zone/"
+    },
+    "halloweenProject": {
+      "title": "HKU × L’Oréal — Halloween Beauty Vote",
+      "tag": "萬聖節美妝人格與投票互動",
+      "objectImage": "assets/project-halloween.webp",
+      "url": "https://hku-loreal-halloween-beauty-world.chillsummery0625.workers.dev/#landing"
+    },
+    "digitalProjects": [
+      {
+        "title": "文科生 Vibe Coding 入門攻略",
+        "tag": "真實項目實踐指南",
+        "body": "從具體痛點出發，走到一個真正可用的網站。",
+        "url": "https://xhslink.cn/o/5drrRNvE6Aq"
+      }
+    ],
+    "note": "點擊上方每張拼貼即可打開對應的小紅書原筆記，讓作品與最初發佈的語境保持連接。"
+  },
+  "closing": {
+    "kicker": "",
+    "title": "下一章會是什麼？",
+    "body": "我正在關注國際業務、海外運營、全球傳播，以及圍繞這些事情發生的數字化實踐。",
+    "signoff": "期待我們一起撰寫下一章。",
+    "emailLabel": "郵件聯繫",
+    "resumeLabel": "查看簡歷"
+  },
+  "resume": {
+    "eyebrow": "兩分鐘版本",
+    "title": "崔逸馨",
+    "subtitle": "香港大學 · 語言學碩士 · 2026.09–2027.11（預計）",
+    "summary": "南京航空航天大學英語專業畢業，現於香港大學修讀語言學碩士，有多段實習經歷，覆蓋社交媒體、國際傳播、海外達人營銷與外貿協作等，同時運營小紅書自媒體，進行內容創作與 Vibe Coding。",
+    "education": "南京航空航天大學 · 英語（民航業務）學士 · 2022–2026 · GPA 4.1/5.0 · 排名 3/46",
+    "availability": "可工作時間：每周 3 天，至少 3 個月",
+    "proficiency": "英語：IELTS 7.5 · TEM-8（良好）· TEM-4（優秀）· CET-6",
+    "tools": "工具：Canva、秀米、ChatGPT、Codex、WorkBuddy · Excel、Word、PowerPoint",
+    "linkGroups": [
+      {
+        "label": "內容創作",
+        "links": [
+          {
+            "label": "7,000 粉絲 · 73,000+ 點贊與收藏",
+            "href": "https://www.xiaohongshu.com/user/profile/63c4e6830000000026010347?xsec_token=ABwqnZUcm0neau5ryEmXCKamhojl2mX3py0vLHug1Ty2Y=&xsec_source=pc_search"
+          }
+        ],
+        "description": "運營拼貼主題小紅書賬號，與美圖建立長期合作，為 Teddi Lab、JUSTFOTO、醒圖、HBN、K-COFFEE、PROF. LING 等品牌製作推廣內容。"
+      },
+      {
+        "label": "Vibe Coding",
+        "links": [
+          {
+            "label": "HKU × L’Oréal Halloween Beauty World",
+            "href": "https://hku-loreal-halloween-beauty-world.chillsummery0625.workers.dev/#landing"
+          },
+          {
+            "label": "Monthly Echoes",
+            "href": "https://elwd84rz457j.meoo.zone/"
+          },
+          {
+            "label": "HKU Compass",
+            "href": "https://hku-compass.chillsummery0625.workers.dev/"
+          }
+        ]
+      }
+    ],
+    "experienceLabel": "專業經歷",
+    "highlights": [
+      "L’Oréal · 社交媒體運營",
+      "SUMEC · 外貿業務助理",
+      "Honey Verse · 海外達人營銷",
+      "China Daily · 英文編輯",
+      "四川廣播電視台 · 新媒體編輯"
+    ],
+    "download": "下載 PDF 簡歷",
+    "email": "yixincui_chill@connect.hku.hk"
   }
 };

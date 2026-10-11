@@ -5,17 +5,38 @@
   let bounce = () => {};
   const enabled = true;
   const positions = {
-    crete:[.095,.515,.075,.12], hku:[.44,.235,.10,.17],
-    campus:[.213,.375,.11,.15], nuaa:[.18,.495,.09,.10],
-    awards:[.115,.68,.08,.15], sumec:[.28,.765,.21,.22],
-    chinaDaily:[.456,.75,.18,.18], broadcast:[.65,.665,.09,.09],
-    eastern:[.664,.824,.16,.16], collage:[.911,.333,.12,.19],
-    loreal:[.439,.627,.11,.10], kol:[.585,.615,.07,.13],
-    monthlyEchoes:[.803,.805,.16,.18], hkuCompass:[.943,.845,.105,.19]
+    crete:[.1545,.157,.0385,.09], hku:[.342,.275,.076,.192],
+    campus:[.192,.501,.092,.128], nuaa:[.1504,.282,.049,.109],
+    awards:[.153,.667,.07,.16], sumec:[.488,.668,.17,.18],
+    chinaDaily:[.604,.685,.16,.18], broadcast:[.577,.73,.04,.15],
+    eastern:[.697,.704,.13,.17], collage:[.878,.399,.105,.19],
+    loreal:[.581,.568,.12,.14], kol:[.707,.56,.045,.14],
+    monthlyEchoes:[.835,.655,.14,.17], hkuCompass:[.938,.71,.075,.17],
+    halloweenBeauty:[.768,.715,.067,.127]
   };
   function mount(root) {
     dispose();
     if (!root) return;
+    if (root.dataset.spatial === "true") {
+      for (const [key,[x,y,w,h]] of Object.entries(positions)) {
+        const el=root.querySelector(`[data-object="${key}"]`);
+        if (!el) continue;
+        const rearScale = 1;
+        el.style.left=((.5+(x-.5)*rearScale)*100)+"%";
+        el.style.top=((.5+(y-.5)*rearScale)*100)+"%";
+        el.style.width=el.dataset.feedbackTarget ? `${w*rearScale*100}%` : `max(32px, ${w*100}%)`;
+        el.style.height=el.dataset.feedbackTarget ? `${h*rearScale*100}%` : `max(32px, ${h*100}%)`;
+      }
+      bounce = key => {
+        const target = root.querySelector(`[data-object="${key}"]`);
+        if (target?.dataset.feedbackTarget) return;
+        if (target && !reduced.matches) target.animate([
+          {translate:"0 0"}, {translate:"0 -9px"}, {translate:"0 0"}
+        ], {duration:450, easing:"cubic-bezier(.2,.8,.3,1)"});
+      };
+      dispose = () => { bounce = () => {}; };
+      return;
+    }
     const image = root.querySelector(".room-art");
     let alive = true, visible = true, frame = 0, gl, canvas, program, texture, buffer;
     let cropLocation, timeLocation, objectLocation, liftLocation;
@@ -49,20 +70,20 @@ void main() {
   vec2 p=vec2(uv.x,1.-uv.y)*crop.xy+crop.zw;
   vec2 shift=vec2(0.);
   // Curtain fabric anchored at top; no face distortion.
-  float curtain=region(p,vec2(.753,.205),vec2(.056,.23));
+  float curtain=region(p,vec2(.635,.285),vec2(.028,.13));
   shift.x += .0022*sin(time*.62+p.y*7.)*curtain*smoothstep(.02,.24,p.y);
   // A slow, small reach toward the book shelf.
-  float reach=region(p,vec2(.204,.165),vec2(.052,.098));
-  float book=region(p,vec2(.197,.105),vec2(.032,.055));
+  float reach=region(p,vec2(.17,.182),vec2(.032,.055));
+  float book=region(p,vec2(.164,.163),vec2(.022,.048));
   shift += vec2(.00165,-.0007)*sin(time*.85)*reach;
   shift.x += .0011*sin(time*.85)*book;
   // Fingertips pulse against keyboard; hand only.
-  float typing=region(p,vec2(.576,.555),vec2(.046,.029));
+  float typing=region(p,vec2(.501,.551),vec2(.033,.023));
   shift.y += .00095*(sin(time*9.)+.3*sin(time*14.))*typing;
   // A gentle wrist/scissor movement, with a quiet paper response.
-  float cutting=region(p,vec2(.826,.528),vec2(.043,.054));
+  float cutting=region(p,vec2(.813,.507),vec2(.035,.03));
   shift += vec2(.0007*sin(time*2.7),.001*sin(time*2.7))*cutting;
-  float paper=region(p,vec2(.914,.354),vec2(.035,.045));
+  float paper=region(p,vec2(.907,.426),vec2(.028,.03));
   shift.y += .0007*sin(time*2.7+.4)*paper;
   // Lift the selected object within the same texture, with feathered boundaries.
   float objectMask=region(p,object.xy,object.zw*.65);
@@ -163,4 +184,105 @@ void main() {
     };
   }
   window.RoomMotion={mount,bounce:key=>bounce(key), stop:()=>{dispose();dispose=()=>{};bounce=()=>{};}};
+})();
+
+/* Frame-synchronized rotation, independent from the page-turn gesture. */
+(() => {
+  let active=null, dispose=()=>{};
+  const mount=()=>{
+    const orbit=document.querySelector('.room-orbit');
+    if(orbit===active)return;
+    dispose(); active=orbit;
+    if(!orbit)return;
+    const scene=orbit.closest('.room-scene');
+    const labels=[...orbit.querySelectorAll('.role-selector')];
+    const media=matchMedia('(max-width: 820px)');
+    const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+    const layout=()=>{
+      labels.forEach(label=>orbit.append(label));
+      // Fit the complete rectangular cover artwork to its four board corners.
+      // Clipping the original rectangle would cut off the lace border.
+      orbit.querySelectorAll('[data-cover-corners]').forEach(art=>{
+        const [tl,tr,br,bl]=art.dataset.coverCorners.split(',').map(n=>Number(n)/100);
+        const w=art.clientWidth,h=art.parentElement.clientHeight;
+        if(!w||!h)return;
+        if(tl===tr && bl===br) {
+          // A square cover is laid out at its actual size, so live type and
+          // artwork share the entry cover's proportions without a Y squash.
+          art.style.height=w+'px'; art.style.top=(tl*h)+'px';
+          art.style.transform='none';
+          return;
+        }
+        const g=(bl-tl)/(br-tr)-1,a=1+g,d=tr*a-tl,e=bl-tl;
+        art.style.transform=`matrix3d(${a},${d*h/w},0,${g/w},0,${e},0,0,0,0,1,0,0,${tl*h},0,1)`;
+      });
+    };
+    layout(); media.addEventListener('change',layout);
+    const coverLayout=new ResizeObserver(layout); coverLayout.observe(scene);
+    let yaw=0,pitch=0,targetYaw=0,targetPitch=0,gesture=null,moved=false,frame=0,last=0;
+    const paint=()=>{
+      orbit.style.setProperty('--room-yaw',yaw+'deg');
+      orbit.style.setProperty('--room-pitch',pitch+'deg');
+
+    };
+    const tick=now=>{
+      frame=0;
+      const dt=last?Math.min(50,now-last):16.67; last=now;
+      const blend=reduced.matches?1:1-Math.exp(-dt/(gesture?32:65));
+      yaw+=(targetYaw-yaw)*blend; pitch+=(targetPitch-pitch)*blend;
+      if(Math.abs(targetYaw-yaw)+Math.abs(targetPitch-pitch)<.015){yaw=targetYaw;pitch=targetPitch;last=0;paint();return;}
+      paint();frame=requestAnimationFrame(tick);
+    };
+    const schedule=()=>{if(!frame)frame=requestAnimationFrame(tick);};
+    orbit.addEventListener('dragstart',e=>e.preventDefault());
+    // The unrotated scene stays hittable when the book is edge-on or rear-facing.
+    scene.addEventListener('pointerdown',e=>{
+      if(gesture||e.target.closest('select,option')||(e.pointerType==='mouse'&&e.button!==0))return;
+      if(e.target.closest('button,a')&&!orbit.contains(e.target))return;
+      gesture={id:e.pointerId,x:e.clientX,y:e.clientY,yaw:targetYaw,pitch:targetPitch};moved=false;
+      // Cancel native image drag without changing ordinary link/button clicks.
+      if(!e.target.closest('button,a'))e.preventDefault();
+      e.target.setPointerCapture?.(e.pointerId);e.stopPropagation();
+    });
+    scene.addEventListener('pointermove',e=>{
+      if(!gesture||gesture.id!==e.pointerId)return;
+      const dx=e.clientX-gesture.x,dy=e.clientY-gesture.y;
+      if(!moved&&Math.hypot(dx,dy)<6)return;
+      if(!moved){moved=true;scene.setPointerCapture(e.pointerId);orbit.dataset.rotating='true';}
+      targetYaw=gesture.yaw+dx*.38;
+      targetPitch=Math.max(-70,Math.min(70,gesture.pitch-dy*.28));
+      schedule();e.preventDefault();e.stopPropagation();
+    });
+    const finish=e=>{
+      if(gesture?.id!==e.pointerId)return;
+      gesture=null;delete orbit.dataset.rotating;
+      if(scene.hasPointerCapture(e.pointerId))scene.releasePointerCapture(e.pointerId);
+      schedule();
+    };
+    scene.addEventListener('pointerup',finish);scene.addEventListener('pointercancel',finish);
+    // A prop can open a dialog before its captured pointer is released.
+    // Finish globally too, so removing that prop cannot leave a live drag.
+    window.addEventListener('pointerup',finish,true);
+    window.addEventListener('pointercancel',finish,true);
+    scene.addEventListener('lostpointercapture',e=>{if(gesture&&e.target===scene)finish(e);});
+    scene.addEventListener('click',e=>{if(moved){e.preventDefault();e.stopImmediatePropagation();moved=false;}},true);
+    orbit.addEventListener('keydown',e=>{
+      if(e.target!==orbit)return;
+      if(!['Home','ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;
+      if(gesture) {
+        const id=gesture.id; gesture=null; delete orbit.dataset.rotating;
+        if(scene.hasPointerCapture(id))scene.releasePointerCapture(id);
+      }
+      if(e.key==='Home'){targetYaw=Math.round(targetYaw/360)*360;targetPitch=0;}
+      else if(e.key==='ArrowLeft')targetYaw-=20;
+      else if(e.key==='ArrowRight')targetYaw+=20;
+      else if(e.key==='ArrowUp')targetPitch=Math.min(70,targetPitch+15);
+      else if(e.key==='ArrowDown')targetPitch=Math.max(-70,targetPitch-15);
+      else return;
+      e.preventDefault();e.stopPropagation();schedule();
+    });
+    orbit.addEventListener('dblclick',e=>{if(e.target.closest('button,a'))return;targetYaw=Math.round(targetYaw/360)*360;targetPitch=0;schedule();});
+    dispose=()=>{cancelAnimationFrame(frame);coverLayout.disconnect();media.removeEventListener('change',layout);window.removeEventListener('pointerup',finish,true);window.removeEventListener('pointercancel',finish,true);};
+  };
+  new MutationObserver(mount).observe(document.querySelector('#book-content'),{childList:true});mount();
 })();

@@ -1,4 +1,56 @@
+## 2026-10-11 — Equal rectangular open covers (local only)
+
+Both cover boards now share the same rectangular bounds (6–90% height) and mirror opening angles of 2 degrees, producing an almost flat 176-degree spread. Colored leaves retain small distinct fan angles inside that opening. Removed asymmetric trapezoid corners; the whole orbit supplies camera tilt. Illustrated faces have hidden backs so their reverse side does not protrude below the rear cover. Interior background/person/desk depths are unchanged.
+
+## 2026-10-11 — Complete cover artwork and clean top edge (local only)
+
+The complete cover artwork is projected onto the four corners of each hinged board on layout/resize, so lace borders are not cut by the board silhouette. The outside cover top encloses the scene at the spine. The room image mask follows its painted top edge, excluding the black source background. Desktop rear/front tilt and mobile rear views checked; authored interior depth remains unchanged. Build and JS syntax checks passed.
+
+## 2026-10-11 — Restore interior relief (local only)
+
+Removed the shared 0.16 Z compression. Background returns to -100px, people to 30/90/45px, and the foreground desk to 135px; mobile retains the authored -50px, 15/40/20px, and 65px depths. Role targets use the same person depths. The separate hinged paper construction is anchored behind the background instead of compressing the illustrated scene.
+
+## 2026-10-11 — Shared hinged construction (local only)
+
+Front and rear now share ten real colored leaves and two separate cover wings, all hinged at x=50%. Leaves have distinct fan angles, 1.6px edges, and small binding offsets; cover wings follow the same fan and have 6px board edges. The solid rectangular page block is removed. Only the source image's painted outer wings are masked, and real leaves replace them; the illustrated room and base remain. Free rotation exposes the same pages from either side.
+
+## 2026-10-11 — Solid bound page block (local only)
+
+The open room has a closed six-face body: an interior paper face, the existing outer cover, continuous fore-edges and top/bottom page edges, plus a central binding. Desktop thickness is 24–42px; mobile is 16px. Paper rules run across five solid pink, mint, blue, pale-yellow and lavender page bands; both covers meet the side faces. Illustration relief remains compact independently of the book body's thickness.
+
+## 2026-10-11 — Compact room construction (local only)
+
+The full room illustration supplies its original colored wings and paper base. Duplicate CSS leaves and added paper tabs have been removed. All illustration layers and object hit targets share a 0.16 Z scale: desktop wall-to-island separation is now 37.6px instead of 235px. Role crystals use the same scaled depth, and the reverse cover sits 4px behind the wall. This retains free rotation and layered relief while avoiding an exploded stack and blank support sheets.
+
+## 2026-10-11 — Resume reverse cover correction (local only)
+
+Applied the cream rear treatment to the separate Resume closing-book reverse face as well. Removed its lace background and contact rectangle; used cover-relative small italic name, foil flower and underlined email/CV copy. Verified by entering through Resume and rotating that book to its reverse; build passed. The previous change affected only the room reverse cover.
+
+## 2026-10-11 — Plain cream rear cover (local only)
+
+The room's rear cover now follows the supplied reference: uninterrupted cream paper, a small foil flower, centered italic name, and small underlined email/CV copy. Removed the reused lace artwork and rectangular contact panel from this face. Text scales with cover width during rotation and on mobile. Desktop and 390px rear views checked; static build passed. No deployment.
+
 # Design System
+
+## 2026-10-11 — Work skin warmth (local only)
+
+Work uses `chapter-work-warm-skin-v8.png`: a localized warmer ivory/peach skin-color edit to reduce the main character's porcelain-white face, with coordinated neck and hands. The fine-line illustration style and composition are retained. Build passed; no deployment.
+
+## 2026-10-11 — Updated Create scene and finer Work contours (local only)
+
+Create uses the user's updated sunset illustration with the Monthly Echoes turntable, edited only to retain separate tinted outer glass leaves (`chapter-create-solid-glass-v10.png`). Removed the stale desktop-only scene override so desktop and mobile share this image. Work uses `chapter-work-fine-lines-v7.png` with finer contours and softer local shadow colors around the character and props, preserving its composition and solid-tint glass. Original assets are retained. Build and local desktop/mobile previews checked; no deployment.
+
+## 2026-10-11 — Chapter outer glass leaves (local only)
+
+Learn, Work and Create now use sibling `chapter-*-solid-glass-*.png` backgrounds. Each exposed outer leaf has its own translucent pink, mint, blue, yellow or lavender tint, matching the homepage material. The existing chapter layout and navigation remain intact. Local build and desktop/mobile preview checks passed; no deployment.
+
+## 2026-10-11 — Single-color outer glass leaves (local only)
+
+Follow-up: the painted outer stack is clipped away from the wall texture. Four actual tinted leaf planes per wing now hinge at the center with separate depths and fan angles; the rear cover sits behind the last leaf. Each leaf has a single hue, a thin outer edge and a translucent face. This replaces the flat color-band illusion during room rotation.
+
+The wall masks now trace the artwork's actual sloping top silhouette, including the lower center fold, so the source image's black exterior cannot appear as a solid strip in front of the transparent leaves.
+
+The room wall uses `assets/room-background-solid-glass-v15.png`. Exposed side leaves each carry one pink, mint, blue, yellow or violet tint with translucent shading and fine bright edges, replacing the rainbow facets inside each leaf. The existing wall geometry, character and object layers remain in place. Desktop front/rotated views and the 390px mobile layout were visually checked; the static build passed. No deployment.
 
 ## Concept
 
@@ -27,9 +79,9 @@ Strategy: full palette. Rose identifies the book as one system; amber belongs to
 
 ## Typography
 
-- Display: Baskerville / Georgia fallback. It feels like a well-used literary book rather than a fashion-magazine affectation.
+- Display and body share Avenir Next / Helvetica Neue / system sans, as requested; size and weight retain the existing hierarchy.
 - Interface and body: Avenir Next / Helvetica Neue / system sans.
-- Chinese: Songti SC for large chapter titles; PingFang SC for body and controls.
+- Chinese: PingFang SC throughout headings, body, and controls.
 - Body line length: 65-72 characters maximum.
 
 ## Layout
@@ -56,6 +108,8 @@ Strategy: full palette. Rose identifies the book as one system; amber belongs to
 
 ## Motion and Sound
 
+- Desktop navigation into or out of the illustrated room turns the complete book construction through a temporary 3D hinge at the spine. The room's current drag orientation remains nested inside the hinge, so its figures, walls, base, and spectral edges travel together. A 250ms inward turn passes into a 400ms opening with a restrained settle. The room is excluded from both rectangular leaf engines; Learn's backward swipe uses the same whole-volume return. Mobile keeps its directional crossfade, and reduced-motion navigation lands immediately.
+
 - The book enters with a restrained pitched 3D reveal, then responds to fine-pointer movement with no more than roughly two degrees of tilt. The approach borrows the physical spine, perspective, and moving-shadow principles of an interactive picture book without reproducing its visual content.
 - Desktop page turns use the vendored MIT-licensed StPageFlip 2.0.7 geometry engine as a temporary, inert visual layer. Pressing and holding a non-interactive area gently lifts the sheet after about 90ms; the fold then follows the captured pointer continuously until release. A committed drag settles across the spine, an incomplete drag falls back, and a plain click does not latch the page to the cursor. Button and keyboard turns run for about 620ms and never overlap. The portfolio's own HTML remains the canonical interactive layer; the older native turn stays available as a loading fallback.
 - The desktop turning leaf keeps the live outgoing half on its front and the destination half on its back. The bottom spread remains the outgoing page until the leaf reaches roughly 90 degrees, then changes to the target page while the edge is thinnest. A stationary outgoing half, a moving angle-driven shadow, restrained paper lift, and a narrow traveling curl highlight preserve continuity. Thin stacked-paper bands remain visible along the right and bottom book edges without copying the reference component's split-flap geometry.
@@ -70,6 +124,8 @@ Strategy: full palette. Rose identifies the book as one system; amber belongs to
 - Sound is opt-in and uses the same bundled local WAV files on desktop and mobile so browser audio-engine differences cannot change the result: quiet tonal touches acknowledge object hover/focus, a soft tactile note confirms selection, and paper swishes accompany opening a detail page or turning into a chapter. There is no background music.
 
 ## Imagery
+
+The chapter scenes use `assets/chapter-learn-topfill-v3.png`, `assets/chapter-work-cover-view-v5-crisp.png`, and `assets/chapter-create-cover-view-v5-crisp.png`, matched to the current homepage figures and clean golden-hour room. HKU wall art uses a green field with a full-color shield only in the learning area. Work and Create exclude the learning-area crest; their scenes derive from the cover room and add no substitute artwork. Desktop uses the full spread; mobile crops the right-hand scene from the same asset through `--chapter-scene`, so generated navigation or content is never shown as a raster image. Real chapter content remains HTML. The obsolete illustrated header flap is removed from all chapter scenes and the homepage backdrop (`room-background-topfill-v14.png`); paper and scenery continue to the upper silhouette beneath the external navigation.
 
 The homepage uses `assets/homepage-room-v12.png`, a precise-object revision of the luminous v11 composition. Its rendering language remains contemporary 2D animation: selective tapered plum contours, mature elongated facial design, simplified glossy hair masses, clean cel-shadow planes with restrained soft edge bloom, and sparse chromatic offsets. The restricted palette is led by coral/apricot light and saturated aubergine/indigo shadow, with pale blue reserved for screens and papers. Crete occupies the shelf immediately left of NUAA; the burgundy crest artwork with large `HKU` lettering behind Student is the HKU entry point, while the former purple HKU book has been replaced by tightly arranged aubergine and indigo book spines so the shelf remains full; the former open book beside it is now a loose six-person Campus Involvement snapshot with adult proportions, fashion-illustration faces, and saturated coral/teal/mustard color blocking rather than a realistic class photo or cute promotional group; all three character versions have bare ears; Professional uses one correctly oriented laptop whose plain lid faces the viewer; and the foreground differentiates one SUMEC clothing and textile catalogue from separate China Eastern announcement-training notes. Evidence is grouped into Student, Professional, and Creator clusters so the first read is one cinematic scene and the second read reveals the CV. The room continues through the upper-left behind the HTML introduction, and a chromatic low-opacity vignette preserves copy contrast without a black block. Important destinations and click targets remain HTML so they are localizable and accessible. Earlier room images remain as non-destructive visual-history assets. The Create chapter follows the same light archive-page structure as Learn and Work: the pale rose studio groups Content Creating and Vibe Coding into equal-format archive indexes on the left, keeps all four selected real collage thumbnails visible below them, and reserves the sunset field on the right exclusively for `assets/create-portrait-v2.png`. The Content Creating heading itself links to the Xiaohongshu profile and sits above the verified creator metrics. The adjacent Vibe Coding index uses the real HKU Compass preview as a clickable project thumbnail; its title opens the live site, while the practical guide remains a secondary link. External destinations remain live HTML and are never baked into the illustration.
 
@@ -137,3 +193,93 @@ Removed the window-light canvas, dust, broad rainbow aura and ground glow. Only 
 ## 2026-10-11 — Capped book geometry and reversible distance
 
 Cover boards now have their own four thickness faces; the binding has inner and end-cap faces. Binding and thin edge materials remain visible from either side, and page hinges align at the binding. This removes missing surfaces at low and rear viewing angles without restoring detached fixed fore-edges. Empty black-stage clicks retreat the book; distant-book clicks recall it. Both transitions interpolate from the current pose and ignore repeated activation until finished.
+
+## 2026-10-11 — Any book surface opens contents (local only)
+
+After recall, front/back boards, spine, binding caps and sheets all route through the same content-entry animation. Drag releases still suppress navigation; empty black-stage clicks retreat. Email and CV anchors retain their specific destinations. Per user request, this change remains local until the remaining edits are approved for a combined deployment.
+
+## 2026-10-11 — Restore spectral atmosphere and center suspended book (local only)
+
+Restored the seven-color aura on the black stage without the former warm window light. Removed the distance-based left offset. The visible cover/page bounds now determine centering after rotation and fanning, including resize; the unrotated square's hinge no longer biases the resting position. Opacity-only entrance avoids overriding the centering transform. Changes remain local per the user's batching preference.
+
+## 2026-10-11 — Spectral contact typography (local only)
+
+Email and CV links on the back cover now use deeper rainbow ink and a restrained pink/cyan text glow, with a stronger hover/focus glow. Removed the CV arrow and bottom rule. Shared styling applies on desktop and mobile, with a 13px email minimum; mailto and PDF destinations are unchanged. Not published.
+
+## 2026-10-11 — New cover statement (local only)
+
+Replaced the printed tagline with live cover text: “I'm a student, a professional, and a creator.” A blank strip from the original paper texture covers the baked-in old line, preserving the original cover image and allowing future copy changes without regenerating it. Updated the accessible image description. Not published.
+
+## 2026-10-11 — Return without folding the stage (local only)
+
+Cover entry is now excluded from the full-page flip engine, including desktop drag and mobile swipe routes. Return fades the room and animates only the physical book's hinged cover/sheets on the stationary black/spectral stage. It settles in the near pose without restarting the entrance showcase. Removed the cloned full-screen return sheet responsible for folding the background.
+
+## 2026-10-11 — Restore spectral floor reflection (local only)
+
+Restored the low elliptical rainbow projection beneath the floating book. It sits on the stationary stage, follows the visible book's lower edge and width during near/far travel, and never rotates with the pages. Background aura remains. Not published.
+
+## 2026-10-11 — English cover and black underlined links (local only)
+
+Back-cover CV label is always “Read My CV”, including when the portfolio language is Chinese. Email and CV use black text with a clear underline; removed spectral text fills and glow. The cover statement and back-cover name/mark also use black ink. Mailto/PDF destinations, surrounding aura and floor reflection remain. Not published.
+
+## 2026-10-11 — Approved A pop-up room (local only)
+
+User selected the translucent pop-up book concept. Replaced the sunset room with a crisp ivory book diorama, translucent folded walls and rainbow edge light; cleaned all baked-in navigation, chapter headings and invented slogans from the generated artwork. Existing toolbar markup/order and routes are preserved. Desktop chapter labels sit above the three figures; mobile shows the uncropped scene followed by three accessible chapter entries. Remapped the object hit areas and seamless reach/typing/cutting animation regions, retaining object hover/click lift and reduced-motion fallback. Cover/contact edits remain intact. No deployment.
+
+Validation: source syntax and static build passed. Local desktop and 390px mobile rendering checked; no horizontal overflow, WebGL room motion ready, L’Oréal object opened the correct Work dossier and home navigation returned. Concept is an illustrated diorama with subtle motion, not a freely orbitable 3D room mesh.
+
+Chapter content starts at 7% of the desktop spread beneath the external toolbar. Work files use compact typographic spacing and wrapped company tabs; all seven entries retain full text and evidence links without a nested scrolling panel at standard desktop sizes. Mobile Work starts directly with the active dossier beneath navigation to prioritize complete entries while retaining readable body text and natural page scrolling on shorter screens. The Halloween project remains in Create, and its pumpkin bottle is restored as a separate clickable homepage object on the desk beside the Monthly Echoes record player.
+
+Homepage spread sizing shares the chapter viewport width budget (7rem reserved for controls), with desktop orbit scale .89 and mobile .94. This brings the opened homepage book closer to chapter size while preserving all scene layers and hotspot transforms.
+
+The Student, Professional and Creator crystal reveals share an ivory paper label with a fine warm border and brown serif text in the main stylesheet, including mobile and reduced-motion styling. On phones labels sit beside the crystals to clear the navigation above. Previews inherit this production stylesheet rather than adding a separate label experiment.
+
+## 2026-10-11 — Printed chapter perspective and fitted dossiers (local only)
+
+Desktop Learn, Work and Create content follows the illustrated left leaf with a shared 4.8-degree vertical shear. Insets leave clearance at the center fold and lower paper edge. Learn details use smaller type and compact spacing; the 19-item awards archive has two selectable pages with every original certificate link retained. Work measures each active dossier and adjusts its type scale to the available page height, enlarging shorter entries such as L’Oréal. Resize, language changes and case selection recompute the fit; mobile retains natural page flow. Create's gallery and project objects stay within the left page, with complete thumbnail images and wrapped project labels.
+
+Validation: JavaScript syntax and static build passed. At 1440×900, all seven English work dossiers fit without scrolling; education, academic and campus details fit one page, and both awards pages fit. Chinese layout and 390px mobile flow were checked; mobile Work/Create have no horizontal overflow. Chapter navigation and return to the cover were exercised. No production deployment.
+
+## 2026-10-11 — Restore Work illustration on narrow screens (local only)
+
+Restored the Work chapter illustration above the professional archive at widths up to 820px. The earlier mobile rule hid this figure, leaving only the dossier visible. Desktop perspective and adaptive dossier type remain intact.
+
+Archive heading hierarchy is shared by Learn, Work and Create: 2.8cqw on desktop and 28px on mobile, with the same 9cqw (88px mobile) spectrum underline. Company names use the subordinate 2.05cqw / 23px tier and do not expand with dossier body fitting.
+
+## 2026-10-11 — Soft spectrum paper, without refraction (local only)
+
+Removed the diagonal refraction bands after user review. Mobile keeps its original soft rainbow paper treatment. Desktop chapter leaves and Learn detail pages use only gentle spectral color washes inside the printed page boundary.
+
+### Closing cover volume
+
+The cream closing page uses a separate desktop 3D cover, rear board, rounded spine and striped paper edges. Live copy and contact actions stay on the front face. Dragging the non-interactive cover rotates the solid volume; double-click or Home restores the readable pose, and Shift + arrow keys rotate it from keyboard focus. Its multicolor floor projection remains on the black stage. Mobile keeps the vertical cream artwork and readable live actions, with touch scrolling. `closing-book.js` mounts and disposes with the existing page renderer.
+
+The closing volume's reverse now reuses the entry's unfolded cover: contact back panel, central spine and portfolio front cover. A deeper paper block, separate board rims, spine highlights, inset paper shadows and angle-dependent front lighting make the volume readable during rotation. Drag, keyboard reset, resume opening, cover return and mobile overflow checks passed locally.
+
+### Resume boundary and light spectrum leaves
+
+The closing page now has a thinner, translucent spectrum edge with fine separated bands rather than a dense striped paper block. Desktop entry to and return from Resume uses a separate 520ms object transition: the outgoing chapter recedes before the closing volume settles into its own pose. The black stage is not a turning sheet. Learn/Work/Create continue to use the original page-flip engine. The final Create drag routes to this boundary transition; mobile retains its existing directional crossfade and reduced motion resolves directly. Desktop shortcut, previous control, boundary drag, chapter flip, resume drawer, mobile overflow and reduced-motion checks passed. Local only.
+
+## 2026-10-11 — CV spectrum paper (local only)
+
+The resume drawer now carries the chapter leaves' soft lavender, blue, mint, yellow and rose paper washes, with a spectrum paper edge and short rainbow rule under the eyebrow. Text uses dark neutral ink and the PDF action shares the subtle spectrum finish. The close button stays reachable when scrolling; the entrance animation releases its transform after opening so viewport-fixed controls remain anchored. Desktop and 390px mobile reading, Chinese/English content, bottom scrolling and closing were checked locally. No production deployment.
+
+### Air between the closing book leaves
+
+The closing volume now uses four actual translucent leaf planes, hinged at the same left spine with separate offsets and angles matching the entry book's fan. The front cover opens by 24 degrees; the unfolded cover remains on the reverse. Colored hairline edges carry the light, and side/top/bottom solid blocks are removed. Rotation is centered using the projected cover and leaf bounds. Mobile retains the readable vertical cover. The Resume transition, drawer, rotation/reset and mobile overflow were checked; this remains local.
+
+### Typography-only Resume spread
+
+The latest direction replaces the cream ornamental front cover with a typography-only interior spread. The left field carries a large sans-serif next-chapter heading; the right field contains the existing introduction, italic invitation and email/resume actions. A narrow paper fold and short spectrum rule echo Work/Create without a character illustration. The generated scene was not integrated. The reverse still carries the name cover, and the translucent hinged leaf fan remains. Mobile stacks the live text on one paper page. English, Simplified Chinese and Traditional Chinese layout, resume drawer, Resume transition and cover return were checked locally.
+
+### Center-bound closing spread
+
+The closing book now has independent left and right wings hinged at the central fold, each with four translucent pink, mint, yellow and violet leaves using the entry book's original leaf fill. The outer cover wraps behind each fan so the name cover stays visible from the reverse. Soft spectrum paper washes, dark spectral headline ink and larger right-page text replace the flat cream treatment. The Resume boundary opens and folds the two wings independently; internal chapter flips retain their existing behavior. Link hover changes ink without moving the hit target within the 3D plane. Desktop front/side/reverse, Create return and Resume entry, drawer actions, three language layouts and 390px mobile were checked. Build and syntax checks passed. Local only.
+
+The outer cover's hinge and its artwork orientation are now separate transforms. The cover sits beyond the last colored leaf, with an opaque white inner face and smaller interior leaves; rotating it no longer swings the cover through the opposite wing or exposes colored layers over its printed outside.
+
+Rotation now caches local book corners on mount and layout resize, projects them mathematically for camera fitting, and coalesces pointer updates with requestAnimationFrame. Dragging no longer alternates transform writes with synchronous DOM measurements. A 100-move desktop drag dropped closing-page bounding-box reads from 2,475 to zero; both runs remained near 16.8ms at the 95th frame percentile on the local test machine. Front/side/reverse composition, drawer, Create return, Resume entry and mobile language layouts were rechecked locally.
+
+### Quiet Work archive tabs
+
+Company tabs no longer play hover or focus tones. A changed selection plays the existing short 150ms cue at one fixed pitch and one-third of its previous volume. Clicking the active tab is silent. A dedicated playback channel fades out the previous cue over 8ms during rapid switching, including the media-to-buffered startup handoff. Hover silence, mouse and keyboard selection, repeated-selection silence, rapid replacement, Sound off and mobile tab switching were checked locally; build passed.
