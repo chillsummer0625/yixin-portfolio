@@ -628,13 +628,6 @@ window.SITE_DATA = {
         }
       ],
       "experienceLabel": "Professional experience",
-      "highlights": [
-        "L’Oréal · Social Media Operator",
-        "SUMEC · Foreign Trade Business Assistant",
-        "Honey Verse · Overseas Influencer Marketing",
-        "China Daily · English Editor",
-        "Sichuan Radio & Television · New Media Editor"
-      ],
       "download": "Download PDF resume",
       "email": "yixincui_chill@connect.hku.hk"
     }
@@ -1265,13 +1258,6 @@ window.SITE_DATA = {
         }
       ],
       "experienceLabel": "专业经历",
-      "highlights": [
-        "L’Oréal · 社交媒体运营",
-        "SUMEC · 外贸业务助理",
-        "Honey Verse · 海外达人营销",
-        "China Daily · 英文编辑",
-        "四川广播电视台 · 新媒体编辑"
-      ],
       "download": "下载 PDF 简历",
       "email": "yixincui_chill@connect.hku.hk"
     }
@@ -2137,13 +2123,6 @@ window.SITE_DATA["zh-Hant"] = {
       }
     ],
     "experienceLabel": "專業經歷",
-    "highlights": [
-      "L’Oréal · 社交媒體運營",
-      "SUMEC · 外貿業務助理",
-      "Honey Verse · 海外達人營銷",
-      "China Daily · 英文編輯",
-      "四川廣播電視台 · 新媒體編輯"
-    ],
     "download": "下載 PDF 簡歷",
     "email": "yixincui_chill@connect.hku.hk"
   }
