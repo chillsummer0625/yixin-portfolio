@@ -7152,7 +7152,3 @@ body[data-portfolio-page="closing"] :is(.portfolio-toolbar,#reader-controls) { t
 .light-entry .book-front-outside .cover-flower-foil { transform:translate(-50%,-50%); }
 .light-entry .book-face--front::after { display:none; }
 .light-entry .cover-book { animation:none; }
-
-/* Paper must occlude the covers; a translucent gradient exposes rear artwork. */
-.light-entry .book-leaf__front,
-.light-entry .book-leaf__back { background-color:var(--leaf-tint); }
