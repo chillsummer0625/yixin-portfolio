@@ -92,30 +92,63 @@
     const front=volume.querySelector('.book-face--front');
     const leaves=[...volume.querySelectorAll('.book-leaf')];
     let pointer=null, startX=0, startY=0, startYaw=0, startPitch=0, dragged=false, suppressClick=false;
+    let geometry = null;
+    const frontOutside = front.querySelector('.book-front-outside');
+    const frontInside = front.querySelector('.book-front-inside');
+    const backOutside = volume.querySelector('.book-back-outside');
+    const backInside = volume.querySelector('.book-back-inside');
+    function measure() {
+      const style = getComputedStyle(bookButton);
+      const frontMatrix = new DOMMatrix(getComputedStyle(front).transform);
+      geometry = { width:bookButton.clientWidth, height:bookButton.clientHeight,
+        x:bookButton.offsetLeft, y:bookButton.offsetTop,
+        stageWidth:root.clientWidth, stageHeight:root.clientHeight,
+        depth:frontMatrix.m43*2, perspective:parseFloat(style.perspective) || 1500 };
+    }
     function orient() {
-      volume.style.transform=`rotateY(${yaw+tiltY}deg) rotateX(${pitch-opening*32+tiltX}deg) rotateZ(${roll}deg) scale3d(${1-opening*.62},${1-opening*.62},${1-opening*.62})`;
-      front.style.transform=`translateZ(calc(var(--book-depth) / 2)) rotateY(${-24-opening*132}deg)`;
-      leaves.forEach((leaf,i)=>{
-        // Include both cover gaps so the spectrum fills the whole book fan.
-        const fanPosition=(i+1)/(leaves.length+1);
-        const angle=-(24+opening*132)*fanPosition;
-        const flutter=opening*Math.sin(showcaseTime*2-i*.85)*4;
-        leaf.style.transform=`translateZ(calc(var(--book-depth) / 2 - var(--leaf-offset))) rotateY(${angle+flutter}deg)`;
-      });
+      const ry=yaw+tiltY, rx=pitch-opening*32+tiltX, scale=1-opening*.62;
+      const coverAngle=-24-opening*132;
+      const angles=leaves.map((leaf,i)=>coverAngle*(i+1)/(leaves.length+1)+opening*Math.sin(showcaseTime*2-i*.85)*4);
+      volume.style.transform=`rotateY(${ry}deg) rotateX(${rx}deg) rotateZ(${roll}deg) scale3d(${scale},${scale},${scale})`;
+      front.style.transform=`translateZ(calc(var(--book-depth) / 2)) rotateY(${coverAngle}deg)`;
+      leaves.forEach((leaf,i)=>{leaf.style.transform=`translateZ(calc(var(--book-depth) / 2 - var(--leaf-offset))) rotateY(${angles[i]}deg)`;});
       volume.dataset.yaw=String(yaw);volume.dataset.pitch=String(pitch);
-      const backVisible=Math.cos(yaw*Math.PI/180)*Math.cos(pitch*Math.PI/180)<0;
+      const rotation=new DOMMatrix().rotateAxisAngle(0,1,0,ry).rotateAxisAngle(1,0,0,rx).rotateAxisAngle(0,0,1,roll);
+      const facing=angle=>rotation.multiply(new DOMMatrix().rotateAxisAngle(0,1,0,angle)).transformPoint(new DOMPoint(0,0,1,0)).z>=0;
+      // Explicit culling also protects against browser compositor backface glitches.
+      const frontVisible=facing(coverAngle), backVisible=facing(180);
+      if(frontOutside)frontOutside.style.visibility=frontVisible?'visible':'hidden';
+      frontInside.style.visibility=frontVisible?'hidden':'visible';
+      backOutside.style.visibility=backVisible?'visible':'hidden';
+      backInside.style.visibility=backVisible?'hidden':'visible';
+      leaves.forEach((leaf,i)=>{
+        const visible=facing(angles[i]);
+        leaf.querySelector('.book-leaf__front').style.visibility=visible?'visible':'hidden';
+        leaf.querySelector('.book-leaf__back').style.visibility=visible?'hidden':'visible';
+      });
       root.dataset.bookSide=backVisible?'back':'front';
-      // The covers remain draggable on both sides; only hidden links are inert.
       volume.querySelectorAll('.book-face--back a').forEach(link=>{link.inert=!backVisible;});
-      if(root.closest('.entry-closing'))return;
-      // Center the visible fan, not the unrotated square containing its hinge.
-      bookButton.style.transform='none';
-      const stage=root.getBoundingClientRect();
-      const bounds=[front,volume.querySelector('.book-face--back'),...leaves].map(face=>face.getBoundingClientRect());
-      const left=Math.min(...bounds.map(r=>r.left)),right=Math.max(...bounds.map(r=>r.right));
-      const top=Math.min(...bounds.map(r=>r.top)),bottom=Math.max(...bounds.map(r=>r.bottom));
-      bookButton.style.transform=`translate(${stage.left+stage.width/2-(left+right)/2}px,${stage.top+stage.height/2-(top+bottom)/2}px)`;
-      root.style.setProperty('--ground-top',`${stage.height/2+(bottom-top)/2+30}px`);
+      if(root.closest('.entry-closing') || !geometry)return;
+      // Project cached local corners instead of resetting transforms and forcing
+      // a layout flush for every animation frame and pointer move.
+      const g=geometry, points=[];
+      const addFace=(angle,z)=>{
+        const local=new DOMMatrix().translate(0,g.height/2,z).rotateAxisAngle(0,1,0,angle).translate(0,-g.height/2,0);
+        for(const x of [0,g.width])for(const y of [0,g.height]){
+          const p=local.transformPoint(new DOMPoint(x,y,0));
+          const q=rotation.transformPoint(new DOMPoint((p.x-g.width/2)*scale,(p.y-g.height/2)*scale,p.z*scale));
+          const depth=g.perspective/(g.perspective-q.z);
+          points.push({x:q.x*depth,y:q.y*depth});
+        }
+      };
+      addFace(coverAngle,g.depth/2); addFace(0,-g.depth/2);
+      angles.forEach((angle,i)=>addFace(angle,g.depth/2-g.depth*(leaves.length-i)/(leaves.length+1)));
+      const left=Math.min(...points.map(p=>p.x)),right=Math.max(...points.map(p=>p.x));
+      const top=Math.min(...points.map(p=>p.y)),bottom=Math.max(...points.map(p=>p.y));
+      const dx=g.stageWidth/2-(g.x+g.width/2+(left+right)/2);
+      const dy=g.stageHeight/2-(g.y+g.height/2+(top+bottom)/2);
+      bookButton.style.transform=`translate(${dx}px,${dy}px)`;
+      root.style.setProperty('--ground-top',`${g.stageHeight/2+(bottom-top)/2+30}px`);
       root.style.setProperty('--ground-width',`${Math.max(90,Math.min(420,(right-left)*.85))}px`);
     }
     const smooth=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
@@ -224,11 +257,11 @@
     bookButton.addEventListener('pointercancel',up);
     bookButton.addEventListener('click',click,true);
     bookButton.addEventListener('keydown',key);
-    const layoutObserver=new ResizeObserver(()=>orient());layoutObserver.observe(root);
+    const layoutObserver=new ResizeObserver(()=>{measure();orient();});layoutObserver.observe(root);
     recenter=orient;
     retreat=(duration=1500)=>new Promise(resolve=>travel(true,duration/1000,resolve));
     if(far)root.dataset.bookAnimation='far';
-    orient();update();
+    measure();orient();update();
     dispose=()=>{layoutObserver.disconnect();root.removeEventListener('click',backgroundClick);alive=false;cancelAnimationFrame(frame);visibilityObserver.disconnect();document.removeEventListener('visibilitychange',update);reduced.removeEventListener('change',update);bookButton.removeEventListener('pointerdown',down);bookButton.removeEventListener('pointermove',move);bookButton.removeEventListener('pointerup',up);bookButton.removeEventListener('pointerleave',leave);bookButton.removeEventListener('pointercancel',up);bookButton.removeEventListener('click',click,true);bookButton.removeEventListener('keydown',key);};
   }
   window.LightEntry={mount,center:()=>recenter(),retreat:duration=>retreat(duration),stop:()=>{dispose();dispose=()=>{};retreat=()=>Promise.resolve();}};

@@ -7137,3 +7137,18 @@ body[data-portfolio-page="closing"] :is(.portfolio-toolbar,#reader-controls) { t
   /* Opacity animations flatten a nested 3D scene during WebKit compositing. */
   .light-entry .cover-book { animation: none; }
 }
+
+/* Printed artwork is one opaque plane, not competing sub-millimetre layers. */
+.light-entry .book-front-outside {
+  position:absolute; inset:0; display:block;
+  background:#efe9dd;
+  transform:translateZ(2px);
+  transform-style:flat;
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+}
+.light-entry .book-front-outside img { transform:none; }
+.light-entry .book-front-outside .book-cover-caption { transform:none; }
+.light-entry .book-front-outside .cover-flower-foil { transform:translate(-50%,-50%); }
+.light-entry .book-face--front::after { display:none; }
+.light-entry .cover-book { animation:none; }
