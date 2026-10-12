@@ -20,7 +20,8 @@
   const pageKeys = ["cover", "room", "learn", "work", "create", "closing"];
   // The state belongs to this browser-history entry, so Back restores the
   // reader while a newly opened portfolio still starts at its cover.
-  const returnState = history.state?.portfolioReader;
+  const navigationType = performance.getEntriesByType("navigation")[0]?.type;
+  const returnState = navigationType === "back_forward" ? history.state?.portfolioReader : null;
   const validReturnState = returnState?.version === 1 && pageKeys.includes(returnState.page);
   const supportedLanguages = ["zh", "zh-Hant", "en"];
   const savedLanguage = localStorage.getItem("yixin-language");
@@ -2502,7 +2503,7 @@
 
   render();
   restoreReaderPosition();
-  if (!reducedMotion()) {
+  if (currentPage !== 0 && !reducedMotion()) {
     book.classList.add("is-arriving");
     window.setTimeout(() => book.classList.remove("is-arriving"), 900);
   }
