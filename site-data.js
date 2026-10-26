@@ -570,7 +570,7 @@ window.SITE_DATA = {
         action: "Open the live website"
       },
       musicProject: {title: "Monthly Echoes", tag: "Music Photo Card Generator", objectImage: "assets/project-monthly.webp", url: "https://elwd84rz457j.meoo.zone/"},
-      halloweenProject: {title: "HKU × L’Oréal — Halloween Beauty Vote", tag: "Halloween Beauty Persona & Voting", objectImage: "assets/project-halloween.webp", url: "https://hku-loreal-halloween-beauty-world.chillsummery0625.workers.dev/#landing"},
+      halloweenProject: {title: "HKU × L’Oréal — Halloween Beauty Vote", tag: "Halloween Beauty Persona & Voting", objectImage: "assets/project-halloween.webp", url: "https://radiant-fairy-58e6cd.netlify.app/#landing"},
       digitalProjects: [
         {
           title: "Vibe coding for humanities students",
@@ -614,7 +614,7 @@ window.SITE_DATA = {
           "links": [
             {
               "label": "HKU × L’Oréal Halloween Beauty World",
-              "href": "https://hku-loreal-halloween-beauty-world.chillsummery0625.workers.dev/#landing"
+              "href": "https://radiant-fairy-58e6cd.netlify.app/#landing"
             },
             {
               "label": "Monthly Echoes",
@@ -1200,7 +1200,7 @@ window.SITE_DATA = {
         action: "打开真实网站"
       },
       musicProject: {title: "Monthly Echoes", tag: "音乐照片卡片生成网站", objectImage: "assets/project-monthly.webp", url: "https://elwd84rz457j.meoo.zone/"},
-      halloweenProject: {title: "HKU × L’Oréal — Halloween Beauty Vote", tag: "万圣节美妆人格与投票互动", objectImage: "assets/project-halloween.webp", url: "https://hku-loreal-halloween-beauty-world.chillsummery0625.workers.dev/#landing"},
+      halloweenProject: {title: "HKU × L’Oréal — Halloween Beauty Vote", tag: "万圣节美妆人格与投票互动", objectImage: "assets/project-halloween.webp", url: "https://radiant-fairy-58e6cd.netlify.app/#landing"},
       digitalProjects: [
         {
           title: "文科生 Vibe Coding 入门攻略",
@@ -1244,7 +1244,7 @@ window.SITE_DATA = {
           "links": [
             {
               "label": "HKU × L’Oréal Halloween Beauty World",
-              "href": "https://hku-loreal-halloween-beauty-world.chillsummery0625.workers.dev/#landing"
+              "href": "https://radiant-fairy-58e6cd.netlify.app/#landing"
             },
             {
               "label": "Monthly Echoes",
@@ -2064,7 +2064,7 @@ window.SITE_DATA["zh-Hant"] = {
       "title": "HKU × L’Oréal — Halloween Beauty Vote",
       "tag": "萬聖節美妝人格與投票互動",
       "objectImage": "assets/project-halloween.webp",
-      "url": "https://hku-loreal-halloween-beauty-world.chillsummery0625.workers.dev/#landing"
+      "url": "https://radiant-fairy-58e6cd.netlify.app/#landing"
     },
     "digitalProjects": [
       {
@@ -2109,7 +2109,7 @@ window.SITE_DATA["zh-Hant"] = {
         "links": [
           {
             "label": "HKU × L’Oréal Halloween Beauty World",
-            "href": "https://hku-loreal-halloween-beauty-world.chillsummery0625.workers.dev/#landing"
+            "href": "https://radiant-fairy-58e6cd.netlify.app/#landing"
           },
           {
             "label": "Monthly Echoes",
